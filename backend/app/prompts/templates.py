@@ -33,55 +33,29 @@ Output strictly in valid JSON format:
 # ------------------------------------------------------------------------------
 # GENERATOR AGENT
 # ------------------------------------------------------------------------------
-# Generates 3 distinct variants of the prompt.
+# Generates a single prompt variant based on a specific persona.
 # Strategies: Direct, Chain-of-Thought, Few-Shot.
 GENERATOR_TEMPLATE = """
-You are a world-class AI Prompt Architect. Your task is to generate 3 distinct, high-quality prompt variants based on the user's requirements.
+You are a world-class AI Prompt Architect. Your task is to generate a single, high-quality prompt based on the user's requirements and a specific strategic persona.
 
 User Requirements:
 "{clarified_requirements}"
 
 Prompt Type: "{prompt_type}"
-Target Language: "{target_language}" (The generated prompts must be in this language).
+Target Language: "{target_language}"
 
-Generate the following 3 variants:
+You must adopt the following persona for this generation:
+**{persona_name}**
+Strategy: {persona_description}
 
-1.  **Variant A (The Direct/Concise):**
-    - Focus on brevity and token efficiency.
-    - Direct instructions, minimal fluff.
-    - Ideal for fast, cost-effective execution.
-
-2.  **Variant B (Chain-of-Thought):**
-    - Instructs the model to "think step-by-step" or "reason before answering".
-    - Great for complex logic, math, or reasoning tasks.
-    - detailed instructions on HOW to process the input.
-
-3.  **Variant C (Few-Shot / Context-Rich):**
-    - Includes placeholders for examples (e.g., "Example 1: ...").
-    - Provides extensive context and persona definition.
-    - robust and detailed.
+Generate strictly the content of the prompt, wrapped in the requested JSON structure.
 
 Output strictly in valid JSON format:
-[
-    {{
-        "id": "A",
-        "name": "Direct & Concise",
-        "description": "Optimized for speed and low token usage.",
-        "content": "...(The actual prompt content)..."
-    }},
-    {{
-        "id": "B",
-        "name": "Chain of Thought",
-        "description": "Encourages step-by-step reasoning for higher accuracy.",
-        "content": "...(The actual prompt content)..."
-    }},
-    {{
-        "id": "C",
-        "name": "Few-Shot / Contextual",
-        "description": "Robust definition with example structures.",
-        "content": "...(The actual prompt content)..."
-    }}
-]
+{{
+    "name": "{persona_name}",
+    "description": "{persona_description}",
+    "content": "...(The actual prompt content)..."
+}}
 """
 
 # ------------------------------------------------------------------------------

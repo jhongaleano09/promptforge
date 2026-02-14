@@ -12,3 +12,5 @@ langgraph
 langchain
 langchain-community
 langchain-core
+aiosqlite
+langgraph-checkpoint-sqlite
