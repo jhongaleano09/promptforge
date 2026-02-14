@@ -40,5 +40,12 @@
 4.  Tiempos de respuesta aceptables (Generación paralela funcionando).
 
 ## ❓ Preguntas Clave para el Usuario
-1.  **Persistencia del Chat:** Si el usuario cierra el navegador a mitad de la entrevista de clarificación, ¿queremos recuperar esa sesión al volver (persistencia de threads en BD) o empezamos de cero?
-2.  **Límite de Preguntas:** Para evitar que el Agente Clarificador entre en un bucle infinito de preguntas, ¿ponemos un límite duro (ej: máximo 3 rondas de preguntas) antes de forzar la generación?
+1.  **Persistencia del Chat:** Si el usuario cierra el navegador a mitad de la entrevista de clarificación, ¿queremos recuperar esa sesión al volver (persistencia de threads en BD) o empezamos de cero? RTA/ Mantener las repuestas, ser persistentes en este nivel.
+2.  **Límite de Preguntas:** Para evitar que el Agente Clarificador entre en un bucle infinito de preguntas, ¿ponemos un límite duro (ej: máximo 5 rondas de preguntas) antes de forzar la generación? RTA/ El mismo agente tiene que realizar sugerencias a las respuestas de tipo multiple para que el seleccione la mas apropiada para el, adicional tener una opcion para que escriba una respuesta difernete por el o donde incorpore parte de las respuestas que el considere. incluyendo hacer combinaciones sobre posibles respuestas preestablecidas por parte del agente, es decir que pueda hacer referncia a A y B
+
+
+
+
+
+
+
