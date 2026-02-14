@@ -29,9 +29,15 @@ interface WorkflowState {
   error: string | null;
   activeTab: string;
 
+  testResults: { [key: string]: string };
+  isTesting: boolean;
+  isRefining: boolean;
+
   startWorkflow: (input: string) => Promise<void>;
   answerClarification: (answer: string) => Promise<void>;
   updateVariant: (index: number, content: string) => void;
+  runTest: (variantText: string, variantId: string, testInput: string) => Promise<void>;
+  refineVariant: (variantId: string, feedback: string) => Promise<void>;
   setActiveTab: (tab: string) => void;
   reset: () => void;
 }
@@ -47,6 +53,9 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   evaluations: {},
   error: null,
   activeTab: 'chat',
+  testResults: {},
+  isTesting: false,
+  isRefining: false,
 
   startWorkflow: async (input: string) => {
     set({ status: 'clarifying', error: null, currentStreamingMessage: '', messages: [{ role: 'user', content: input }] });
@@ -197,6 +206,68 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
     });
   },
 
+  runTest: async (variantText: string, variantId: string, testInput: string) => {
+      set({ isTesting: true, error: null });
+      try {
+          const res = await fetch(`${API_BASE}/arena/execute`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  variant_text: variantText,
+                  prompt_type: 'normal', // TODO: support system prompts dynamically
+                  input_data: { user_test_input: testInput }
+              })
+          });
+
+          if (!res.ok) throw new Error('Test execution failed');
+
+          const data = await res.json();
+          set((state) => ({
+              testResults: { ...state.testResults, [variantId]: data.result },
+              isTesting: false
+          }));
+
+      } catch (e: any) {
+          set({ isTesting: false, error: e.message });
+      }
+  },
+
+  refineVariant: async (variantId: string, feedback: string) => {
+      const { threadId } = get();
+      if (!threadId) return;
+
+      set({ isRefining: true, error: null, status: 'generating' });
+
+      try {
+          const res = await fetch(`${API_BASE}/workflow/${threadId}/run`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  selected_variant: variantId,
+                  user_feedback: feedback
+              })
+          });
+
+          if (!res.ok) throw new Error('Refinement failed');
+
+          const data = await res.json();
+          const newState = data.state;
+          
+          // Update store with new variants and evaluations from the returned state
+          // The state structure from backend is: { generated_variants: [...], evaluations: {...}, ... }
+          
+          set({
+              variants: newState.generated_variants || [],
+              evaluations: newState.evaluations || {},
+              isRefining: false,
+              status: 'completed' // Refinement done
+          });
+
+      } catch (e: any) {
+          set({ isRefining: false, error: e.message, status: 'error' });
+      }
+  },
+
   setActiveTab: (tab) => set({ activeTab: tab }),
-  reset: () => set({ threadId: null, status: 'idle', messages: [], variants: [], evaluations: {}, error: null, currentStreamingMessage: '' })
+  reset: () => set({ threadId: null, status: 'idle', messages: [], variants: [], evaluations: {}, error: null, currentStreamingMessage: '', testResults: {} })
 }));

@@ -4,7 +4,7 @@ from typing import Dict, Any, List
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 
 from app.agents.state import PromptState
-from app.prompts.templates import CLARIFIER_TEMPLATE, GENERATOR_TEMPLATE, EVALUATOR_TEMPLATE
+from app.prompts.templates import CLARIFIER_TEMPLATE, GENERATOR_TEMPLATE, EVALUATOR_TEMPLATE, JUDGE_TEMPLATE, REFINER_TEMPLATE
 from litellm import acompletion
 
 # --- Helpers ---
@@ -184,3 +184,94 @@ async def evaluate_node(state: PromptState):
     return {
         "evaluations": evaluations
     }
+
+async def judge_node(state: PromptState):
+    """
+    Analyzes execution results and selects a winner.
+    """
+    test_outputs = state.get("test_outputs", {})
+    test_inputs = state.get("test_inputs", {})
+    
+    # Construct input for the Judge
+    user_test_input = test_inputs.get("user_test_input", "")
+    if not user_test_input and test_inputs:
+         # Fallback: Just stringify the first value found if no specific key
+         user_test_input = str(list(test_inputs.values())[0])
+
+    # Ensure we have outputs to judge
+    if not test_outputs:
+        return {"judge_result": {"error": "No test outputs to judge"}}
+
+    # Format prompt
+    # Safely get outputs A, B, C (or as many as exist)
+    output_a = test_outputs.get("A", "No output generated")
+    output_b = test_outputs.get("B", "No output generated")
+    output_c = test_outputs.get("C", "No output generated")
+
+    prompt = JUDGE_TEMPLATE.format(
+        original_intent=state["user_input"],
+        test_input=user_test_input,
+        output_a=output_a,
+        output_b=output_b,
+        output_c=output_c
+    )
+    
+    # Call LLM
+    try:
+        result = await llm_call(prompt, model="gpt-4o")
+    except Exception as e:
+        return {"judge_result": {"error": f"Judge failed: {str(e)}"}}
+        
+    return {
+        "judge_result": result
+    }
+
+async def refiner_node(state: PromptState):
+    """
+    Generates new variants based on feedback.
+    """
+    selected_variant_id = state.get("selected_variant")
+    if not selected_variant_id:
+        # Fallback if nothing selected (shouldn't happen in proper flow)
+        return {"messages": [AIMessage(content="Error: No variant selected for refinement.")]}
+        
+    # Find the content of the selected variant
+    # It could be in 'generated_variants'
+    selected_content = ""
+    for v in state.get("generated_variants", []):
+        if v["id"] == selected_variant_id:
+            selected_content = v["content"]
+            break
+            
+    user_feedback = state.get("user_feedback", "Improve this.") # Need to add user_feedback to state?
+    # Actually, in LangGraph, user feedback usually comes in via 'user_input' or messages 
+    # when resuming a thread. But for state simplicity let's assume it's injected into state.
+    # We might need to handle this in the graph definition or API handler.
+    
+    # Re-construct context
+    original_context = f"Original Request: {state['user_input']}"
+    
+    prompt = REFINER_TEMPLATE.format(
+        seed_prompt=selected_content,
+        user_feedback=user_feedback,
+        original_context=original_context
+    )
+    
+    try:
+        result = await llm_call(prompt, model="gpt-4o")
+        new_variants = result.get("variations", [])
+        
+        # We need to update state with new variants.
+        # Ideally, we archive the old ones to history first (graph logic).
+        # Here we just return the new variants.
+        
+        return {
+            "generated_variants": new_variants,
+            # We clear evaluations and judge results as they are for the old batch
+            "evaluations": {},
+            "test_outputs": {},
+            "judge_result": {} 
+        }
+        
+    except Exception as e:
+         return {"messages": [AIMessage(content=f"Error in refinement: {str(e)}")]}

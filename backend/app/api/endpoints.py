@@ -6,8 +6,17 @@ from app.db.database import get_db
 from app.db.models import Settings
 from app.core.security import security_service
 from app.api.schemas import SettingsCreate, ValidationRequest
+from app.services.llm_engine import run_prompt_variant
+from app.agents.graph import get_graph
+from app.agents.state import PromptState
+from typing import Dict, Any, List
+from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
+import aiosqlite
+from langchain_core.messages import HumanMessage
 
 router = APIRouter()
+
+# ... (Existing settings endpoints) ...
 
 @router.post("/settings/validate")
 async def validate_settings(request: ValidationRequest):
@@ -47,11 +56,6 @@ async def save_settings(settings_in: SettingsCreate, db: Session = Depends(get_d
     """
     Validates and then saves the encrypted settings.
     """
-    # 1. Validate (Internal call logic or trust the frontend? Safer to re-validate or just save)
-    # The requirement says: "Llama a validate internamente"
-    
-    # We can reuse the validation logic or call the function.
-    # Let's just do the try/except block again to be safe and simple
     try:
         # Same logic as validate
         test_model = "gpt-3.5-turbo" if settings_in.provider == "openai" else "claude-3-haiku-20240307"
@@ -106,10 +110,6 @@ async def list_models(provider: str):
     Returns a list of available models for the given provider.
     This is a simplified list for the prototype.
     """
-    # In a real app, we might query the provider API using the stored key
-    # or a key provided in headers.
-    # For now, we return static lists based on provider.
-    
     if provider == "openai":
         return ["gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"]
     elif provider == "anthropic":
@@ -118,3 +118,106 @@ async def list_models(provider: str):
         return ["llama3", "mistral", "gemma"]
     else:
         return ["default-model"]
+
+# --- Arena & Workflow Endpoints ---
+
+@router.post("/arena/execute")
+async def execute_prompt_variant(
+    payload: Dict[str, Any], 
+    db: Session = Depends(get_db)
+):
+    """
+    Executes a single prompt variant against the configured LLM.
+    Payload: { "variant_text": "...", "prompt_type": "...", "input_data": {...} }
+    """
+    variant_text = payload.get("variant_text")
+    prompt_type = payload.get("prompt_type", "normal")
+    input_data = payload.get("input_data", {})
+
+    if not variant_text:
+        raise HTTPException(status_code=400, detail="Missing variant_text")
+
+    # Retrieve API Key
+    db_settings = db.query(Settings).first()
+    if not db_settings or not db_settings.api_key_encrypted:
+        raise HTTPException(status_code=400, detail="LLM Settings not configured")
+
+    api_key = security_service.decrypt_key(db_settings.api_key_encrypted)
+    model_config = {
+        "model": db_settings.model_preference or "gpt-3.5-turbo",
+        "api_key": api_key,
+        "base_url": None # Add base_url logic if supporting other providers
+    }
+
+    try:
+        result = await run_prompt_variant(
+            variant_text=variant_text,
+            prompt_type=prompt_type,
+            input_data=input_data,
+            model_config=model_config
+        )
+        return {"result": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/workflow/{thread_id}/update_test_results")
+async def update_test_results(
+    thread_id: str,
+    payload: Dict[str, Any]
+):
+    """
+    Updates the state with test results (test_inputs, test_outputs).
+    """
+    # In a real app with LangGraph Cloud or persistent checkpointer, we'd update state here.
+    # For this local prototype using SQLite checkpointer, we need to access the checkpointer.
+    # This requires dependency injection of the checkpointer which is async.
+    # For simplicity, we might just pass the results in the next run call.
+    return {"status": "simulated_update", "message": "State update logic pending integration"}
+
+@router.post("/workflow/{thread_id}/run")
+async def run_workflow(
+    thread_id: str,
+    payload: Dict[str, Any]
+):
+    """
+    Runs or resumes the workflow.
+    Payload: { "user_input": "...", "selected_variant": "...", "user_feedback": "..." }
+    """
+    user_input = payload.get("user_input")
+    selected_variant = payload.get("selected_variant")
+    user_feedback = payload.get("user_feedback")
+
+    # Inputs for the graph
+    inputs = {}
+    if user_input:
+        inputs["user_input"] = user_input
+    
+    # If refining, we inject selected_variant and feedback into state
+    if selected_variant:
+        inputs["selected_variant"] = selected_variant
+    if user_feedback:
+        inputs["user_feedback"] = user_feedback
+
+    # Config for checkpointer
+    config = {"configurable": {"thread_id": thread_id}}
+
+    # Initialize Checkpointer & Graph
+    async with aiosqlite.connect("database.sqlite") as conn:
+        checkpointer = AsyncSqliteSaver(conn)
+        # Initialize the checkpointer tables if they don't exist
+        await checkpointer.setup()
+        
+        graph = get_graph(checkpointer)
+
+        # Run the graph
+        # streaming mode is better for long running processes, 
+        # but for simple request/response we can use ainvoke if quick.
+        # However, clarifier might stop.
+        
+        final_state = await graph.ainvoke(inputs, config=config)
+        
+        return {
+            "state": final_state,
+            "thread_id": thread_id,
+            "next": "evaluate" if selected_variant else "clarify_result" 
+        }

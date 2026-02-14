@@ -29,9 +29,6 @@
 4.  Los scores de evaluación son visibles y fáciles de entender.
 
 ## ❓ Preguntas Clave para el Usuario
-1.  **Edición Manual:** Si el usuario edita un prompt manualmente en la Arena, ¿se pierde el score de evaluación anterior (ya que el texto cambió) y se fuerza una re-evaluación, o simplemente se marca como "Editado"?
-2.  **Exportación:** ¿Qué formatos son prioritarios para el botón "Exportar"?
-    - Texto plano (.txt)
-    - JSON (para integrar en código)
-    - Markdown
-3.  **Tema Visual:** ¿Preferencia por Dark Mode por defecto (común en herramientas de dev) o Light Mode?
+1.  **Edición Manual:** Si el usuario edita un prompt manualmente en la Arena, ¿se pierde el score de evaluación anterior (ya que el texto cambió) y se fuerza una re-evaluación, o simplemente se marca como "Editado"? RTA/ En caso de que el usuario edite un prompt desde la Interfaz de usuario, se debe mantener el score de la evaluacion anterior asi cambiara el prompt, no seria necesaria una reevaluacion del mismo, se marcara como editado y se procede con el flujo.
+2.  **Exportación:** ¿Qué formatos son prioritarios para el botón "Exportar"? RTA/ habilitar una opion de copiar y habilitar la funcion de exportar en texto plano. asi en caso de ser un formato complicado asi el mismo sea un JSON o un .md desde el .txt les sera facil de manipular al usuario. 
+3.  **Tema Visual:** ¿Preferencia por Dark Mode por defecto (común en herramientas de dev) o Light Mode? RTA/ Dark Mode inicialmente, pero puede habilitar el swich botton para tener ambas formas, habilita el swich mode. 

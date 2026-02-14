@@ -16,3 +16,14 @@ class PromptState(TypedDict):
     # 'messages' is reserved for the graph's internal message history if using MessageGraph,
     # but we are using StateGraph with custom state, so we define what we need.
     messages: Annotated[List[BaseMessage], operator.add]
+
+    # --- Phase 5 Additions ---
+    iteration: int
+    history: List[Dict[str, Any]] # Snapshots of previous states (limit 100)
+    
+    # Testing Results
+    test_inputs: Dict[str, Any] # { 'user_test_input': '...', 'var_x': '...' }
+    test_outputs: Dict[str, str] # { 'A': 'Response...', 'B': ... }
+    
+    # Judge Evaluation
+    judge_result: Dict[str, Any] # { 'winner': 'A', 'reason': '...', 'tags': [...] }
