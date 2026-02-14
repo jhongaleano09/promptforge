@@ -17,7 +17,7 @@ export function OnboardingForm() {
 
   // Fetch models when provider changes
   useEffect(() => {
-    fetch(`http://localhost:8001/api/models?provider=${provider}`)
+    fetch(`http://localhost:8000/api/models?provider=${provider}`)
       .then(res => res.json())
       .then(data => {
         setModels(data)
@@ -31,7 +31,7 @@ export function OnboardingForm() {
     setErrorMsg("")
     
     try {
-      const res = await fetch("http://localhost:8001/api/settings/validate", {
+      const res = await fetch("http://localhost:8000/api/settings/validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ provider, api_key: apiKey }),
@@ -43,7 +43,7 @@ export function OnboardingForm() {
       }
 
       // If validation passes, save settings
-      const saveRes = await fetch("http://localhost:8001/api/settings/save", {
+      const saveRes = await fetch("http://localhost:8000/api/settings/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
