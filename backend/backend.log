@@ -11,3 +11,89 @@ INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
 INFO:     127.0.0.1:39920 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36316 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36316 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36316 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47180 - "OPTIONS /api/settings/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47180 - "POST /api/settings/validate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47180 - "OPTIONS /api/settings/save HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47180 - "POST /api/settings/save HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47180 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33124 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33124 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33144 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33130 - "GET /api/settings/keys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33130 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33144 - "GET /api/settings/keys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34098 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43502 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43502 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43508 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43506 - "GET /api/settings/keys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43508 - "GET /api/settings/keys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43506 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43508 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43506 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36566 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36566 - "OPTIONS /api/workflow/stream/start HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36566 - "POST /api/workflow/stream/start HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 412, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 84, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/routing.py", line 758, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/routing.py", line 778, in app
+    await route.handle(scope, receive, send)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/routing.py", line 299, in handle
+    await self.app(scope, receive, send)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/routing.py", line 79, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/starlette/routing.py", line 74, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 299, in app
+    raise e
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 294, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/api/workflow.py", line 86, in start_workflow_stream
+    manager = await workflow_manager.get_instance()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/workflow_manager.py", line 14, in get_instance
+    await cls._instance.initialize()
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/workflow_manager.py", line 23, in initialize
+    await self._saver.setup()
+  File "/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/langgraph/checkpoint/sqlite/aio.py", line 283, in setup
+    if not self.conn.is_alive():
+           ^^^^^^^^^^^^^^^^^^
+AttributeError: 'Connection' object has no attribute 'is_alive'
