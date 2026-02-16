@@ -1,0 +1,33 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: promptforge-backend
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - ./promptforge_data:/app/data
+    networks:
+      - promptforge-net
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:///data/database.sqlite
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: promptforge-frontend
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    networks:
+      - promptforge-net
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000/api
+    depends_on:
+      - backend
+
+networks:
+  promptforge-net:
+    driver: bridge
