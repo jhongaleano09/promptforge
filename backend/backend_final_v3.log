@@ -1,0 +1,16 @@
+INFO:     Will watch for changes in these directories: ['/home/jhongaleano/projects/promptforge/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [273710] using StatReload
+/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_max_budget" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_spend" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+INFO:     Started server process [273712]
+INFO:     Waiting for application startup.
+Migration error: cannot import name 'migrate_to_api_keys' from 'migrations' (unknown location)
+INFO:     Application startup complete.
+INFO:     127.0.0.1:51328 - "GET / HTTP/1.1" 200 OK

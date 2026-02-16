@@ -1,0 +1,14 @@
+/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_max_budget" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_spend" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+INFO:     Started server process [257764]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8001): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.

@@ -20,10 +20,13 @@ class PromptState(TypedDict):
     # --- Phase 5 Additions ---
     iteration: int
     history: List[Dict[str, Any]] # Snapshots of previous states (limit 100)
-    
+
     # Testing Results
     test_inputs: Dict[str, Any] # { 'user_test_input': '...', 'var_x': '...' }
     test_outputs: Dict[str, str] # { 'A': 'Response...', 'B': ... }
-    
+
     # Judge Evaluation
     judge_result: Dict[str, Any] # { 'winner': 'A', 'reason': '...', 'tags': [...] }
+
+    # --- Phase 6.5 Additions ---
+    selected_provider: Optional[str]  # Provider seleccionado por el usuario

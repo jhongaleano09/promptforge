@@ -12,5 +12,5 @@ langgraph
 langchain
 langchain-community
 langchain-core
-aiosqlite
+aiosqlite>=0.23.0
 langgraph-checkpoint-sqlite

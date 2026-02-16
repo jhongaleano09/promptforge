@@ -1,0 +1,28 @@
+/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_max_budget" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_spend" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+INFO:     Started server process [255491]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:40082 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40084 - "POST /api/workflow/stream/start HTTP/1.1" 200 OK
+/home/jhongaleano/projects/promptforge/backend/app/api/workflow.py:71: LangChainBetaWarning: This API is in beta and may change in the future.
+  async for event in graph.astream_events(input_state, config, version="v1"):
+Error getting active API key: Instance <ApiKey at 0x7f439fbf7f50> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3)
+Error getting active API key: Instance <ApiKey at 0x7f439d971910> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3)
+Error getting active API key: Instance <ApiKey at 0x7f439d972960> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3)
+Error getting active API key: Instance <ApiKey at 0x7f439d999070> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3)
+format_response error: 'list' object has no attribute 'keys'
+INFO:     127.0.0.1:33690 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38424 - "POST /api/workflow/stream/start HTTP/1.1" 200 OK
+Error getting active API key: Instance <ApiKey at 0x7f439d99b530> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3)
+Error getting active API key: Instance <ApiKey at 0x7f439d99c890> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3)
+Error getting active API key: Instance <ApiKey at 0x7f439d99d2e0> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3)
+Error getting active API key: Instance <ApiKey at 0x7f439d99f350> is not bound to a Session; attribute refresh operation cannot proceed (Background on this error at: https://sqlalche.me/e/20/bhk3)
+format_response error: 'list' object has no attribute 'keys'
