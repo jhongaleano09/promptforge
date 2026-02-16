@@ -17,6 +17,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 class Base(DeclarativeBase):
     pass
 
+# Import models to register them with Base.metadata
+# This ensures that ApiKey table is created automatically
+from app.db.models import Settings, ApiKey
+
 def get_db():
     db = SessionLocal()
     try:
