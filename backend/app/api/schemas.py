@@ -1,8 +1,12 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from typing import List, Dict, Any, Optional
 from datetime import datetime
+import warnings
+import os
 
-# --- Settings Schemas (Legacy) ---
+# Desactivar TODAS las advertencias de Pydantic que causan que el proceso se detenga
+warnings.filterwarnings("ignore")
+os.environ['PYTHONWARNINGS'] = 'ignore'
 
 class SettingsCreate(BaseModel):
     provider: str
@@ -28,6 +32,17 @@ class ApiKeyResponse(BaseModel):
     usage_count: int
     created_at: str
     updated_at: Optional[str] = None
+
+class ApiKeyResponse(BaseModel):
+    id: int
+    provider: str
+    model_preference: str
+    is_active: bool
+    usage_count: int
+    created_at: str
+    updated_at: Optional[str] = None
+
+    model_config = {"protected_namespaces": ()}
 
 class ApiKeysListResponse(BaseModel):
     keys: List[ApiKeyResponse]

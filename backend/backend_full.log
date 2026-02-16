@@ -1,0 +1,8 @@
+/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_max_budget" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_spend" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(

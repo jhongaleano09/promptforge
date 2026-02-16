@@ -41,7 +41,7 @@ def run_migration_if_needed():
 async def lifespan(app: FastAPI):
     # Startup actions
     logger.info("Starting PromptForge API...")
-    run_migration_if_needed()
+    # run_migration_if_needed()  # Temporarily disabled for debugging
     logger.info("PromptForge API startup completed")
     yield
     # Shutdown actions
