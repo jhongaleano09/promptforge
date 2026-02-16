@@ -39,6 +39,7 @@ out/
 frontend/out/
 frontend/.next/
 frontend/node_modules/
+frontend/.env.local
 
 # IDEs
 .idea/

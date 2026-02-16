@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { API_BASE } from '@/config/api';
 
 export interface Variant {
+  id?: string;
   title: string; // e.g., "Variant A"
   content: string;
   model_used?: string;
@@ -41,8 +43,6 @@ interface WorkflowState {
   setActiveTab: (tab: string) => void;
   reset: () => void;
 }
-
-const API_BASE = 'http://localhost:8000/api';
 
 export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   threadId: null,

@@ -8,6 +8,7 @@ import { useWorkflowStore } from '@/store/workflowStore';
 import { cn } from '@/lib/utils';
 import { LayoutDashboard, MessageSquare, Sparkles, Sun, Moon } from 'lucide-react';
 import { useTheme } from "next-themes";
+import { API_BASE } from "@/config/api";
 
 export default function Home() {
   const { status, activeTab, setActiveTab, startWorkflow, error } = useWorkflowStore();
@@ -21,7 +22,7 @@ export default function Home() {
 
   useEffect(() => {
     // Check if configured (simple check)
-    fetch('http://localhost:8000/api/settings')
+    fetch(`${API_BASE}/settings`)
         .then(res => res.json())
         .then(data => {
             if (data.configured) setApiKeyConfigured(true);

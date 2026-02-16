@@ -1,9 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Loader2, AlertCircle, CheckCircle2 } from "lucide-react"
+import { Loader2, CheckCircle2, XCircle } from "lucide-react"
+import { API_BASE } from "@/config/api"
+
+const MAX_RETRIES = 2
 
 export function OnboardingForm() {
   const [step, setStep] = useState<"provider" | "validating" | "success" | "error">("provider")
@@ -14,10 +17,32 @@ export function OnboardingForm() {
   const [errorMsg, setErrorMsg] = useState("")
   const [retryCount, setRetryCount] = useState(0)
   const [countdown, setCountdown] = useState(0)
+  const [isCountingDown, setIsCountingDown] = useState(false)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Cleanup interval on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [])
+
+  // Cancel countdown when user modifies inputs
+  useEffect(() => {
+    if (isCountingDown && intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+      setIsCountingDown(false)
+      setCountdown(0)
+      setErrorMsg("")
+    }
+  }, [apiKey, provider, isCountingDown])
 
   // Fetch models when provider changes
   useEffect(() => {
-    fetch(`http://localhost:8000/api/models?provider=${provider}`)
+    fetch(`${API_BASE}/models?provider=${provider}`)
       .then(res => res.json())
       .then(data => {
         setModels(data)
@@ -26,12 +51,26 @@ export function OnboardingForm() {
       .catch(err => console.error("Failed to fetch models", err))
   }, [provider])
 
+  const getErrorMessage = (res: Response, err: { message?: string }) => {
+    if (res.status === 404) {
+      return "Backend server not reachable. Please check your API configuration"
+    } else if (res.status === 401) {
+      return "Invalid API Key. Please check your credentials."
+    } else if (res.status === 429) {
+      return "Rate limit exceeded or insufficient quota. Please try again later."
+    } else if (err.message) {
+      return err.message
+    } else {
+      return "Validation failed. Please try again."
+    }
+  }
+
   const handleValidation = async () => {
     setStep("validating")
     setErrorMsg("")
-    
+
     try {
-      const res = await fetch("http://localhost:8000/api/settings/validate", {
+      const res = await fetch(`${API_BASE}/settings/validate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ provider, api_key: apiKey }),
@@ -39,17 +78,18 @@ export function OnboardingForm() {
 
       if (!res.ok) {
         const errorData = await res.json()
-        throw new Error(errorData.detail || "Validation failed")
+        const message = getErrorMessage(res, { message: errorData.detail })
+        throw new Error(message)
       }
 
       // If validation passes, save settings
-      const saveRes = await fetch("http://localhost:8000/api/settings/save", {
+      const saveRes = await fetch(`${API_BASE}/settings/save`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          provider, 
+        body: JSON.stringify({
+          provider,
           api_key: apiKey,
-          model_preference: selectedModel 
+          model_preference: selectedModel
         }),
       })
 
@@ -57,36 +97,57 @@ export function OnboardingForm() {
 
       setStep("success")
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err)
-      // Check if it's a timeout/connection error (simulated)
-      // In a real browser env, network errors might show up differently.
-      // For this logic, we assume if it fails, we offer retry.
-      
-      setErrorMsg(err.message)
+      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred"
+      setErrorMsg(errorMessage)
       setStep("error")
 
-      // If we want to auto-retry logic with countdown as requested:
-      // "iniciar un contador de 10 segundos e indicamos al usuario que algo paso"
-      if (retryCount < 1) { // Let's try once automatically
+      // Auto-retry logic with countdown
+      // Only retry if we haven't exceeded max retries and not 404 (backend not reachable)
+      if (retryCount < MAX_RETRIES && !errorMessage.includes("Backend server not reachable")) {
          startRetryCountdown()
+      } else {
+        setRetryCount(MAX_RETRIES)
       }
     }
   }
 
   const startRetryCountdown = () => {
+    setIsCountingDown(true)
     setCountdown(10)
-    const interval = setInterval(() => {
+    
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+    }
+    
+    intervalRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          clearInterval(interval)
-          handleValidation() // Retry
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current)
+            intervalRef.current = null
+          }
+          setIsCountingDown(false)
+          handleValidation()
           setRetryCount(prevCount => prevCount + 1)
           return 0
         }
         return prev - 1
       })
     }, 1000)
+  }
+
+  const handleCancelRetry = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
+    setIsCountingDown(false)
+    setCountdown(0)
+    setRetryCount(0)
+    setErrorMsg("")
+    setStep("provider")
   }
 
   if (step === "success") {
@@ -145,28 +206,47 @@ export function OnboardingForm() {
         )}
 
         {step === "error" && (
-           <div className="p-3 text-sm text-red-500 bg-red-50 rounded-md flex items-start gap-2">
-             <AlertCircle className="h-4 w-4 mt-0.5" />
-             <div className="flex-1">
-               <p className="font-medium">Error: {errorMsg}</p>
-               {countdown > 0 && (
-                 <p className="mt-1 text-slate-600">
-                   Retrying connection in {countdown}s...
+           <div className="p-4 text-sm bg-red-50 border border-red-200 rounded-md flex items-start gap-3 transition-opacity duration-300">
+             <XCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+             <div className="flex-1 space-y-2">
+               <p className="font-medium text-red-800">{errorMsg}</p>
+               {countdown > 0 ? (
+                 <p className="text-slate-600">
+                   Retrying in <span className="font-semibold">{countdown}s</span>...
                  </p>
+               ) : retryCount >= MAX_RETRIES ? (
+                 <p className="text-slate-600">
+                   Maximum retry attempts reached. Please check your API key or try again.
+                 </p>
+               ) : null}
+               {(countdown > 0 || retryCount >= MAX_RETRIES) && (
+                 <Button
+                   variant="outline"
+                   size="sm"
+                   onClick={handleCancelRetry}
+                   className="mt-2 text-xs"
+                 >
+                   Cancel & Enter New Key
+                 </Button>
                )}
              </div>
            </div>
-        )}
+         )}
 
         <Button 
           className="w-full" 
           onClick={handleValidation}
-          disabled={step === "validating" || countdown > 0 || !apiKey}
+          disabled={step === "validating" || isCountingDown || !apiKey}
         >
           {step === "validating" ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Validating...
+            </>
+          ) : isCountingDown ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Retrying in {countdown}s...
             </>
           ) : (
             "Validate & Save"
