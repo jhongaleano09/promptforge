@@ -17,7 +17,7 @@ def run_migration_if_needed():
         import sys
         import os
 
-        migration_path = os.path.join(os.path.dirname(__file__), "migrations", "002_migrate_to_api_keys.py")
+        migration_path = os.path.join(os.path.dirname(__file__), "migrations", "migrate_to_api_keys.py")
 
         if not os.path.exists(migration_path):
             logger.warning(f"Migration script not found at {migration_path}")
@@ -41,7 +41,7 @@ def run_migration_if_needed():
 async def lifespan(app: FastAPI):
     # Startup actions
     logger.info("Starting PromptForge API...")
-    # run_migration_if_needed()  # Temporarily disabled for debugging
+    run_migration_if_needed()  # Enable automatic migration on startup
     logger.info("PromptForge API startup completed")
     yield
     # Shutdown actions

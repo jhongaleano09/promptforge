@@ -33,15 +33,6 @@ class ApiKeyResponse(BaseModel):
     created_at: str
     updated_at: Optional[str] = None
 
-class ApiKeyResponse(BaseModel):
-    id: int
-    provider: str
-    model_preference: str
-    is_active: bool
-    usage_count: int
-    created_at: str
-    updated_at: Optional[str] = None
-
     model_config = {"protected_namespaces": ()}
 
 class ApiKeysListResponse(BaseModel):
@@ -57,6 +48,7 @@ class ValidationActiveResponse(BaseModel):
 
 class WorkflowStartRequest(BaseModel):
     user_input: str
+    provider: Optional[str] = None  # Proveedor seleccionado por el usuario
 
 class WorkflowAnswerRequest(BaseModel):
     answer: str

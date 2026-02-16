@@ -455,6 +455,28 @@ def get_test_model(provider: str, model_preference: str = None) -> str:
     return test_models.get(provider, "gpt-3.5-turbo")
 
 
+# --- Endpoint: Listar Providers Activos (New) ---
+
+@router.get("/settings/providers")
+async def list_active_providers():
+    """
+    Lista todos los proveedores con API keys activas.
+    Retorna información de modelos y contadores de uso.
+    """
+    from app.core.config_service import get_config_service
+
+    try:
+        config_service = await get_config_service()
+        providers = await config_service.get_all_active_providers()
+
+        logger.info(f"Listed {len(providers)} active providers")
+        return {"providers": providers}
+
+    except Exception as e:
+        logger.error(f"Error listing providers: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 # --- Arena & Workflow Endpoints ---
 
 @router.post("/arena/execute")

@@ -6,6 +6,7 @@ import { OnboardingForm } from '@/components/onboarding-form';
 import { ChatInterface } from '@/components/arena/ChatInterface';
 import { ArenaView } from '@/components/arena/ArenaView';
 import { useWorkflowStore } from '@/store/workflowStore';
+import { ProviderSelector } from '@/components/provider-selector';
 import { cn } from '@/lib/utils';
 import { LayoutDashboard, MessageSquare, Sparkles, Sun, Moon, Settings as SettingsIcon } from 'lucide-react';
 import { useTheme } from "next-themes";
@@ -72,6 +73,7 @@ export default function Home() {
               <h1 className="text-xl font-bold tracking-tight">PromptForge</h1>
          </div>
           <div className="flex items-center gap-2">
+             <ProviderSelector className="mr-2" />
              <button
                  onClick={() => router.push('/settings')}
                  className="p-2 rounded-lg hover:bg-muted transition-colors"
@@ -176,6 +178,10 @@ function InitialPromptInput({ onSubmit }: { onSubmit: (text: string) => void }) 
             
             <div className="flex flex-col gap-4 p-1 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent rounded-2xl">
                 <div className="bg-card rounded-xl p-2 shadow-sm border">
+                    <div className="px-4 py-2 border-b flex justify-between items-center bg-muted/20 rounded-t-lg mb-2">
+                        <span className="text-xs font-medium text-muted-foreground">System Context</span>
+                        <ProviderSelector />
+                    </div>
                     <textarea 
                         className="w-full p-4 rounded-lg bg-transparent border-none outline-none resize-none text-lg min-h-[150px] placeholder:text-muted-foreground/50"
                         placeholder="e.g., I need a system prompt for a customer support agent that handles refund requests politely but firmly..."

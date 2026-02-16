@@ -31,6 +31,9 @@ interface WorkflowState {
   error: string | null;
   activeTab: string;
 
+  selectedProvider: string | null;
+  setSelectedProvider: (provider: string | null) => void;
+
   testResults: { [key: string]: string };
   isTesting: boolean;
   isRefining: boolean;
@@ -54,9 +57,12 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   evaluations: {},
   error: null,
   activeTab: 'chat',
+  selectedProvider: null,
   testResults: {},
   isTesting: false,
   isRefining: false,
+
+  setSelectedProvider: (provider) => set({ selectedProvider: provider }),
 
   checkActiveKeys: async () => {
     try {
@@ -93,7 +99,10 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ user_input: input }),
+        body: JSON.stringify({ 
+          user_input: input,
+          provider: get().selectedProvider 
+        }),
         onmessage(ev) {
           const { event, data } = ev;
           const parsedData = JSON.parse(data);
