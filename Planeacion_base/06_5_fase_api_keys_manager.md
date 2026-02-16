@@ -1,8 +1,8 @@
 # 06.5. Fase: Sistema de Gestión de API Keys
 
-**Estado:** 🆕 PLANIFICADA - Lista para Implementación  
-**Prioridad:** 1 (CRÍTICA - Bloquea otras funcionalidades)  
-**Estimado:** 2-3 días
+**Estado:** ✅ COMPLETADA - Implementación Finalizada  
+**Prioridad:** 1 (CRÍTICA - Bloquea otras funcionalidades)
+**Estimado:** 2-3 días (Completado)
 
 ---
 
@@ -72,10 +72,10 @@ class ApiKey(Base):
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas crear la nueva tabla `api_keys` y eliminar la vieja `settings` en el mismo script de migración, o prefieres hacerlo en pasos separados?
-2. ¿Deberíamos agregar un campo `user_id` o `session_id` para soportar múltiples usuarios en el futuro?
-3. ¿Deberíamos agregar campos adicionales como `last_used_at` o `usage_count` para estadísticas?
-4. ¿Qué hacer con los datos existentes en `settings` cuando se realice la migración? ¿Migrarlos o solicitar al usuario que reingrese la API key?
+1. ¿Deseas crear la nueva tabla `api_keys` y eliminar la vieja `settings` en el mismo script de migración, o prefieres hacerlo en pasos separados? RTA/ Mantenerla actual, deberia funcionar.
+2. ¿Deberíamos agregar un campo `user_id` o `session_id` para soportar múltiples usuarios en el futuro? agregar el campo del user_id, ya que en un futuro se creara un perfil para ayudar a la generacion de prompts.
+3. ¿Deberíamos agregar campos adicionales como `last_used_at` o `usage_count` para estadísticas? RTA/ si.
+4. ¿Qué hacer con los datos existentes en `settings` cuando se realice la migración? ¿Migrarlos o solicitar al usuario que reingrese la API key? RTA/ Migrarlos.
 
 ---
 
@@ -133,11 +133,11 @@ class ApiKey(Base):
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que la migración se ejecute automáticamente al iniciar el backend si detecta que la tabla `settings` existe y `api_keys` no?
+1. ¿Deseas que la migración se ejecute automáticamente al iniciar el backend si detecta que la tabla `settings` existe y `api_keys` no? RTA/ si
 2. ¿O prefieres que la migración sea un comando manual que el usuario ejecute?
-3. ¿Qué debería pasar si la migración falla? ¿Mostrar error y bloquear el sistema, o permitir continuar con configuración vacía?
-4. ¿Deberíamos guardar un registro de la migración en un archivo `migration_log.txt` o solo en logs del backend?
-5. ¿Deberíamos mantener la tabla `settings` por un tiempo por si el usuario quiere revertir la migración?
+3. ¿Qué debería pasar si la migración falla? ¿Mostrar error y bloquear el sistema, o permitir continuar con configuración vacía? RTA/ Notificar y continuar.
+4. ¿Deberíamos guardar un registro de la migración en un archivo `migration_log.txt` o solo en logs del backend? solo en los logs
+5. ¿Deberíamos mantener la tabla `settings` por un tiempo por si el usuario quiere revertir la migración? RTA/ Si
 
 ---
 
@@ -239,11 +239,11 @@ db.query(ApiKey).filter(
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que la validación con el servicio se haga de forma síncrona o asíncrona?
-2. ¿Qué modelo usar para la validación? ¿Uno económico (`gpt-3.5-turbo`) o el que el usuario seleccionó como preferido?
-3. ¿Deberíamos guardar un registro de intentos fallidos de validación para detectar posibles ataques?
-4. ¿Cuál debería ser el límite de keys por proveedor? ¿3, 5, o sin límite?
-5. ¿Qué hacer si el proveedor seleccionado no soporta el modelo preferido? ¿Usar un modelo default o mostrar error?
+1. ¿Deseas que la validación con el servicio se haga de forma síncrona o asíncrona? RTA/ sincrona
+2. ¿Qué modelo usar para la validación? ¿Uno económico (`gpt-3.5-turbo`) o el que el usuario seleccionó como preferido? RTA/ el usuario debe seleccinarlo.
+3. ¿Deberíamos guardar un registro de intentos fallidos de validación para detectar posibles ataques? RTA/ SI
+4. ¿Cuál debería ser el límite de keys por proveedor? ¿3, 5, o sin límite? RTA/ sin limites, se pueden borrar dado el caso.
+5. ¿Qué hacer si el proveedor seleccionado no soporta el modelo preferido? ¿Usar un modelo default o mostrar error? RTA/ Mostrar el error al usuario.
 
 #### 3. DELETE `/api/settings/keys/{key_id}` - Eliminar API Key
 
@@ -299,11 +299,11 @@ if count_active_keys() == 0:
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que la confirmación se haga en el backend (requerir confirmación) o en el frontend (modal)?
-2. Si el usuario confirma eliminar la última key y no agrega una nueva, ¿qué debería pasar? ¿Bloquear el sistema con mensaje instructivo?
-3. ¿Deberíamos ofrecer la opción "Eliminar y Agregar Nueva" en el mismo flujo?
-4. ¿Deberíamos guardar un log de eliminaciones (quién, cuándo, qué key) para auditoría?
-5. ¿Deseas un período de "papelera" (por ejemplo, keys eliminadas pero recuperables por 24 horas)?
+1. ¿Deseas que la confirmación se haga en el backend (requerir confirmación) o en el frontend (modal)? RTA/ modal
+2. Si el usuario confirma eliminar la última key y no agrega una nueva, ¿qué debería pasar? ¿Bloquear el sistema con mensaje instructivo? RTA/ validar si tiene otras API KEYs disponibles, caso contratio mandar al onboarding para que ingrese una API KEY nueva con el proovedor que requiera.
+3. ¿Deberíamos ofrecer la opción "Eliminar y Agregar Nueva" en el mismo flujo? RTA/ Si
+4. ¿Deberíamos guardar un log de eliminaciones (quién, cuándo, qué key) para auditoría? RTA/ Si
+5. ¿Deseas un período de "papelera" (por ejemplo, keys eliminadas pero recuperables por 24 horas)? RTA/ no sin papeleras.
 
 #### 4. PUT `/api/settings/keys/{key_id}/activate` - Activar API Key
 
@@ -335,7 +335,7 @@ db.query(ApiKey).filter(
 **Beneficio:** Garantiza que solo una key esté activa por proveedor.
 
 **❓ Pregunta Clave:**
-¿Deseas que al activar una key, se envíe una notificación o evento (para mostrar en el frontend que la key cambió)?
+¿Deseas que al activar una key, se envíe una notificación o evento (para mostrar en el frontend que la key cambió)? RTA/ Si.
 
 #### 5. GET `/api/settings/validate-active` - Validar Configuración
 
@@ -367,7 +367,7 @@ db.query(ApiKey).filter(
 **Uso:** Llamar al inicio de cada acción que requiera API key.
 
 **❓ Pregunta Clave:**
-¿Deseas incluir en la respuesta también la lista de providers que tienen keys (aunque estén inactivas) para mostrar en la UI?
+¿Deseas incluir en la respuesta también la lista de providers que tienen keys (aunque estén inactivas) para mostrar en la UI? RTA/ Si
 
 ---
 
@@ -445,10 +445,10 @@ return (
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que la lista sea en formato de cards (vertical) o tabla (horizontal con columnas)?
-2. ¿Deberíamos mostrar el modelo preferido en la lista o solo el provider y el estado?
-3. ¿Deseas agregar información adicional como "Última vez usada" o "Cantidad de usos"?
-4. ¿Deberíamos implementar búsqueda/filtro en la lista de API keys?
+1. ¿Deseas que la lista sea en formato de cards (vertical) o tabla (horizontal con columnas)? RTA/ si, en cards.
+2. ¿Deberíamos mostrar el modelo preferido en la lista o solo el provider y el estado? RTA/ la card debe permitir seleccionar el modelo mismo.
+3. ¿Deseas agregar información adicional como "Última vez usada" o "Cantidad de usos"? RTA/ indicar el contador de tokens para que el usuario este enterado, aunque esta seria una tarjeta al costado derecho.
+4. ¿Deberíamos implementar búsqueda/filtro en la lista de API keys? RTA/ no, porque normalmente solo tendran una por servicio, aunque caso de tener mas apis por tocken permitir un apodo o similar para que le sea facil seleccionar el correcto.
 
 #### 4. Modal para Agregar Nueva API Key
 
@@ -502,9 +502,9 @@ return (
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que la validación se haga al perder foco del campo (onBlur) o mientras escribe (onChange con debounce)?
-2. ¿Deberíamos mostrar mensajes de error específicos (ej: "Formato inválido para OpenAI")?
-3. ¿Deseas agregar un botón de "Paste" para facilitar pegar la API key desde el portapapeles?
+1. ¿Deseas que la validación se haga al perder foco del campo (onBlur) o mientras escribe (onChange con debounce)? RTA/ si
+2. ¿Deberíamos mostrar mensajes de error específicos (ej: "Formato inválido para OpenAI")? RTA/ si.
+3. ¿Deseas agregar un botón de "Paste" para facilitar pegar la API key desde el portapapeles? RTA/ si, habilitar la opcion.
 
 #### 5. Modal de Confirmación de Eliminación
 
@@ -553,7 +553,7 @@ return (
 ```
 
 **❓ Pregunta Clave:**
-¿Deseas agregar una opción de "Papelera" donde las keys eliminadas se guarden por 24 horas y puedan recuperarse?
+¿Deseas agregar una opción de "Papelera" donde las keys eliminadas se guarden por 24 horas y puedan recuperarse? RTA/ no, sin papelereas.
 
 ---
 
@@ -585,7 +585,7 @@ return (
 ```
 
 **❓ Pregunta Clave:**
-¿Deseas que el botón de settings esté siempre visible o solo cuando hay una API key configurada?
+¿Deseas que el botón de settings esté siempre visible o solo cuando hay una API key configurada? RTA/ El boton de setings debe estar disponible siempre.
 
 #### 2. Verificar Configuración al Iniciar
 
@@ -618,10 +618,10 @@ const validateConfiguration = async () => {
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que esta validación se haga cada vez que se carga la página o solo una vez y guardar en estado?
-2. ¿Qué debería pasar si la validación falla por error de red? ¿Mostrar mensaje o intentar de nuevo?
-3. ¿Deseas agregar un indicador de "Conectando..." mientras se valida la configuración?
-4. ¿Deberíamos permitir acceder a settings aunque no haya key activa (para agregar una)?
+1. ¿Deseas que esta validación se haga cada vez que se carga la página o solo una vez y guardar en estado? RTA/ solo una vez.
+2. ¿Qué debería pasar si la validación falla por error de red? ¿Mostrar mensaje o intentar de nuevo? RTA/ mostrar el error en pantalla al usuario.
+3. ¿Deseas agregar un indicador de "Conectando..." mientras se valida la configuración? RTA/ no es necesario.
+4. ¿Deberíamos permitir acceder a settings aunque no haya key activa (para agregar una)? RTA/ si.
 
 #### 3. Actualizar Store de Workflow
 
@@ -662,7 +662,7 @@ const startWorkflow = async (input: string) => {
 ```
 
 **❓ Pregunta Clave:**
-¿Deseas que la validación se haga antes de cada acción (costoso en llamadas) o solo al inicio de la sesión y guardar en caché?
+¿Deseas que la validación se haga antes de cada acción (costoso en llamadas) o solo al inicio de la sesión y guardar en caché? RTA/ Solo al inicio de la sesion.
 
 ---
 

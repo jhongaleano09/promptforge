@@ -1,19 +1,22 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { OnboardingForm } from '@/components/onboarding-form';
 import { ChatInterface } from '@/components/arena/ChatInterface';
 import { ArenaView } from '@/components/arena/ArenaView';
 import { useWorkflowStore } from '@/store/workflowStore';
 import { cn } from '@/lib/utils';
-import { LayoutDashboard, MessageSquare, Sparkles, Sun, Moon } from 'lucide-react';
+import { LayoutDashboard, MessageSquare, Sparkles, Sun, Moon, Settings as SettingsIcon } from 'lucide-react';
 import { useTheme } from "next-themes";
 import { API_BASE } from "@/config/api";
 
 export default function Home() {
+  const router = useRouter();
   const { status, activeTab, setActiveTab, startWorkflow, error } = useWorkflowStore();
   const [apiKeyConfigured, setApiKeyConfigured] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [validationError, setValidationError] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
 
   // Handle mounting for theme to avoid hydration mismatch
@@ -21,15 +24,35 @@ export default function Home() {
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    // Check if configured (simple check)
-    fetch(`${API_BASE}/settings`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.configured) setApiKeyConfigured(true);
-        })
-        .catch(() => {}) // Ignore error, assume not configured
-        .finally(() => setLoading(false));
+    // Check if configured and validate active keys
+    validateConfiguration();
   }, []);
+
+  const validateConfiguration = async () => {
+    setLoading(true);
+    setValidationError(null);
+
+    try {
+      const res = await fetch(`${API_BASE}/settings/validate-active`);
+      const data = await res.json();
+
+      if (data.has_active_key) {
+        setApiKeyConfigured(true);
+      } else {
+        setApiKeyConfigured(false);
+        if (data.warning) {
+          console.log('Validation warning:', data.warning);
+        }
+      }
+    } catch (err: any) {
+      console.error('Validation error:', err);
+      setValidationError(err.message || 'Failed to validate configuration');
+      // Still try to show the app even if validation fails
+      setApiKeyConfigured(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const showArena = status === 'completed' || status === 'generating' || status === 'evaluating';
 
@@ -39,24 +62,33 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 md:p-8 bg-background text-foreground selection:bg-primary/20">
-      
+
       {/* Header */}
       <header className="w-full max-w-7xl mb-8 flex justify-between items-center border-b pb-4">
          <div className="flex items-center gap-2">
-             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                 <Sparkles className="w-5 h-5 text-primary-foreground" />
-             </div>
-             <h1 className="text-xl font-bold tracking-tight">PromptForge</h1>
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <h1 className="text-xl font-bold tracking-tight">PromptForge</h1>
          </div>
-         {mounted && (
-            <button
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="p-2 rounded-lg hover:bg-muted transition-colors"
-                title="Toggle Theme"
-            >
-                {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
-         )}
+          <div className="flex items-center gap-2">
+             <button
+                 onClick={() => router.push('/settings')}
+                 className="p-2 rounded-lg hover:bg-muted transition-colors"
+                 title="Settings"
+             >
+                 <SettingsIcon className="w-5 h-5" />
+             </button>
+             {mounted && (
+                 <button
+                     onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                     className="p-2 rounded-lg hover:bg-muted transition-colors"
+                     title="Toggle Theme"
+                 >
+                     {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                 </button>
+             )}
+          </div>
       </header>
 
       {/* Main Content */}

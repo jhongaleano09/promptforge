@@ -1,5 +1,8 @@
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
+from datetime import datetime
+
+# --- Settings Schemas (Legacy) ---
 
 class SettingsCreate(BaseModel):
     provider: str
@@ -9,6 +12,31 @@ class SettingsCreate(BaseModel):
 class ValidationRequest(BaseModel):
     provider: str
     api_key: str
+
+# --- API Keys Schemas (New) ---
+
+class ApiKeyCreate(BaseModel):
+    provider: str
+    api_key: str
+    model_preference: str
+
+class ApiKeyResponse(BaseModel):
+    id: int
+    provider: str
+    model_preference: str
+    is_active: bool
+    usage_count: int
+    created_at: str
+    updated_at: Optional[str] = None
+
+class ApiKeysListResponse(BaseModel):
+    keys: List[ApiKeyResponse]
+
+class ValidationActiveResponse(BaseModel):
+    has_active_key: bool
+    active_providers: List[str]
+    all_providers: List[str]
+    warning: Optional[str] = None
 
 # --- Workflow Schemas ---
 

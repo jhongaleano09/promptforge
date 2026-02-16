@@ -41,6 +41,7 @@ interface WorkflowState {
   runTest: (variantText: string, variantId: string, testInput: string) => Promise<void>;
   refineVariant: (variantId: string, feedback: string) => Promise<void>;
   setActiveTab: (tab: string) => void;
+  checkActiveKeys: () => Promise<boolean>;
   reset: () => void;
 }
 
@@ -57,7 +58,33 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   isTesting: false,
   isRefining: false,
 
+  checkActiveKeys: async () => {
+    try {
+      const response = await fetch(`${API_BASE}/settings/validate-active`);
+      const data = await response.json();
+
+      if (!data.has_active_key) {
+        set({
+          error: data.warning || "No hay ninguna API key activa configurada"
+        });
+        throw new Error("Configuración requerida: No hay API key activa");
+      }
+
+      return data.has_active_key;
+    } catch (e: any) {
+      set({ error: e.message || "Failed to validate configuration" });
+      throw e;
+    }
+  },
+
   startWorkflow: async (input: string) => {
+    // Validate active keys before starting workflow
+    try {
+      await get().checkActiveKeys();
+    } catch (e) {
+      return; // Error is already set in state
+    }
+
     set({ status: 'clarifying', error: null, currentStreamingMessage: '', messages: [{ role: 'user', content: input }] });
 
     try {
@@ -78,21 +105,21 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
               currentStreamingMessage: state.currentStreamingMessage + parsedData.content
             }));
           } else if (event === 'status') {
-             // Map backend status to frontend status
-             const backendStatus = parsedData.status; // clarify, generate, evaluate
-             let frontendStatus: WorkflowState['status'] = 'clarifying';
-             if (backendStatus === 'generate') frontendStatus = 'generating';
-             if (backendStatus === 'evaluate') frontendStatus = 'evaluating';
-             
-             set({ status: frontendStatus });
+              // Map backend status to frontend status
+              const backendStatus = parsedData.status; // clarify, generate, evaluate
+              let frontendStatus: WorkflowState['status'] = 'clarifying';
+              if (backendStatus === 'generate') frontendStatus = 'generating';
+              if (backendStatus === 'evaluate') frontendStatus = 'evaluating';
+
+              set({ status: frontendStatus });
           } else if (event === 'update') {
             // Full state update
             const { status, message, questions, variants, evaluations } = parsedData;
-            
+
             // If we have a final message (clarification question), append it to messages
             // But we might have been streaming it into currentStreamingMessage
             // So we should commit currentStreamingMessage to messages if it's done
-            
+
             set((state) => {
                 const newMessages = [...state.messages];
                 if (state.currentStreamingMessage) {
@@ -101,7 +128,7 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
                     // Fallback if no streaming happened but we got a message
                     newMessages.push({ role: 'assistant', content: message });
                 }
-                
+
                 // If status is completed, switch tab to arena
                 const nextTab = status === 'completed' ? 'arena' : state.activeTab;
 
@@ -120,7 +147,7 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
         },
         onerror(err) {
             console.error("SSE Error:", err);
-            // Don't throw to avoid retrying indefinitely in this simple logic, 
+            // Don't throw to avoid retrying indefinitely in this simple logic,
             // unless we want auto-reconnect. For this prototype, maybe just log and stop.
             set({ error: "Connection lost" });
             throw err; // rethrow to stop
