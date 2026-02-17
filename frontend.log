@@ -41,3 +41,11 @@ Translation missing for key: "loading"
  GET / 200 in 198ms (compile: 60ms, render: 138ms)
 Translation missing for key: "loading"
  GET / 200 in 31ms (compile: 3ms, render: 28ms)
+ GET /settings 200 in 22ms (compile: 3ms, render: 19ms)
+ GET /settings 200 in 17ms (compile: 3ms, render: 14ms)
+Translation missing for key: "loading"
+ GET / 200 in 31ms (compile: 3ms, render: 28ms)
+ GET /settings 200 in 46ms (compile: 2ms, render: 43ms)
+Translation missing for key: "loading"
+ GET / 200 in 26ms (compile: 2ms, render: 24ms)
+ GET /settings 200 in 14ms (compile: 1578µs, render: 12ms)

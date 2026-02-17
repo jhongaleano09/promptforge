@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from litellm import completion, AuthenticationError, RateLimitError
 import litellm
@@ -18,8 +18,22 @@ import aiosqlite
 from langchain_core.messages import HumanMessage
 from datetime import datetime
 import logging
+import os
 
 logger = logging.getLogger(__name__)
+
+# Configurar logger específico para validaciones de test
+test_validation_logger = logging.getLogger("test_validations")
+test_validation_logger.setLevel(logging.INFO)
+
+# Configurar handler para archivo de log específico
+if not test_validation_logger.handlers:
+    os.makedirs('logs', exist_ok=True)
+    test_log_handler = logging.FileHandler('logs/test_validations.log')
+    test_log_handler.setFormatter(
+        logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    )
+    test_validation_logger.addHandler(test_log_handler)
 
 router = APIRouter()
 
@@ -57,6 +71,131 @@ async def validate_settings(request: ValidationRequest):
     except Exception as e:
         # In a real scenario, check for timeout specifically if needed
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/settings/validate-test")
+async def validate_test_key(request_obj: Request, validation_request: ValidationRequest):
+    """
+    Valida una API key SIN guardarla en base de datos.
+    Solo para pruebas del propietario/desarrollador.
+    
+    Endpoint diferente de /settings/validate que:
+    - Valida Y guarda en BD
+    - Es para producción (usuarios finales)
+    
+    Args:
+        request_obj: FastAPI Request object para obtener metadata (IP, user agent)
+        validation_request: ValidationRequest con provider, api_key
+    
+    Returns:
+        JSON con resultado de validación
+        
+    Raises:
+        HTTPException: Si la validación falla o el modo test está deshabilitado
+    """
+    # Verificar si estamos en modo de test
+    test_mode = os.getenv("PROMPTFORGE_TEST_MODE", "false").lower() == "true"
+    
+    if not test_mode:
+        test_validation_logger.warning(
+            f"Intento de acceso a endpoint de test con modo deshabilitado | "
+            f"IP: {request_obj.client.host if request_obj.client else 'unknown'}"
+        )
+        raise HTTPException(
+            status_code=403,
+            detail="Test validation endpoint is only available in test mode. "
+                   "Set PROMPTFORGE_TEST_MODE=true in your .env file to enable."
+        )
+    
+    # Validar que el proveedor sea soportado
+    SUPPORTED_PROVIDERS = ["openai", "anthropic", "ollama"]
+    provider_lower = validation_request.provider.lower()
+    
+    if provider_lower not in SUPPORTED_PROVIDERS:
+        error_msg = (
+            f"Provider '{validation_request.provider}' is not supported. "
+            f"Supported providers: {', '.join(SUPPORTED_PROVIDERS)}"
+        )
+        test_validation_logger.error(
+            f"Proveedor no soportado | IP: {request_obj.client.host if request_obj.client else 'unknown'} | "
+            f"Provider: {validation_request.provider}"
+        )
+        raise HTTPException(status_code=400, detail=error_msg)
+    
+    # Obtener metadata para logging
+    client_ip = request_obj.client.host if request_obj.client else "unknown"
+    user_agent = request_obj.headers.get("user-agent", "unknown")
+    
+    # Seleccionar modelo de prueba según proveedor (modelos económicos)
+    test_models = {
+        "openai": "gpt-3.5-turbo",
+        "anthropic": "claude-3-haiku-20240307",
+        "ollama": "llama3"
+    }
+    test_model = test_models.get(provider_lower, "gpt-3.5-turbo")
+    
+    try:
+        # Llamar realmente al servicio para validar la API key
+        response = completion(
+            model=test_model,
+            messages=[{"role": "user", "content": "Hello"}],
+            api_key=validation_request.api_key,
+            max_tokens=5
+        )
+        
+        # Obtener respuesta de prueba
+        test_response = response.choices[0].message.content if response.choices else "OK"
+        
+        # Log de validación exitosa
+        test_validation_logger.info(
+            f"Validación exitosa | IP: {client_ip} | User-Agent: {user_agent} | "
+            f"Provider: {validation_request.provider} | Model: {test_model} | "
+            f"Status: success"
+        )
+        
+        return {
+            "status": "success",
+            "message": "API Key is valid and working",
+            "provider": validation_request.provider,
+            "test_model": test_model,
+            "test_response": test_response
+        }
+    
+    except AuthenticationError as e:
+        # API key inválida
+        test_validation_logger.warning(
+            f"API key inválida | IP: {client_ip} | User-Agent: {user_agent} | "
+            f"Provider: {validation_request.provider} | Status: authentication_error | "
+            f"Error: {str(e)}"
+        )
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid API Key. Please check your credentials."
+        )
+    
+    except RateLimitError as e:
+        # Límite de cuota o rate limit
+        test_validation_logger.warning(
+            f"Rate limit excedido | IP: {client_ip} | User-Agent: {user_agent} | "
+            f"Provider: {validation_request.provider} | Status: rate_limit_error | "
+            f"Error: {str(e)}"
+        )
+        raise HTTPException(
+            status_code=429,
+            detail="Rate limit exceeded or insufficient quota. Please check your provider dashboard."
+        )
+    
+    except Exception as e:
+        # Error general
+        test_validation_logger.error(
+            f"Error de validación | IP: {client_ip} | User-Agent: {user_agent} | "
+            f"Provider: {validation_request.provider} | Status: error | "
+            f"Error: {str(e)}"
+        )
+        raise HTTPException(
+            status_code=500,
+            detail=f"Validation failed: {str(e)}"
+        )
 
 @router.post("/settings/save")
 async def save_settings(settings_in: SettingsCreate, db: Session = Depends(get_db)):
