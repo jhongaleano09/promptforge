@@ -1,1 +1,108 @@
-/bin/bash: línea 1: python: orden no encontrada
+/home/jhongaleano/.local/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_max_budget" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+/home/jhongaleano/.local/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_spend" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+INFO:     Started server process [20503]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8002 (Press CTRL+C to quit)
+INFO:     127.0.0.1:37690 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50512 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37962 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37962 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37964 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37962 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37964 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37962 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37964 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37962 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40668 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40668 - "OPTIONS /api/workflow/stream/start HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40668 - "POST /api/workflow/stream/start HTTP/1.1" 200 OK
+Error getting active API key: 
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
+    h.verify(data[-32:])
+cryptography.exceptions.InvalidSignature: Signature did not match digest.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/config_service.py", line 51, in get_active_api_key
+    api_key_decrypted = security_service.decrypt_key(api_key_encrypted)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/security.py", line 51, in decrypt_key
+    return self.fernet.decrypt(encrypted_key).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 89, in decrypt
+    return self._decrypt_data(data, timestamp, time_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 148, in _decrypt_data
+    self._verify_signature(data)
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 132, in _verify_signature
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+No active API key found in clarify_node
+INFO:     127.0.0.1:44216 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44216 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44224 - "GET /api/settings/keys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44238 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44224 - "GET /api/settings/keys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44238 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44224 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44224 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44224 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44224 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40860 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40868 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40860 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40868 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40860 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54602 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38196 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38196 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:38202 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38202 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57576 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57598 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57598 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39950 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39950 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39952 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39950 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39966 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:39950 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39950 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39950 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54326 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54330 - "GET /docs HTTP/1.1" 200 OK

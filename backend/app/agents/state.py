@@ -9,6 +9,7 @@ class PromptState(TypedDict):
     """
     user_input: str
     language: str  # Interaction language: 'spanish' or 'english' (default: 'spanish')
+    prompt_type: str  # Type of prompt: 'basic', 'system', 'image', 'additional' (default: 'basic')
     requirements: Dict[str, Any]
     clarification_dialogue: Annotated[List[BaseMessage], operator.add]
     generated_variants: List[Dict[str, Any]]  # [ {id: 'A', content: '...'}, ... ]

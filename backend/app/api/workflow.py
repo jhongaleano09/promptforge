@@ -8,6 +8,8 @@ from langchain_core.messages import HumanMessage, AIMessage
 
 from app.api.schemas import WorkflowStartRequest, WorkflowAnswerRequest, WorkflowResponse
 from app.core.workflow_manager import workflow_manager
+from app.agents.workflow_factory import get_workflow_graph
+from app.core.prompt_types import validate_prompt_type
 
 logger = logging.getLogger(__name__)
 
@@ -138,13 +140,20 @@ async def event_generator(graph, input_state, config):
 async def start_workflow_stream(request: WorkflowStartRequest):
     thread_id = str(uuid.uuid4())
     manager = await workflow_manager.get_instance()
-    graph = await manager.get_graph_runnable()
+    
+    # Validate and get prompt type (with fallback to 'basic')
+    prompt_type = validate_prompt_type(request.prompt_type)
+    
+    # Get the appropriate workflow graph using factory pattern
+    checkpointer = await manager.get_checkpointer()
+    graph = get_workflow_graph(prompt_type, checkpointer=checkpointer)
 
     config = {"configurable": {"thread_id": thread_id}}
 
     initial_state = {
         "user_input": request.user_input,
         "selected_provider": request.provider,
+        "prompt_type": prompt_type,  # Add prompt type to state
         "clarification_dialogue": [],
         "requirements": {},
         "generated_variants": [],
@@ -159,9 +168,19 @@ async def start_workflow_stream(request: WorkflowStartRequest):
 @router.post("/stream/{thread_id}/answer")
 async def answer_clarification_stream(thread_id: str, request: WorkflowAnswerRequest):
     manager = await workflow_manager.get_instance()
-    graph = await manager.get_graph_runnable()
+    checkpointer = await manager.get_checkpointer()
     
+    # Get current state to retrieve prompt_type
     config = {"configurable": {"thread_id": thread_id}}
+    temp_graph = get_workflow_graph("basic", checkpointer=checkpointer)  # Use basic to get state
+    state = await temp_graph.aget_state(config)
+    
+    # Extract prompt_type from state, default to 'basic' if not found
+    prompt_type = state.values.get("prompt_type", "basic") if state.values else "basic"
+    prompt_type = validate_prompt_type(prompt_type)
+    
+    # Get the appropriate workflow graph
+    graph = get_workflow_graph(prompt_type, checkpointer=checkpointer)
     
     input_delta = {
         "clarification_dialogue": [HumanMessage(content=request.answer)]
@@ -176,12 +195,18 @@ async def answer_clarification_stream(thread_id: str, request: WorkflowAnswerReq
 async def start_workflow(request: WorkflowStartRequest):
     thread_id = str(uuid.uuid4())
     manager = await workflow_manager.get_instance()
-    graph = await manager.get_graph_runnable()
+    checkpointer = await manager.get_checkpointer()
+    
+    # Validate and get prompt type
+    prompt_type = validate_prompt_type(request.prompt_type)
+    graph = get_workflow_graph(prompt_type, checkpointer=checkpointer)
     
     config = {"configurable": {"thread_id": thread_id}}
     
     initial_state = {
         "user_input": request.user_input,
+        "selected_provider": request.provider,
+        "prompt_type": prompt_type,
         "clarification_dialogue": [],
         "requirements": {},
         "generated_variants": [],
@@ -195,9 +220,18 @@ async def start_workflow(request: WorkflowStartRequest):
 @router.post("/{thread_id}/answer", response_model=WorkflowResponse)
 async def answer_clarification(thread_id: str, request: WorkflowAnswerRequest):
     manager = await workflow_manager.get_instance()
-    graph = await manager.get_graph_runnable()
+    checkpointer = await manager.get_checkpointer()
     
     config = {"configurable": {"thread_id": thread_id}}
+    
+    # Get current state to retrieve prompt_type
+    temp_graph = get_workflow_graph("basic", checkpointer=checkpointer)
+    state = await temp_graph.aget_state(config)
+    prompt_type = state.values.get("prompt_type", "basic") if state.values else "basic"
+    prompt_type = validate_prompt_type(prompt_type)
+    
+    # Get the appropriate workflow graph
+    graph = get_workflow_graph(prompt_type, checkpointer=checkpointer)
     
     input_delta = {
         "clarification_dialogue": [HumanMessage(content=request.answer)]
@@ -210,10 +244,13 @@ async def answer_clarification(thread_id: str, request: WorkflowAnswerRequest):
 @router.get("/{thread_id}/state", response_model=WorkflowResponse)
 async def get_workflow_state(thread_id: str):
     manager = await workflow_manager.get_instance()
-    graph = await manager.get_graph_runnable()
+    checkpointer = await manager.get_checkpointer()
     
     config = {"configurable": {"thread_id": thread_id}}
-    state = await graph.aget_state(config)
+    
+    # Get current state to retrieve prompt_type
+    temp_graph = get_workflow_graph("basic", checkpointer=checkpointer)
+    state = await temp_graph.aget_state(config)
     
     if not state.values:
         raise HTTPException(status_code=404, detail="Thread not found")

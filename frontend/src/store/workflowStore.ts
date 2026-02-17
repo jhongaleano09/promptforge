@@ -38,7 +38,7 @@ interface WorkflowState {
   isTesting: boolean;
   isRefining: boolean;
 
-  startWorkflow: (input: string) => Promise<void>;
+  startWorkflow: (input: string, promptType?: string) => Promise<void>;
   answerClarification: (answer: string) => Promise<void>;
   updateVariant: (index: number, content: string) => void;
   runTest: (variantText: string, variantId: string, testInput: string) => Promise<void>;
@@ -83,7 +83,7 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
     }
   },
 
-  startWorkflow: async (input: string) => {
+  startWorkflow: async (input: string, promptType: string = 'basic') => {
     // Validate active keys before starting workflow
     try {
       await get().checkActiveKeys();
@@ -101,7 +101,8 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
         },
         body: JSON.stringify({ 
           user_input: input,
-          provider: get().selectedProvider 
+          provider: get().selectedProvider,
+          prompt_type: promptType
         }),
         onmessage(ev) {
           const { event, data } = ev;

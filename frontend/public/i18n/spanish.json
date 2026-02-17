@@ -110,5 +110,19 @@
   
   "validation_retrying_in": "Reintentando en {countdown}s...",
   "validation_max_retries": "Máximo de intentos alcanzado. Por favor revise su clave API o intente nuevamente.",
-  "validation_cancel": "Cancelar"
+  "validation_cancel": "Cancelar",
+  
+  "prompt_type_selector_title": "Selecciona el Tipo de Prompt",
+  "prompt_type_selector_description": "Elige el tipo de prompt que deseas crear",
+  "prompt_type_basic_name": "Básico",
+  "prompt_type_basic_description": "Prompt general de texto",
+  "prompt_type_system_name": "Sistema",
+  "prompt_type_system_description": "Instrucciones del sistema",
+  "prompt_type_image_name": "Imagen",
+  "prompt_type_image_description": "Prompt con soporte de imágenes",
+  "prompt_type_additional_name": "Adicional",
+  "prompt_type_additional_description": "Prompt avanzado con variables",
+  "prompt_type_coming_soon_title": "Próximamente",
+  "prompt_type_coming_soon_description": "Este tipo de prompt estará disponible pronto. Por ahora, solo está disponible el tipo Básico.",
+  "prompt_type_coming_soon_close": "Entendido"
 }

@@ -110,5 +110,19 @@
   
   "validation_retrying_in": "Retrying in {countdown}s...",
   "validation_max_retries": "Maximum retry attempts reached. Please check your API key or try again.",
-  "validation_cancel": "Cancel"
+  "validation_cancel": "Cancel",
+  
+  "prompt_type_selector_title": "Select Prompt Type",
+  "prompt_type_selector_description": "Choose the type of prompt you want to create",
+  "prompt_type_basic_name": "Basic",
+  "prompt_type_basic_description": "General text prompt",
+  "prompt_type_system_name": "System",
+  "prompt_type_system_description": "System instructions",
+  "prompt_type_image_name": "Image",
+  "prompt_type_image_description": "Prompt with image support",
+  "prompt_type_additional_name": "Additional",
+  "prompt_type_additional_description": "Advanced prompt with variables",
+  "prompt_type_coming_soon_title": "Coming Soon",
+  "prompt_type_coming_soon_description": "This prompt type will be available soon. For now, only the Basic type is available.",
+  "prompt_type_coming_soon_close": "Got it"
 }

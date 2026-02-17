@@ -109,6 +109,12 @@ class WorkflowManager:
             await self.initialize()
         return self._graph
     
+    async def get_checkpointer(self):
+        """Get the checkpointer instance for use in workflow factory."""
+        if self._saver is None:
+            await self.initialize()
+        return self._saver
+    
     async def close(self):
         if hasattr(self, 'conn') and self.conn:
             await self.conn.close()

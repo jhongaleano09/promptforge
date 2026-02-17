@@ -1,53 +1,17 @@
-INFO:     Will watch for changes in these directories: ['/home/jhongaleano/projects/promptforge/backend']
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [298388] using StatReload
-/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_max_budget" has conflict with protected namespace "model_".
+/home/jhongaleano/.local/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_max_budget" has conflict with protected namespace "model_".
 
 You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
   warnings.warn(
-/home/jhongaleano/projects/promptforge/backend/venv/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_spend" has conflict with protected namespace "model_".
+/home/jhongaleano/.local/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_spend" has conflict with protected namespace "model_".
 
 You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
   warnings.warn(
-INFO:     Started server process [298400]
+INFO:     Started server process [16061]
 INFO:     Waiting for application startup.
-Migration error: cannot import name 'DATABASE_URL' from 'app.db.database' (/home/jhongaleano/projects/promptforge/backend/app/db/database.py)
 INFO:     Application startup complete.
-INFO:     127.0.0.1:34208 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46950 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46058 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46058 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46058 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46058 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46058 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46058 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46070 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56768 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56768 - "OPTIONS /api/workflow/stream/start HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56768 - "POST /api/workflow/stream/start HTTP/1.1" 200 OK
-Error in llm_call from clarify_node: OpenAIException - Error code: 400 - {'error': {'message': "Invalid parameter: 'response_format' of type 'json_object' is not supported with this model.", 'type': 'invalid_request_error', 'param': 'response_format', 'code': None}}
-
-[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
-LiteLLM.Info: If you need to debug this error, use `litellm.set_verbose=True'.
-
-INFO:     127.0.0.1:38064 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38064 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38064 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38064 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38078 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38078 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38064 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59604 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59604 - "OPTIONS /api/workflow/stream/start HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59604 - "POST /api/workflow/stream/start HTTP/1.1" 200 OK
-Error in llm_call from clarify_node: OpenAIException - Error code: 400 - {'error': {'message': "Invalid parameter: 'response_format' of type 'json_object' is not supported with this model.", 'type': 'invalid_request_error', 'param': 'response_format', 'code': None}}
-
-[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
-LiteLLM.Info: If you need to debug this error, use `litellm.set_verbose=True'.
-
-INFO:     127.0.0.1:37270 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59604 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37270 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37278 - "GET /api/settings/keys HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37294 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37278 - "GET /api/settings/keys HTTP/1.1" 200 OK
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:46018 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [16061]

@@ -7,6 +7,7 @@ import { ChatInterface } from '@/components/arena/ChatInterface';
 import { ArenaView } from '@/components/arena/ArenaView';
 import { useWorkflowStore } from '@/store/workflowStore';
 import { ProviderSelector } from '@/components/provider-selector';
+import { PromptTypeSelector } from '@/components/prompt-type-selector';
 import { cn } from '@/lib/utils';
 import { LayoutDashboard, MessageSquare, Sparkles, Sun, Moon, Settings as SettingsIcon } from 'lucide-react';
 import { useTheme } from "next-themes";
@@ -21,11 +22,20 @@ export default function Home() {
   const [apiKeyConfigured, setApiKeyConfigured] = useState(false);
   const [loading, setLoading] = useState(true);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [promptType, setPromptType] = useState<string>('basic');
   const { theme, setTheme } = useTheme();
 
   // Handle mounting for theme to avoid hydration mismatch
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+
+  // Load prompt type from localStorage on mount
+  useEffect(() => {
+    const savedType = localStorage.getItem('promptforge_prompt_type');
+    if (savedType) {
+      setPromptType(savedType);
+    }
+  }, []);
 
   useEffect(() => {
     // Check if configured and validate active keys
@@ -146,7 +156,15 @@ export default function Home() {
                     {activeTab === 'chat' && (
                         <div className="w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
                              {status === 'idle' ? (
-                                 <InitialPromptInput onSubmit={startWorkflow} />
+                                 <>
+                                   <PromptTypeSelector 
+                                     selectedType={promptType}
+                                     onTypeSelect={(type) => setPromptType(type)}
+                                   />
+                                   <InitialPromptInput 
+                                     onSubmit={(text) => startWorkflow(text, promptType)} 
+                                   />
+                                 </>
                              ) : (
                                  <ChatInterface />
                              )}

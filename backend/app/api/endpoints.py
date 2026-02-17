@@ -619,3 +619,46 @@ async def run_workflow(
             "thread_id": thread_id,
             "next": "evaluate" if selected_variant else "clarify_result" 
         }
+
+
+# ===== Phase 8: Prompt Types Endpoints =====
+
+@router.get("/prompts/types")
+async def get_all_prompt_types():
+    """
+    Get all prompt types with their configurations.
+    Returns both enabled and disabled types.
+    """
+    from app.core.prompt_types import get_all_prompt_types as get_types_list
+    
+    types = get_types_list()
+    enabled_count = len([t for t in types if t.get("enabled", False)])
+    
+    return {
+        "types": types,
+        "total": len(types),
+        "enabled_count": enabled_count
+    }
+
+
+@router.get("/prompts/types/available")
+async def get_available_prompt_types():
+    """
+    Get only enabled prompt types (ready to use).
+    """
+    from app.core.prompt_types import get_enabled_prompt_types, get_prompt_type_config
+    
+    enabled_ids = get_enabled_prompt_types()
+    types = []
+    
+    for type_id in enabled_ids:
+        config = get_prompt_type_config(type_id)
+        types.append({
+            "id": type_id,
+            **config
+        })
+    
+    return {
+        "types": types,
+        "total": len(types)
+    }
