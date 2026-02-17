@@ -8,6 +8,7 @@ class PromptState(TypedDict):
     State definition for the PromptForge LangGraph workflow.
     """
     user_input: str
+    language: str  # Interaction language: 'spanish' or 'english' (default: 'spanish')
     requirements: Dict[str, Any]
     clarification_dialogue: Annotated[List[BaseMessage], operator.add]
     generated_variants: List[Dict[str, Any]]  # [ {id: 'A', content: '...'}, ... ]

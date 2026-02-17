@@ -24,4 +24,4 @@ def get_db():
 
 # Import models to register them with Base.metadata AFTER Base is defined
 # This avoids circular imports
-from app.db.models import Settings, ApiKey
+from app.db.models import Settings, ApiKey, UserPreferences

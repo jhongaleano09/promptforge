@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from app.api import endpoints, workflow
+from app.api import endpoints, workflow, user_preferences
 from app.db.database import engine, Base
 from app.core.workflow_manager import workflow_manager
 import logging
+import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -36,12 +37,14 @@ def run_migration_if_needed():
 
     except Exception as e:
         logger.error(f"Migration error: {e}")
+        import traceback
+        traceback.print_exc()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup actions
     logger.info("Starting PromptForge API...")
-    run_migration_if_needed()  # Enable automatic migration on startup
+    # run_migration_if_needed()  # Enable automatic migration on startup - DISABLED FOR DEBUG
     logger.info("PromptForge API startup completed")
     yield
     # Shutdown actions
@@ -69,7 +72,12 @@ app.add_middleware(
 
 app.include_router(endpoints.router, prefix="/api")
 app.include_router(workflow.router, prefix="/api/workflow")
+app.include_router(user_preferences.router, prefix="/api")
 
 @app.get("/")
 def read_root():
     return {"message": "PromptForge Backend is running"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "service": "promptforge"}

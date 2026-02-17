@@ -24,6 +24,7 @@ class ConfigService:
             Dict con: { 'api_key': str, 'model_preference': str, 'provider': str, 'key_id': int }
             o None si no hay API key activa.
         """
+        db = None
         try:
             db = next(get_db())
 
@@ -36,11 +37,18 @@ class ConfigService:
 
             if not active_key:
                 logger.warning(f"No active API key found" + (f" for provider {provider}" if provider else ""))
-                db.close()
                 return None
 
+            # Extraer TODOS los datos necesarios MIENTRAS la sesión está abierta
+            # Esto evita el error "not bound to a Session"
+            key_id = active_key.id
+            provider_name = active_key.provider
+            model_preference = active_key.model_preference
+            api_key_encrypted = active_key.api_key_encrypted
+            usage_count = active_key.usage_count
+            
             # Desencriptar la API key
-            api_key_decrypted = security_service.decrypt_key(active_key.api_key_encrypted)
+            api_key_decrypted = security_service.decrypt_key(api_key_encrypted)
 
             # Actualizar contador de uso
             active_key.usage_count += 1
@@ -48,19 +56,22 @@ class ConfigService:
             active_key.last_used_at = datetime.utcnow()
             db.commit()
 
-            db.close()
-
             return {
                 'api_key': api_key_decrypted,
-                'model_preference': active_key.model_preference,
-                'provider': active_key.provider,
-                'key_id': active_key.id,
-                'usage_count': active_key.usage_count
+                'model_preference': model_preference,
+                'provider': provider_name,
+                'key_id': key_id,
+                'usage_count': usage_count
             }
 
         except Exception as e:
             logger.error(f"Error getting active API key: {e}")
+            import traceback
+            logger.error(f"Traceback: {traceback.format_exc()}")
             return None
+        finally:
+            if db:
+                db.close()
 
     async def get_all_active_providers(self) -> list:
         """
@@ -69,11 +80,13 @@ class ConfigService:
         Returns:
             List de dicts: [{ 'provider': str, 'model_preference': str, 'usage_count': int }, ...]
         """
+        db = None
         try:
             db = next(get_db())
 
             active_keys = db.query(ApiKey).filter(ApiKey.is_active == 1).all()
 
+            # Extraer datos mientras la sesión está abierta
             providers_info = []
             for key in active_keys:
                 providers_info.append({
@@ -82,13 +95,16 @@ class ConfigService:
                     'usage_count': key.usage_count
                 })
 
-            db.close()
-
             return providers_info
 
         except Exception as e:
             logger.error(f"Error getting active providers: {e}")
+            import traceback
+            logger.error(f"Traceback: {traceback.format_exc()}")
             return []
+        finally:
+            if db:
+                db.close()
 
     async def get_models_for_provider(self, provider: str) -> list:
         """

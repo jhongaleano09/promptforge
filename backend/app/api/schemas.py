@@ -60,3 +60,34 @@ class WorkflowResponse(BaseModel):
     questions: List[str] = []
     variants: List[Dict[str, Any]] = []
     evaluations: Dict[str, Any] = {}
+
+# --- User Preferences Schemas ---
+
+class UserPreferencesResponse(BaseModel):
+    """Response schema for user preferences"""
+    language: str
+    name: Optional[str] = None
+    country: Optional[str] = None
+    
+    model_config = {"protected_namespaces": ()}
+
+class UserPreferencesUpdate(BaseModel):
+    """Request schema for updating user preferences"""
+    language: Optional[str] = None
+    name: Optional[str] = None
+    country: Optional[str] = None
+    
+    model_config = {"protected_namespaces": ()}
+
+class LanguagePreferenceResponse(BaseModel):
+    """Response schema for language preference"""
+    language: str
+    supported_languages: List[str] = ["spanish", "english"]
+    
+    model_config = {"protected_namespaces": ()}
+
+class LanguagePreferenceUpdate(BaseModel):
+    """Request schema for updating language preference"""
+    language: str
+    
+    model_config = {"protected_namespaces": ()}

@@ -1,1 +1,22 @@
-python3: can't open file '/home/jhongaleano/projects/promptforge/main.py': [Errno 2] No such file or directory
+DEBUG 1: Starting imports...
+/home/jhongaleano/.local/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_max_budget" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+/home/jhongaleano/.local/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_spend" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+DEBUG 2: Imported API modules
+DEBUG 3: Imported database
+DEBUG 4: Imported workflow manager
+DEBUG 5: Creating tables...
+DEBUG 6: Tables created
+DEBUG 8: Creating FastAPI app
+DEBUG 9: App created, adding CORS
+DEBUG 10: Routers included
+INFO:     Started server process [48245]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:43360 - "GET /health HTTP/1.1" 200 OK

@@ -4,8 +4,10 @@ import { useWorkflowStore } from '@/store/workflowStore';
 import { PromptCard } from './PromptCard';
 import { EvaluationChart } from './EvaluationChart';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export function ArenaView() {
+  const { t } = useLanguage();
   const { variants, status } = useWorkflowStore();
 
   if (status === 'generating' || status === 'evaluating') {
@@ -41,7 +43,7 @@ export function ArenaView() {
         <div className="w-full md:w-1/3 lg:w-1/4 sticky top-4">
              <EvaluationChart />
              <div className="mt-4 p-4 bg-muted/20 rounded-xl text-sm text-muted-foreground border border-dashed">
-                <p>Compare the variants across Clarity, Safety, and Completeness. Edit any variant to refine it further.</p>
+                <p>{t("arena_compare_description")}</p>
              </div>
         </div>
 

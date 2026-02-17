@@ -6,7 +6,7 @@ from pathlib import Path
 # or a secure file vault. For this local desktop app, we will store it in a .env file
 # or generate it on the fly if missing (persisting it).
 
-SECRET_KEY_FILE = Path(".env")
+SECRET_KEY_FILE = Path(__file__).parent.parent.parent / ".env"
 
 class SecurityService:
     def __init__(self):
@@ -17,14 +17,20 @@ class SecurityService:
         # Check environment variable first
         env_key = os.getenv("PROMPTFORGE_SECRET_KEY")
         if env_key:
-            return env_key.encode()
+            key_val = env_key.strip()
+            if not key_val.endswith('=') and len(key_val) == 43:
+                key_val += '='
+            return key_val.encode()
 
         # Check .env file
         if SECRET_KEY_FILE.exists():
             with open(SECRET_KEY_FILE, "r") as f:
                 for line in f:
                     if line.startswith("PROMPTFORGE_SECRET_KEY="):
-                        return line.strip().split("=")[1].encode()
+                        key_val = line.strip().split("=")[1].strip()
+                        if not key_val.endswith('=') and len(key_val) == 43:
+                            key_val += '='
+                        return key_val.encode()
 
         # Generate new key
         new_key = Fernet.generate_key()

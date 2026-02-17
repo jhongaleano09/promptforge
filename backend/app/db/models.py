@@ -28,3 +28,23 @@ class ApiKey(Base):
     __table_args__ = (
         Index('idx_provider_active', 'provider', 'is_active'),
     )
+
+
+class UserPreferences(Base):
+    """
+    User profile and preferences table.
+    Single-user application: should only contain ONE row.
+    
+    Stores:
+    - language: UI and agent interaction language ('spanish' or 'english')
+    - name: User's name (optional)
+    - country: User's country (optional)
+    """
+    __tablename__ = "user_preferences"
+
+    id = Column(Integer, primary_key=True, index=True)
+    language = Column(String, default="spanish", nullable=False)
+    name = Column(String, nullable=True)
+    country = Column(String, nullable=True)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())

@@ -8,9 +8,9 @@ cryptography==42.0.2
 python-dotenv==1.0.1
 httpx==0.26.0
 python-multipart==0.0.9
-langgraph
-langchain
-langchain-community
-langchain-core
-aiosqlite>=0.23.0
-langgraph-checkpoint-sqlite
+langgraph==0.2.76
+langchain==0.2.17
+langchain-community==0.2.19
+langchain-core==0.2.43
+aiosqlite==0.20.0
+langgraph-checkpoint-sqlite==2.0.11

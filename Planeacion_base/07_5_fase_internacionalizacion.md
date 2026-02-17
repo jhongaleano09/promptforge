@@ -259,12 +259,12 @@ def is_valid_language(language: str) -> bool:
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que los marcadores de formato sean idénticos en ambos idiomas (ej: `{user_input}` siempre, no `{input}` en inglés)?
-2. ¿Deseas agregar notas o comentarios en los templates para explicar qué hace cada sección?
-3. ¿Deberíamos mantener también los templates originales en `templates.py` o reemplazarlos completamente?
-4. ¿Deseas que los nombres de variables sean los mismos en ambos idiomas (ej: `persona_name` en vez de `nombre_persona`)?
-5. ¿Deseas que la función `get_templates()` valide el idioma o retorne el default sin advertencias?
-6. ¿Hay alguna expresión idiomática o mática cultural que sea difícil de traducir literalmente?
+1. ¿Deseas que los marcadores de formato sean idénticos en ambos idiomas (ej: `{user_input}` siempre, no `{input}` en inglés)? RTA/ si los marcadores se deben conservar, lo relevante es la interfaz de usuario.
+2. ¿Deseas agregar notas o comentarios en los templates para explicar qué hace cada sección? RTA? si.
+3. ¿Deberíamos mantener también los templates originales en `templates.py` o reemplazarlos completamente? RTA/ Mantenerlos seran la base que posteriores iteraciones se traduciran a otros idiomas.
+4. ¿Deseas que los nombres de variables sean los mismos en ambos idiomas (ej: `persona_name` en vez de `nombre_persona`)? RTA/ si las variables debe ser las mismos no hay necesidad de ajustarlas.
+5. ¿Deseas que la función `get_templates()` valide el idioma o retorne el default sin advertencias? RTA/ correcto.
+6. ¿Hay alguna expresión idiomática o mática cultural que sea difícil de traducir literalmente? RTA/ por el momento realiza la traduccion directa, en pruebas y usos se realizaran las correcciones inlcuidas las de los prompts iniciales que aun debo trabajarlos de forma directa.
 
 ---
 
@@ -311,11 +311,11 @@ class PromptState(TypedDict):
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que `language` sea requerido o opcional (con default)?
-2. ¿Deberíamos agregar validación para asegurar que solo se use "spanish" o "english"?
-3. ¿Deseas agregar también un campo `ui_language` separado de `interaction_language`?
-4. ¿Deberíamos mantener el nombre en inglés (`language`) o usar `idioma` en español?
-
+1. ¿Deseas que `language` sea requerido o opcional (con default)? RTA/ definelo
+2. ¿Deberíamos agregar validación para asegurar que solo se use "spanish" o "english"? RTA/ Correcto.
+3. ¿Deseas agregar también un campo `ui_language` separado de `interaction_language`? RTA/ Si van a ser el mismo valor no seria necesario.
+4. ¿Deberíamos mantener el nombre en inglés (`language`) o usar `idioma` en español? RTA/ usar idioma cuando este en español y en ingles usar language.
+ 
 ---
 
 ### Tarea 7.5.3: Integrar Templates i18n en Nodos del Workflow
@@ -395,11 +395,11 @@ async def clarify_node(state: PromptState):
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que mantengamos ambos imports (templates.py y i18n_templates.py) por compatibilidad o solo usar i18n?
-2. ¿Deseas que la lógica de selección de idioma se centralice en una función auxiliar que usen todos los nodos?
-3. ¿Qué debería pasar si el estado no tiene el campo `language`? ¿Usar default o lanzar error?
-4. ¿Deseas agregar logging para rastrear qué idioma se está usando en cada ejecución?
-5. ¿Deberíamos validar que el template seleccionado exista antes de usarlo (defensivo)?
+1. ¿Deseas que mantengamos ambos imports (templates.py y i18n_templates.py) por compatibilidad o solo usar i18n? RTA/ si mantener.
+2. ¿Deseas que la lógica de selección de idioma se centralice en una función auxiliar que usen todos los nodos? RTA/ no comprendi la pregunta, realiza una sugerencia sobre este punto.
+3. ¿Qué debería pasar si el estado no tiene el campo `language`? ¿Usar default o lanzar error? RTA/ usar default.
+4. ¿Deseas agregar logging para rastrear qué idioma se está usando en cada ejecución? RTA/ no es necesario realizar logging, sin embargo, si sera necesario tener un espacio para el usuario. (nombre, pais, etc)
+5. ¿Deberíamos validar que el template seleccionado exista antes de usarlo (defensivo)? RTA/ Si, pero solo para los test, a nivel general no deberiamos validar ya que siempre deben estar disponibles.
 
 ---
 
@@ -436,9 +436,9 @@ GET /api/settings/language
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas almacenar la preferencia de idioma en la tabla `api_keys` o crear una tabla `user_preferences`?
-2. ¿Deseas que la respuesta incluya también los metadatos del idioma (nombre, código, dirección del texto)?
-3. ¿Deberíamos incluir en la respuesta también la fecha de la última vez que se cambió el idioma?
+1. ¿Deseas almacenar la preferencia de idioma en la tabla `api_keys` o crear una tabla `user_preferences`? RTA/ crear nueva tabla 'user_perfil_preferences'
+2. ¿Deseas que la respuesta incluya también los metadatos del idioma (nombre, código, dirección del texto)? RTA/ no, la respuesta debe ser pensada en funcion del usuario. no requiere esa parte.
+3. ¿Deberíamos incluir en la respuesta también la fecha de la última vez que se cambió el idioma? RTA/ no, enfocarnos en que realicamos refinamiento de prompts.
 
 #### 4.2: POST `/api/settings/language` - Guardar Preferencia de Idioma
 
@@ -495,11 +495,11 @@ Content-Type: application/json
 
 **❓ Preguntas Clave:**
 
-1. ¿Prefieres almacenar la preferencia de idioma en la tabla `api_keys` (Opción A) o crear una tabla `user_settings` (Opción B)?
-2. ¿Deseas que al guardar el idioma, se actualice también el estado de cualquier workflow activo en memoria?
-3. ¿Deberíamos enviar un evento o notificación cuando se cambia el idioma?
-4. ¿Deseas agregar un campo `last_changed_at` para rastrear cuándo se modificó el idioma?
-5. ¿Deseas que el endpoint valide si el usuario tiene permisos para cambiar configuraciones?
+1. ¿Prefieres almacenar la preferencia de idioma en la tabla `api_keys` (Opción A) o crear una tabla `user_settings` (Opción B)? RTA/ en la tabla nueva creada, se menciono antes.
+2. ¿Deseas que al guardar el idioma, se actualice también el estado de cualquier workflow activo en memoria? RTA/ si actualizarlos 
+3. ¿Deberíamos enviar un evento o notificación cuando se cambia el idioma? RTA/ no es necesario.
+4. ¿Deseas agregar un campo `last_changed_at` para rastrear cuándo se modificó el idioma? RTA/ no es relevante.
+5. ¿Deseas que el endpoint valide si el usuario tiene permisos para cambiar configuraciones? RTA/ no es relevante.
 
 ---
 
@@ -644,11 +644,11 @@ export function useLanguage() {
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que el idioma se guarde automáticamente en localStorage, solo backend, o ambos?
-2. ¿Deseas agregar un indicador de "cargando traducciones..." mientras se carga el archivo JSON?
-3. ¿Deberíamos usar una biblioteca como `i18next` o implementar el sistema nosotros?
-4. ¿Deseas que el contexto también exponga las listas de idiomas disponibles y sus metadatos?
-5. ¿Cómo manejar el caso donde el archivo de traducción no tenga una key (fallback al key original)?
+1. ¿Deseas que el idioma se guarde automáticamente en localStorage, solo backend, o ambos? RTA/ en la tabla del usuario comentado antes.
+2. ¿Deseas agregar un indicador de "cargando traducciones..." mientras se carga el archivo JSON? RTA/ No deberia tomar tanto tiempo, si toma mas de 1 segundo, si.
+3. ¿Deberíamos usar una biblioteca como `i18next` o implementar el sistema nosotros? RTA/ la que sea mas sencilla y cumpla.
+4. ¿Deseas que el contexto también exponga las listas de idiomas disponibles y sus metadatos? RTA/ considero que si.
+5. ¿Cómo manejar el caso donde el archivo de traducción no tenga una key (fallback al key original)? RTA/ el traductor sabra, por ello se crearan plantillas base, esto se valida manualmente.
 
 ---
 
@@ -756,11 +756,11 @@ export function useLanguage() {
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas usar snake_case para las keys (`welcome_title`) o camelCase (`welcomeTitle`)?
-2. ¿Deseas que las keys sigan una convención de prefijos por funcionalidad (ej: `onboarding.title`)?
+1. ¿Deseas usar snake_case para las keys (`welcome_title`) o camelCase (`welcomeTitle`)? RTA/ no se enque consiste, comenta y aplica la mejor opcion.
+2. ¿Deseas que las keys sigan una convención de prefijos por funcionalidad (ej: `onboarding.title`)? no tengo presente en que consista.
 3. ¿Deseas agregar metadatos de contexto (ej: `context: "onboarding"`) para ayudarte a organizar?
-4. ¿Cómo manejar textos que son iguales en ambos idiomas (ej: "OpenAI", "GPT-4")? ¿Duplicar o centralizar?
-5. ¿Deseas agregar un campo `__metadata` en cada archivo JSON con información sobre la traducción (autor, fecha)?
+4. ¿Cómo manejar textos que son iguales en ambos idiomas (ej: "OpenAI", "GPT-4")? ¿Duplicar o centralizar? Son nombres propios, se deben mantener. (centralizar)
+5. ¿Deseas agregar un campo `__metadata` en cada archivo JSON con información sobre la traducción (autor, fecha)? RTA/ no lo veo relevante.
 
 ---
 
@@ -846,11 +846,11 @@ export function LanguageSwitcher() {
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que el switcher use un dropdown (select) como en el ejemplo, o prefieres botones de toggle (dos botones)?
-2. ¿Deseas incluir el nombre del idioma en texto además del emoji de bandera?
-3. ¿Deseas agregar un indicador visual de qué idioma está activo (subrayado, background, etc.)?
-4. ¿Deseas que el switcher tenga un tooltip explicando qué hace (para usuarios nuevos)?
-5. ¿Deseas agregar un shortcut de teclado para cambiar idioma (ej: Ctrl+L)?
+1. ¿Deseas que el switcher use un dropdown (select) como en el ejemplo, o prefieres botones de toggle (dos botones)? RTA/ usar un swicher.
+2. ¿Deseas incluir el nombre del idioma en texto además del emoji de bandera? RTA/ si.    agregarlos.
+3. ¿Deseas agregar un indicador visual de qué idioma está activo (subrayado, background, etc.)? con el swhicher mas negrilla para resaltar el seleccioando actualemnte.
+4. ¿Deseas que el switcher tenga un tooltip explicando qué hace (para usuarios nuevos)? RTA/ No.
+5. ¿Deseas agregar un shortcut de teclado para cambiar idioma (ej: Ctrl+L)? RTA/ No, ir a configuracion y hacerlo manualmente.
 
 ---
 
@@ -905,10 +905,10 @@ export default function RootLayout({
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que el atributo `lang` del HTML se actualice automáticamente cuando cambia el idioma o solo al recargar la página?
-2. ¿Deberíamos cambiar también la dirección del texto del HTML (`dir="ltr"` o `dir="rtl"`) según el idioma?
-3. ¿Deseas agregar también metadatos de SEO (`<title>`, `<meta>`) que cambien según el idioma?
-4. ¿Deseas que el `LanguageProvider` esté dentro o fuera del `ThemeProvider`? ¿Qué orden es mejor?
+1. ¿Deseas que el atributo `lang` del HTML se actualice automáticamente cuando cambia el idioma o solo al recargar la página? RTA/ si,
+2. ¿Deberíamos cambiar también la dirección del texto del HTML (`dir="ltr"` o `dir="rtl"`) según el idioma? RTA/ Evalua y toma la mejor opcion en terminos de miplementacion. 
+3. ¿Deseas agregar también metadatos de SEO (`<title>`, `<meta>`) que cambien según el idioma? RTA/ no
+4. ¿Deseas que el `LanguageProvider` esté dentro o fuera del `ThemeProvider`? ¿Qué orden es mejor? RTA/ evalua y toma la decision.
 
 ---
 
@@ -989,7 +989,7 @@ const { t } = useLanguage();
 
 **❓ Preguntas Clave:**
 
-1. ¿Deseas que hagamos la migración componente por componente (más lento pero más controlado) o en un solo cambio masivo?
+1. ¿Deseas que hagamos la migración componente por componente (más lento pero más controlado) o en un solo cambio masivo? RTA/ En un solo cambio masivo.
 2. ¿Cómo manejar textos dinámicos que incluyen variables (ej: "Hola, {nombre}")? ¿Interpolación o pasar parámetros a `t()`?
 3. ¿Deseas que agreguemos un script o herramienta que escanee todos los archivos buscando textos en inglés/español para no olvidar ninguno?
 4. ¿Deberíamos agregar una función `t()` que acepte parámetros para interpolación (ej: `t('welcome', {name: 'Juan'})`)?

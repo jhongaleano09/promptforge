@@ -11,8 +11,11 @@ import { cn } from '@/lib/utils';
 import { LayoutDashboard, MessageSquare, Sparkles, Sun, Moon, Settings as SettingsIcon } from 'lucide-react';
 import { useTheme } from "next-themes";
 import { API_BASE } from "@/config/api";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 export default function Home() {
+  const { t } = useLanguage();
   const router = useRouter();
   const { status, activeTab, setActiveTab, startWorkflow, error } = useWorkflowStore();
   const [apiKeyConfigured, setApiKeyConfigured] = useState(false);
@@ -58,7 +61,7 @@ export default function Home() {
   const showArena = status === 'completed' || status === 'generating' || status === 'evaluating';
 
   if (loading) {
-      return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+      return <div className="min-h-screen flex items-center justify-center">{t("loading")}</div>;
   }
 
   return (
@@ -70,14 +73,15 @@ export default function Home() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-primary-foreground" />
               </div>
-              <h1 className="text-xl font-bold tracking-tight">PromptForge</h1>
+               <h1 className="text-xl font-bold tracking-tight">{t("app_title")}</h1>
          </div>
           <div className="flex items-center gap-2">
+             <LanguageSwitcher />
              <ProviderSelector className="mr-2" />
              <button
                  onClick={() => router.push('/settings')}
                  className="p-2 rounded-lg hover:bg-muted transition-colors"
-                 title="Settings"
+                 title={t("settings")}
              >
                  <SettingsIcon className="w-5 h-5" />
              </button>
@@ -85,7 +89,7 @@ export default function Home() {
                  <button
                      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                      className="p-2 rounded-lg hover:bg-muted transition-colors"
-                     title="Toggle Theme"
+                     title={t("toggle_theme")}
                  >
                      {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                  </button>
@@ -101,7 +105,7 @@ export default function Home() {
                 <OnboardingForm />
                 <div className="mt-4 text-center">
                     <button onClick={() => setApiKeyConfigured(true)} className="text-xs text-muted-foreground underline">
-                        I've already configured it
+                        {t("onboarding_already_configured")}
                     </button>
                 </div>
              </div>
@@ -119,7 +123,7 @@ export default function Home() {
                                 )}
                             >
                                 <MessageSquare className="w-4 h-4" />
-                                Clarification
+                                {t("home_tab_clarification")}
                             </button>
                             <button 
                                 onClick={() => setActiveTab('arena')}
@@ -131,7 +135,7 @@ export default function Home() {
                                 )}
                             >
                                 <LayoutDashboard className="w-4 h-4" />
-                                Arena
+                                {t("home_tab_arena")}
                             </button>
                         </div>
                     </div>
@@ -159,7 +163,7 @@ export default function Home() {
       
       {error && (
         <div className="fixed bottom-6 right-6 bg-destructive text-destructive-foreground p-4 rounded-xl shadow-lg border animate-in slide-in-from-bottom-full duration-300">
-            <p className="font-semibold">Error Occurred</p>
+            <p className="font-semibold">{t("error_occurred")}</p>
             <p className="text-sm opacity-90">{error}</p>
         </div>
       )}
@@ -168,23 +172,24 @@ export default function Home() {
 }
 
 function InitialPromptInput({ onSubmit }: { onSubmit: (text: string) => void }) {
+    const { t } = useLanguage();
     const [text, setText] = useState('');
     return (
         <div className="max-w-2xl mx-auto mt-16 text-center space-y-8 animate-in zoom-in-95 duration-500">
             <div className="space-y-2">
-                <h2 className="text-4xl font-extrabold tracking-tight lg:text-5xl">What do you want to build?</h2>
-                <p className="text-xl text-muted-foreground">Describe your task, and I'll help you craft the perfect prompt.</p>
+                <h2 className="text-4xl font-extrabold tracking-tight lg:text-5xl">{t("home_what_build_title")}</h2>
+                <p className="text-xl text-muted-foreground">{t("home_what_build_description")}</p>
             </div>
             
             <div className="flex flex-col gap-4 p-1 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent rounded-2xl">
                 <div className="bg-card rounded-xl p-2 shadow-sm border">
                     <div className="px-4 py-2 border-b flex justify-between items-center bg-muted/20 rounded-t-lg mb-2">
-                        <span className="text-xs font-medium text-muted-foreground">System Context</span>
+                        <span className="text-xs font-medium text-muted-foreground">{t("home_system_context")}</span>
                         <ProviderSelector />
                     </div>
                     <textarea 
                         className="w-full p-4 rounded-lg bg-transparent border-none outline-none resize-none text-lg min-h-[150px] placeholder:text-muted-foreground/50"
-                        placeholder="e.g., I need a system prompt for a customer support agent that handles refund requests politely but firmly..."
+                        placeholder={t("home_input_placeholder")}
                         value={text}
                         onChange={e => setText(e.target.value)}
                         autoFocus
@@ -196,7 +201,7 @@ function InitialPromptInput({ onSubmit }: { onSubmit: (text: string) => void }) 
                             className="px-8 py-2.5 bg-primary text-primary-foreground rounded-lg font-semibold hover:opacity-90 transition-all disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-primary/20"
                         >
                             <Sparkles className="w-4 h-4" />
-                            Start Forging
+                            {t("home_start_forging")}
                         </button>
                     </div>
                 </div>

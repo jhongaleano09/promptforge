@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Variant, useWorkflowStore } from '@/store/workflowStore';
 import ReactMarkdown from 'react-markdown';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface PromptCardProps {
   variant: Variant;
@@ -14,6 +15,7 @@ interface PromptCardProps {
 }
 
 export function PromptCard({ variant, index }: PromptCardProps) {
+  const { t } = useLanguage();
   const { updateVariant, runTest, testResults, isTesting, refineVariant, isRefining } = useWorkflowStore();
   const [isEditing, setIsEditing] = useState(false);
   const [isTestingMode, setIsTestingMode] = useState(false);
@@ -72,19 +74,19 @@ export function PromptCard({ variant, index }: PromptCardProps) {
            {variant.model_used && <span className="text-xs text-muted-foreground">{variant.model_used}</span>}
         </div>
         <div className="flex gap-1">
-            <Button size="icon" variant="ghost" className="h-7 w-7" onClick={handleCopy} title="Copy">
+            <Button size="icon" variant="ghost" className="h-7 w-7" onClick={handleCopy} title={t("card_copy")}>
                 {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
             </Button>
-            <Button size="icon" variant="ghost" className="h-7 w-7" onClick={handleExport} title="Export .txt">
+            <Button size="icon" variant="ghost" className="h-7 w-7" onClick={handleExport} title={t("card_export")}>
                 <Download className="w-3.5 h-3.5" />
             </Button>
-             <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => setIsEditing(!isEditing)} title="Edit">
+             <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => setIsEditing(!isEditing)} title={t("card_edit")}>
                 <Edit2 className="w-3.5 h-3.5" />
             </Button>
-            <Button size="icon" variant={isTestingMode ? "secondary" : "ghost"} className="h-7 w-7" onClick={() => setIsTestingMode(!isTestingMode)} title="Test Prompt">
+            <Button size="icon" variant={isTestingMode ? "secondary" : "ghost"} className="h-7 w-7" onClick={() => setIsTestingMode(!isTestingMode)} title={t("card_test_prompt")}>
                 <Play className="w-3.5 h-3.5" />
             </Button>
-            <Button size="icon" variant={isRefiningMode ? "secondary" : "ghost"} className="h-7 w-7" onClick={() => setIsRefiningMode(!isRefiningMode)} title="Refine">
+            <Button size="icon" variant={isRefiningMode ? "secondary" : "ghost"} className="h-7 w-7" onClick={() => setIsRefiningMode(!isRefiningMode)} title={t("card_refine")}>
                 <RefreshCw className="w-3.5 h-3.5" />
             </Button>
         </div>
@@ -99,26 +101,26 @@ export function PromptCard({ variant, index }: PromptCardProps) {
                     className="flex-1 font-mono text-xs resize-none bg-muted/50"
                 />
                 <div className="flex justify-end gap-2">
-                    <Button size="sm" variant="ghost" onClick={() => setIsEditing(false)}>Cancel</Button>
-                    <Button size="sm" onClick={handleSave}>Save Changes</Button>
+                    <Button size="sm" variant="ghost" onClick={() => setIsEditing(false)}>{t("card_cancel")}</Button>
+                    <Button size="sm" onClick={handleSave}>{t("card_save_changes")}</Button>
                 </div>
             </div>
         ) : isTestingMode ? (
             <div className="flex flex-col gap-4 h-full">
-                <div className="text-xs font-semibold text-muted-foreground uppercase">Test Input</div>
+                <div className="text-xs font-semibold text-muted-foreground uppercase">{t("card_test_input")}</div>
                 <Textarea 
-                    placeholder="Enter test input (e.g. user message)..."
+                    placeholder={t("card_test_input_placeholder")}
                     value={testInput}
                     onChange={(e) => setTestInput(e.target.value)}
                     className="min-h-[100px] resize-none text-xs"
                 />
                 <Button size="sm" onClick={handleRunTest} disabled={isTesting || !testInput}>
-                    {isTesting ? "Running..." : "Run Test"}
+                    {isTesting ? t("card_running") : t("card_run_test")}
                 </Button>
                 
                 {testResults?.[variant.id || String(index)] && (
                     <div className="flex-1 flex flex-col gap-2 min-h-0">
-                        <div className="text-xs font-semibold text-muted-foreground uppercase border-t pt-2">Output</div>
+                        <div className="text-xs font-semibold text-muted-foreground uppercase border-t pt-2">{t("card_output")}</div>
                         <div className="bg-muted/30 p-2 rounded text-xs font-mono overflow-y-auto flex-1">
                             {testResults[variant.id || String(index)]}
                         </div>
@@ -127,18 +129,18 @@ export function PromptCard({ variant, index }: PromptCardProps) {
             </div>
         ) : isRefiningMode ? (
             <div className="flex flex-col gap-4 h-full">
-                <div className="text-xs font-semibold text-muted-foreground uppercase">Refine Prompt</div>
+                <div className="text-xs font-semibold text-muted-foreground uppercase">{t("card_refine_prompt")}</div>
                 <div className="text-xs text-muted-foreground">
-                    Describe how you want to improve this specific variant. This will generate 3 new variations based on it.
+                    {t("card_refine_description")}
                 </div>
                 <Textarea 
-                    placeholder="E.g. Make it shorter, use a more formal tone..."
+                    placeholder={t("card_refine_placeholder")}
                     value={refineFeedback}
                     onChange={(e) => setRefineFeedback(e.target.value)}
                     className="min-h-[100px] resize-none text-xs"
                 />
                 <Button size="sm" onClick={handleRefine} disabled={isRefining || !refineFeedback}>
-                    {isRefining ? "Refining..." : "Generate Variations"}
+                    {isRefining ? t("card_refining") : t("card_generate_variations")}
                 </Button>
             </div>
         ) : (
@@ -151,15 +153,15 @@ export function PromptCard({ variant, index }: PromptCardProps) {
       {/* Mini Scoreboard */}
       <div className="p-3 border-t bg-muted/10 grid grid-cols-3 gap-px text-center text-xs divide-x">
          <div className="flex flex-col gap-1">
-            <span className="text-muted-foreground uppercase tracking-wider text-[10px]">Clarity</span>
+            <span className="text-muted-foreground uppercase tracking-wider text-[10px]">{t("card_clarity")}</span>
             <div className="font-bold text-blue-500">{clarity}/10</div>
          </div>
          <div className="flex flex-col gap-1">
-            <span className="text-muted-foreground uppercase tracking-wider text-[10px]">Safety</span>
+            <span className="text-muted-foreground uppercase tracking-wider text-[10px]">{t("card_safety")}</span>
             <div className="font-bold text-green-500">{safety}/10</div>
          </div>
          <div className="flex flex-col gap-1">
-            <span className="text-muted-foreground uppercase tracking-wider text-[10px]">Completeness</span>
+            <span className="text-muted-foreground uppercase tracking-wider text-[10px]">{t("card_completeness")}</span>
             <div className="font-bold text-purple-500">{completeness}/10</div>
          </div>
       </div>

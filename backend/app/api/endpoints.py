@@ -564,12 +564,15 @@ async def update_test_results(
 @router.post("/workflow/{thread_id}/run")
 async def run_workflow(
     thread_id: str,
-    payload: Dict[str, Any]
+    payload: Dict[str, Any],
+    db: Session = Depends(get_db)
 ):
     """
     Runs or resumes the workflow.
     Payload: { "user_input": "...", "selected_variant": "...", "user_feedback": "..." }
     """
+    from app.services.user_service import user_preferences_service
+    
     user_input = payload.get("user_input")
     selected_variant = payload.get("selected_variant")
     user_feedback = payload.get("user_feedback")
@@ -578,6 +581,14 @@ async def run_workflow(
     inputs = {}
     if user_input:
         inputs["user_input"] = user_input
+    
+    # Get user language preference from database
+    try:
+        language = user_preferences_service.get_language(db)
+        inputs["language"] = language
+    except Exception as e:
+        logger.warning(f"Failed to get language preference, using default: {e}")
+        inputs["language"] = "spanish"  # Fallback to default
     
     # If refining, we inject selected_variant and feedback into state
     if selected_variant:
