@@ -69,7 +69,27 @@ async def clarify_node(state: PromptState) -> Dict[str, Any]:
 
         user_input = state["user_input"]
         history = state.get("clarification_dialogue", [])
-
+        
+        # ✅ FIX: Detectar si el usuario ya respondió a las preguntas
+        has_user_answers = any(isinstance(msg, HumanMessage) for msg in history)
+        
+        if has_user_answers:
+            logger.info("[CLARIFY] Usuario ya respondió a las preguntas. Procesando respuestas...")
+            
+            # Extraer respuestas del usuario
+            user_answers = [msg.content for msg in history if isinstance(msg, HumanMessage)]
+            
+            # Retornar con has_questions=False para que el workflow vaya a generate
+            return {
+                "requirements": {
+                    "has_questions": False,  # ✅ IMPORTANTE: False para proceder a generate
+                    "user_answers": user_answers,
+                    "clarified": True
+                },
+                "clarification_dialogue": [AIMessage(content="Gracias por tus respuestas. Generando tu prompt ahora...")]
+            }
+        
+        # Si no hay respuestas, generar preguntas de clarificación (comportamiento original)
         # Obtener provider del estado (si fue especificado)
         selected_provider = state.get("selected_provider", None)
 

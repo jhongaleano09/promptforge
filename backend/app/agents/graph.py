@@ -2,6 +2,9 @@ from typing import Literal
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
 from langchain_core.messages import HumanMessage, AIMessage
+import logging
+
+logger = logging.getLogger(__name__)
 
 from app.agents.state import PromptState
 from app.agents.nodes import clarify_node, generate_node, evaluate_node, judge_node, refiner_node
@@ -24,13 +27,21 @@ def should_continue(state: PromptState) -> Literal["generate", END]:
     """
     requirements = state.get("requirements", {})
     questions = requirements.get("questions", [])
+    user_answers = requirements.get("user_answers", [])
     
-    # If the clarifier generated questions, we stop to let the user answer.
-    # The last message in 'messages' should be the AIMessage with questions.
-    if questions:
+    # ✅ FIX: Si el usuario ya respondió, proceder a generación
+    # El usuario ya proporcionó la información necesaria
+    if user_answers:
+        logger.info("[SHOULD_CONTINUE] Usuario respondió a preguntas. Procediendo a generate...")
+        return "generate"
+    
+    # Si hay preguntas y NO hay respuestas, esperar al usuario
+    if questions and not user_answers:
+        logger.info("[SHOULD_CONTINUE] Hay preguntas sin respuestas. Esperando al usuario...")
         return END
     
-    # If no questions, we proceed to generation.
+    # Si no hay preguntas (primera ejecución o ya clarificado), proceder a generación
+    logger.info("[SHOULD_CONTINUE] No hay preguntas pendientes. Procediendo a generate...")
     return "generate"
 
 # --- Graph Construction ---

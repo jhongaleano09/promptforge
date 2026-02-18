@@ -49,3 +49,30 @@ Translation missing for key: "loading"
 Translation missing for key: "loading"
  GET / 200 in 26ms (compile: 2ms, render: 24ms)
  GET /settings 200 in 14ms (compile: 1578µs, render: 12ms)
+Translation missing for key: "loading"
+ GET / 200 in 26ms (compile: 2ms, render: 24ms)
+Translation missing for key: "loading"
+ GET / 200 in 27ms (compile: 3ms, render: 24ms)
+Translation missing for key: "loading"
+ GET / 200 in 26ms (compile: 2ms, render: 23ms)
+Translation missing for key: "loading"
+ GET / 200 in 24ms (compile: 2ms, render: 22ms)
+Translation missing for key: "loading"
+ GET / 200 in 28ms (compile: 1865µs, render: 26ms)
+Translation missing for key: "loading"
+ GET / 200 in 23ms (compile: 1914µs, render: 21ms)
+Translation missing for key: "loading"
+ GET / 200 in 26ms (compile: 3ms, render: 24ms)
+  Reload env: .env.local
+✓ Compiled in 25ms
+ GET / 200 in 109ms (compile: 66ms, render: 44ms)
+⚠ Fast Refresh had to perform a full reload when ./frontend/src/contexts/LanguageContext.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+Translation missing for key: "loading"
+ GET / 200 in 227ms (compile: 2ms, render: 225ms)
+Translation missing for key: "loading"
+ GET / 200 in 30ms (compile: 3ms, render: 27ms)
+Translation missing for key: "loading"
+ GET / 200 in 26ms (compile: 2ms, render: 24ms)
+ GET /settings 200 in 107ms (compile: 54ms, render: 53ms)
+Translation missing for key: "loading"
+ GET / 200 in 32ms (compile: 2ms, render: 30ms)

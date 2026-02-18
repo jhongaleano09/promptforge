@@ -6,23 +6,11 @@ You may be able to resolve this warning by setting `model_config['protected_name
 
 You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
   warnings.warn(
-INFO:     Started server process [20503]
+INFO:     Started server process [158735]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:8002 (Press CTRL+C to quit)
-INFO:     127.0.0.1:37690 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50512 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37962 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37962 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37964 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37962 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37964 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37962 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37964 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37962 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40668 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40668 - "OPTIONS /api/workflow/stream/start HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40668 - "POST /api/workflow/stream/start HTTP/1.1" 200 OK
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:46032 - "POST /api/workflow/stream/start HTTP/1.1" 200 OK
 Error getting active API key: 
 Traceback: Traceback (most recent call last):
   File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
@@ -48,61 +36,115 @@ Traceback (most recent call last):
 cryptography.fernet.InvalidToken
 
 No active API key found in clarify_node
-INFO:     127.0.0.1:44216 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44216 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44224 - "GET /api/settings/keys HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44238 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44224 - "GET /api/settings/keys HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44238 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44224 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44224 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44224 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:44224 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40860 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40868 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40860 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40868 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40860 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54602 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54602 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54602 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54602 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54602 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38196 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:38196 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:38202 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:38202 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:57576 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:57598 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:57598 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57588 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57576 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39950 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39950 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39952 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:39950 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39966 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:39950 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39950 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39950 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54326 - "GET /api/prompts/types HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:54330 - "GET /docs HTTP/1.1" 200 OK
+Streaming Error: name 'logger' is not defined
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/api/workflow.py", line 103, in event_generator
+    async for state in graph.astream(input_state, config, stream_mode="values"):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/pregel/__init__.py", line 2274, in astream
+    async for _ in runner.atick(
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/pregel/runner.py", line 444, in atick
+    await arun_with_retry(
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/pregel/retry.py", line 128, in arun_with_retry
+    return await task.proc.ainvoke(task.input, config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/utils/runnable.py", line 585, in ainvoke
+    input = await step.ainvoke(input, config)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/utils/runnable.py", line 371, in ainvoke
+    ret = await asyncio.create_task(coro, context=context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/graph/graph.py", line 115, in _aroute
+    result = await self.path.ainvoke(value, config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/utils/runnable.py", line 359, in ainvoke
+    ret = await asyncio.create_task(coro, context=context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langchain_core/runnables/config.py", line 590, in run_in_executor
+    return await asyncio.get_running_loop().run_in_executor(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langchain_core/runnables/config.py", line 581, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/agents/graph.py", line 37, in should_continue
+    logger.info("[SHOULD_CONTINUE] Hay preguntas sin respuestas. Esperando al usuario...")
+    ^^^^^^
+NameError: name 'logger' is not defined
+During task with name 'clarify' and id 'fa40df7d-7434-80f1-4b2f-e547deb3a4c5'
+
+INFO:     127.0.0.1:44384 - "POST /api/workflow/stream/start HTTP/1.1" 200 OK
+Error getting active API key: 
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
+    h.verify(data[-32:])
+cryptography.exceptions.InvalidSignature: Signature did not match digest.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/config_service.py", line 51, in get_active_api_key
+    api_key_decrypted = security_service.decrypt_key(api_key_encrypted)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/security.py", line 51, in decrypt_key
+    return self.fernet.decrypt(encrypted_key).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 89, in decrypt
+    return self._decrypt_data(data, timestamp, time_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 148, in _decrypt_data
+    self._verify_signature(data)
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 132, in _verify_signature
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+No active API key found in clarify_node
+Streaming Error: name 'logger' is not defined
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/api/workflow.py", line 103, in event_generator
+    async for state in graph.astream(input_state, config, stream_mode="values"):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/pregel/__init__.py", line 2274, in astream
+    async for _ in runner.atick(
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/pregel/runner.py", line 444, in atick
+    await arun_with_retry(
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/pregel/retry.py", line 128, in arun_with_retry
+    return await task.proc.ainvoke(task.input, config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/utils/runnable.py", line 585, in ainvoke
+    input = await step.ainvoke(input, config)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/utils/runnable.py", line 371, in ainvoke
+    ret = await asyncio.create_task(coro, context=context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/graph/graph.py", line 115, in _aroute
+    result = await self.path.ainvoke(value, config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langgraph/utils/runnable.py", line 359, in ainvoke
+    ret = await asyncio.create_task(coro, context=context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langchain_core/runnables/config.py", line 590, in run_in_executor
+    return await asyncio.get_running_loop().run_in_executor(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/langchain_core/runnables/config.py", line 581, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/agents/graph.py", line 37, in should_continue
+    logger.info("[SHOULD_CONTINUE] Hay preguntas sin respuestas. Esperando al usuario...")
+    ^^^^^^
+NameError: name 'logger' is not defined
+During task with name 'clarify' and id 'bc169bed-0fb3-d18a-8ee9-a1ce9111a504'
+
+INFO:     127.0.0.1:44868 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44868 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44872 - "GET /api/prompts/types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44868 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44872 - "GET /api/prompts/types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44872 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44872 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44872 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44872 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44872 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
