@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { MetadataUpdater } from "@/components/metadata-updater";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +24,7 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-  }>) {
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -36,7 +37,9 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              {children}
+              <MetadataUpdater>
+                {children}
+              </MetadataUpdater>
             </ThemeProvider>
         </LanguageProvider>
       </body>

@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Loader2, CheckCircle2, XCircle, Settings, Key, Trash2, Plus, RefreshCw, AlertTriangle } from "lucide-react"
 import { API_BASE } from "@/config/api"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 interface ApiKey {
   id: number
@@ -27,6 +28,7 @@ interface ValidationActiveResponse {
 const MAX_RETRIES = 2
 
 export function ApiKeysManager() {
+  const { t } = useLanguage()
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -97,7 +99,7 @@ export function ApiKeysManager() {
       const data = await res.json()
       setApiKeys(data.keys || [])
     } catch (err: any) {
-      setError(err.message || "Failed to load API keys")
+      setError(err.message || t("errors_failed_load_api_keys"))
     } finally {
       setLoading(false)
     }
@@ -109,7 +111,7 @@ export function ApiKeysManager() {
       const data = await res.json()
       setValidationStatus(data)
     } catch (err) {
-      console.error("Failed to validate configuration", err)
+      console.error(t("errors_failed_validate"), err)
     }
   }
 
@@ -128,12 +130,12 @@ export function ApiKeysManager() {
 
   const handleAddKey = async () => {
     if (!apiKey || !modelPreference) {
-      setAddError("Please fill in all fields")
+      setAddError(t("errors_fill_all_fields"))
       return
     }
 
     if (!validateApiKeyFormat(apiKey)) {
-      setAddError(`Invalid API key format for ${provider}`)
+      setAddError(t("errors_invalid_api_key_format", { provider }))
       return
     }
 
@@ -153,7 +155,7 @@ export function ApiKeysManager() {
 
       if (!res.ok) {
         const errorData = await res.json()
-        throw new Error(errorData.detail || "Failed to add API key")
+        throw new Error(errorData.detail || t("api_keys_error_add"))
       }
 
       await loadApiKeys()
@@ -164,11 +166,11 @@ export function ApiKeysManager() {
       setModelPreference("")
     } catch (err: unknown) {
       console.error(err)
-      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred"
+      const errorMessage = err instanceof Error ? err.message : t("errors_unknown_error")
       setAddError(errorMessage)
       setValidating(false)
 
-      if (retryCount < MAX_RETRIES && !errorMessage.includes("Backend server not reachable")) {
+      if (retryCount < MAX_RETRIES && !errorMessage.includes(t("errors_backend_not_reachable"))) {
         startRetryCountdown()
       } else {
         setRetryCount(MAX_RETRIES)
@@ -224,7 +226,7 @@ export function ApiKeysManager() {
 
       if (!res.ok) {
         const errorData = await res.json()
-        throw new Error(errorData.detail || "Failed to delete API key")
+        throw new Error(errorData.detail || t("api_keys_error_delete"))
       }
 
       await loadApiKeys()
@@ -232,10 +234,10 @@ export function ApiKeysManager() {
       setShowDeleteModal(false)
       setKeyToDelete(null)
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred"
+      const errorMessage = err instanceof Error ? err.message : t("errors_unknown_error")
       setAddError(errorMessage)
 
-      if (retryCount < MAX_RETRIES && !errorMessage.includes("Backend server not reachable")) {
+      if (retryCount < MAX_RETRIES && !errorMessage.includes(t("errors_backend_not_reachable"))) {
         startRetryCountdown()
       } else {
         setRetryCount(MAX_RETRIES)
@@ -253,13 +255,13 @@ export function ApiKeysManager() {
 
       if (!res.ok) {
         const errorData = await res.json()
-        throw new Error(errorData.detail || "Failed to activate API key")
+        throw new Error(errorData.detail || t("api_keys_error_activate"))
       }
 
       await loadApiKeys()
       await validateConfiguration()
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to activate API key")
+      setError(err instanceof Error ? err.message : t("api_keys_error_activate"))
     }
   }
 
@@ -294,8 +296,8 @@ export function ApiKeysManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">API Keys Management</h2>
-          <p className="text-muted-foreground">Manage your LLM provider API keys</p>
+          <h2 className="text-2xl font-bold">{t("api_keys_title")}</h2>
+          <p className="text-muted-foreground">{t("api_keys_description")}</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={loadApiKeys} disabled={loading}>
@@ -303,7 +305,7 @@ export function ApiKeysManager() {
           </Button>
           <Button onClick={() => setShowAddModal(true)}>
             <Plus className="w-4 h-4 mr-2" />
-            Add New Key
+            {t("api_keys_add_new")}
           </Button>
         </div>
       </div>
@@ -315,7 +317,7 @@ export function ApiKeysManager() {
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="font-medium text-orange-800">Configuration Required</p>
+                <p className="font-medium text-orange-800">{t("api_keys_validation_required")}</p>
                 <p className="text-sm text-orange-700">{validationStatus.warning}</p>
               </div>
             </div>
@@ -328,10 +330,10 @@ export function ApiKeysManager() {
         <Card>
           <CardContent className="pt-6 text-center">
             <Settings className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">No API keys configured yet</p>
+            <p className="text-muted-foreground">{t("api_keys_no_keys")}</p>
             <Button onClick={() => setShowAddModal(true)} className="mt-4">
               <Plus className="w-4 h-4 mr-2" />
-              Add Your First Key
+              {t("api_keys_add_first")}
             </Button>
           </CardContent>
         </Card>
@@ -349,14 +351,14 @@ export function ApiKeysManager() {
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold capitalize">{key.provider}</h3>
                         {key.is_active && (
-                          <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">Active</span>
+                          <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">{t("api_keys_active")}</span>
                         )}
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        Model: {key.model_preference} · Usage: {key.usage_count} tokens
+                        {t("api_keys_model")}: {key.model_preference} · {t("api_keys_usage")}: {key.usage_count} {t("api_keys_tokens")}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        Created: {new Date(key.created_at).toLocaleDateString()}
+                        {t("api_keys_created")}: {new Date(key.created_at).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
@@ -367,7 +369,7 @@ export function ApiKeysManager() {
                         size="sm"
                         onClick={() => handleActivateKey(key.id)}
                       >
-                        Activate
+                        {t("api_keys_activate")}
                       </Button>
                     )}
                     <Button
@@ -390,7 +392,7 @@ export function ApiKeysManager() {
               onClick={() => setShowAllKeys(true)}
               className="w-full"
             >
-              Show All Keys ({inactiveKeys.length} inactive)
+              {t("api_keys_show_all", { count: inactiveKeys.length })}
             </Button>
           )}
 
@@ -400,7 +402,7 @@ export function ApiKeysManager() {
               onClick={() => setShowAllKeys(false)}
               className="w-full"
             >
-              Show Only Active Key
+              {t("api_keys_show_active_only")}
             </Button>
           )}
         </div>
@@ -411,29 +413,29 @@ export function ApiKeysManager() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <Card className="w-full max-w-md">
             <CardHeader>
-              <CardTitle>Add New API Key</CardTitle>
-              <CardDescription>Add a new API key for your LLM provider</CardDescription>
+              <CardTitle>{t("api_keys_modal_add_title")}</CardTitle>
+              <CardDescription>{t("api_keys_modal_add_description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Provider</label>
+                <label className="text-sm font-medium">{t("api_keys_modal_provider_label")}</label>
                 <select
                   className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
                   value={provider}
                   onChange={(e) => setProvider(e.target.value)}
                 >
-                  <option value="openai">OpenAI</option>
-                  <option value="anthropic">Anthropic</option>
-                  <option value="ollama">Ollama (Local)</option>
+                  <option value="openai">{t("api_keys_modal_provider_openai")}</option>
+                  <option value="anthropic">{t("api_keys_modal_provider_anthropic")}</option>
+                  <option value="ollama">{t("api_keys_modal_provider_ollama")}</option>
                 </select>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">API Key</label>
+                <label className="text-sm font-medium">{t("api_keys_modal_api_key_label")}</label>
                 <div className="relative">
                   <Input
                     type="password"
-                    placeholder="Enter your API key"
+                    placeholder={t("api_keys_modal_api_key_placeholder")}
                     value={apiKey}
                     onChange={(e) => setApiKey(e.target.value)}
                     disabled={validating || isCountingDown}
@@ -449,7 +451,7 @@ export function ApiKeysManager() {
 
               {models.length > 0 && (
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Default Model</label>
+                  <label className="text-sm font-medium">{t("api_keys_modal_default_model_label")}</label>
                   <select
                     className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
                     value={modelPreference}
@@ -472,11 +474,11 @@ export function ApiKeysManager() {
                     <p className="font-medium text-red-800">{addError}</p>
                     {countdown > 0 ? (
                       <p className="text-slate-600">
-                        Retrying in <span className="font-semibold">{countdown}s</span>...
+                        {t("validation_retrying_in", { countdown: countdown })}
                       </p>
                     ) : retryCount >= MAX_RETRIES ? (
                       <p className="text-slate-600">
-                        Maximum retry attempts reached. Please check your API key or try again.
+                        {t("validation_max_retries")}
                       </p>
                     ) : null}
                     {(countdown > 0 || retryCount >= MAX_RETRIES) && (
@@ -486,7 +488,7 @@ export function ApiKeysManager() {
                         onClick={handleCancelRetry}
                         className="mt-2 text-xs"
                       >
-                        Cancel
+                        {t("validation_cancel")}
                       </Button>
                     )}
                   </div>
@@ -507,7 +509,7 @@ export function ApiKeysManager() {
                   disabled={validating || isCountingDown}
                   className="flex-1"
                 >
-                  Cancel
+                  {t("api_keys_modal_cancel")}
                 </Button>
                 <Button
                   onClick={handleAddKey}
@@ -517,15 +519,15 @@ export function ApiKeysManager() {
                   {validating ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Validating...
+                      {t("api_keys_modal_validating")}
                     </>
                   ) : isCountingDown ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Retrying in {countdown}s...
+                      {t("validation_retrying_in", { countdown: countdown })}
                     </>
                   ) : (
-                    "Add Key"
+                    t("api_keys_modal_add_button")
                   )}
                 </Button>
               </div>
@@ -539,22 +541,20 @@ export function ApiKeysManager() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <Card className="w-full max-w-md">
             <CardHeader>
-              <CardTitle>Delete API Key?</CardTitle>
+              <CardTitle>{t("api_keys_modal_delete_title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-sm text-muted-foreground">
-                You are about to delete the API key for <strong>{keyToDelete.provider}</strong>.
-                This action cannot be undone.
+                {t("api_keys_modal_delete_description", { provider: keyToDelete.provider })}
               </div>
-
               {keyToDelete.is_active && activeKey && apiKeys.length === 1 && (
                 <div className="p-4 bg-orange-50 border border-orange-200 rounded-md">
                   <div className="flex items-start gap-3">
                     <AlertTriangle className="h-5 w-5 text-orange-600 flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-medium text-orange-800">Warning</p>
+                      <p className="font-medium text-orange-800">{t("api_keys_modal_delete_warning")}</p>
                       <p className="text-sm text-orange-700">
-                        This is your only API key. You'll need to add a new one before using PromptForge.
+                        {t("api_keys_modal_delete_warning_message")}
                       </p>
                     </div>
                   </div>
@@ -568,11 +568,11 @@ export function ApiKeysManager() {
                     <p className="font-medium text-red-800">{addError}</p>
                     {countdown > 0 ? (
                       <p className="text-slate-600">
-                        Retrying in <span className="font-semibold">{countdown}s</span>...
+                        {t("validation_retrying_in", { countdown: countdown })}
                       </p>
                     ) : retryCount >= MAX_RETRIES ? (
                       <p className="text-slate-600">
-                        Maximum retry attempts reached. Please try again.
+                        {t("validation_max_retries")}
                       </p>
                     ) : null}
                     {(countdown > 0 || retryCount >= MAX_RETRIES) && (
@@ -582,7 +582,7 @@ export function ApiKeysManager() {
                         onClick={handleCancelRetry}
                         className="mt-2 text-xs"
                       >
-                        Cancel
+                        {t("validation_cancel")}
                       </Button>
                     )}
                   </div>
@@ -603,7 +603,7 @@ export function ApiKeysManager() {
                   disabled={deleting || isCountingDown}
                   className="flex-1"
                 >
-                  Cancel
+                  {t("api_keys_modal_cancel")}
                 </Button>
                 <Button
                   variant="destructive"
@@ -614,15 +614,15 @@ export function ApiKeysManager() {
                   {deleting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Deleting...
+                      {t("api_keys_modal_deleting")}
                     </>
                   ) : isCountingDown ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Retrying in {countdown}s...
+                      {t("validation_retrying_in", { countdown: countdown })}
                     </>
                   ) : (
-                    "Delete"
+                    t("api_keys_modal_delete_button")
                   )}
                 </Button>
               </div>

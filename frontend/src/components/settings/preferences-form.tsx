@@ -8,18 +8,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Loader2, Save, CheckCircle2 } from 'lucide-react'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 export function PreferencesForm() {
-  const { 
-    name, 
-    country, 
-    autoSave, 
+  const { t } = useLanguage()
+  const {
+    name,
+    country,
+    autoSave,
     theme,
     loading,
     error,
     loadPreferences,
     updatePreferences,
-    setTheme 
+    setTheme
   } = usePreferenceStore()
 
   const [localName, setLocalName] = useState(name || '')
@@ -72,17 +74,17 @@ export function PreferencesForm() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>General Preferences</CardTitle>
+          <CardTitle>{t("preferences_form_title")}</CardTitle>
           <CardDescription>
-            Configure your personal preferences and appearance
+            {t("preferences_form_description")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Your Name</label>
+              <label className="text-sm font-medium">{t("preferences_form_your_name")}</label>
               <Input
-                placeholder="Enter your name"
+                placeholder={t("preferences_form_name_placeholder")}
                 value={localName}
                 onChange={(e) => setLocalName(e.target.value)}
                 onBlur={() => autoSaveEnabled && handleSave()}
@@ -90,9 +92,9 @@ export function PreferencesForm() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Country</label>
+              <label className="text-sm font-medium">{t("preferences_form_country")}</label>
               <Input
-                placeholder="Enter your country"
+                placeholder={t("preferences_form_country_placeholder")}
                 value={localCountry}
                 onChange={(e) => setLocalCountry(e.target.value)}
                 onBlur={() => autoSaveEnabled && handleSave()}
@@ -102,15 +104,15 @@ export function PreferencesForm() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Language</label>
+            <label className="text-sm font-medium">{t("preferences_form_language")}</label>
             <LanguageSwitcher />
           </div>
 
           <div className="flex items-center justify-between py-2 border-t">
             <div className="space-y-0.5">
-              <label className="text-sm font-medium">Auto-save Preferences</label>
+              <label className="text-sm font-medium">{t("preferences_form_auto_save")}</label>
               <p className="text-xs text-muted-foreground">
-                Automatically save changes as you type
+                {t("preferences_form_auto_save_help")}
               </p>
             </div>
             <button
@@ -132,9 +134,9 @@ export function PreferencesForm() {
 
           <div className="flex items-center justify-between py-2 border-t">
             <div className="space-y-0.5">
-              <label className="text-sm font-medium">Theme</label>
+              <label className="text-sm font-medium">{t("preferences_form_theme")}</label>
               <p className="text-xs text-muted-foreground">
-                {theme === 'light' ? 'Light mode' : 'Dark mode'}
+                {theme === 'light' ? t("preferences_form_light_mode") : t("preferences_form_dark_mode")}
               </p>
             </div>
             <Button
@@ -150,10 +152,10 @@ export function PreferencesForm() {
           {!autoSaveEnabled && (
             <div className="flex items-center justify-between py-2 border-t">
               <div className="space-y-0.5">
-                <label className="text-sm font-medium">Save Changes</label>
+                <label className="text-sm font-medium">{t("preferences_form_save_changes")}</label>
                 {lastSaved && (
                   <p className="text-xs text-muted-foreground">
-                    Last saved: {lastSaved.toLocaleTimeString()}
+                    {t("preferences_form_last_saved")} {lastSaved.toLocaleTimeString()}
                   </p>
                 )}
               </div>
@@ -165,17 +167,17 @@ export function PreferencesForm() {
                 {saving ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
+                    {t("preferences_form_saving")}
                   </>
                 ) : lastSaved ? (
                   <>
                     <CheckCircle2 className="mr-2 h-4 w-4 text-green-600" />
-                    Saved
+                    {t("preferences_form_saved")}
                   </>
                 ) : (
                   <>
                     <Save className="mr-2 h-4 w-4" />
-                    Save
+                    {t("preferences_form_save")}
                   </>
                 )}
               </Button>

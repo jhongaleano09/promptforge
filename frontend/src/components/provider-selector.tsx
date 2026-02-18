@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useWorkflowStore } from '@/store/workflowStore';
 import { API_BASE } from '@/config/api';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ProviderSelectorProps {
   className?: string;
 }
 
 export function ProviderSelector({ className }: ProviderSelectorProps) {
+  const { t } = useLanguage();
   const [providers, setProviders] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const { selectedProvider, setSelectedProvider } = useWorkflowStore();
@@ -40,12 +42,12 @@ export function ProviderSelector({ className }: ProviderSelectorProps) {
     fetchProviders();
   }, [selectedProvider, setSelectedProvider]);
 
-  if (loading) return <div className="text-xs text-muted-foreground">Loading providers...</div>;
+  if (loading) return <div className="text-xs text-muted-foreground">{t("provider_selector_loading")}</div>;
 
   if (providers.length === 0) {
     return (
       <div className={`text-xs text-destructive ${className}`}>
-        No active providers configured. Please go to Settings.
+        {t("provider_selector_no_providers")}
       </div>
     );
   }
@@ -53,14 +55,14 @@ export function ProviderSelector({ className }: ProviderSelectorProps) {
   if (providers.length === 1) {
     return (
       <div className={`text-xs text-muted-foreground ${className}`}>
-        Using <strong>{providers[0]}</strong>
+        {t("provider_selector_using")} <strong>{providers[0]}</strong>
       </div>
     );
   }
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <span className="text-xs text-muted-foreground whitespace-nowrap">Provider:</span>
+      <span className="text-xs text-muted-foreground whitespace-nowrap">{t("provider_selector_provider_label")}</span>
       <select
         value={selectedProvider || ''}
         onChange={(e) => setSelectedProvider(e.target.value)}
@@ -68,7 +70,7 @@ export function ProviderSelector({ className }: ProviderSelectorProps) {
       >
         {providers.map((p) => (
           <option key={p} value={p}>
-            {p.charAt(0).toUpperCase() + p.slice(1)}
+            {p === 'openai' ? t("provider_selector_openai") : p === 'anthropic' ? t("provider_selector_anthropic") : t("provider_selector_ollama")}
           </option>
         ))}
       </select>

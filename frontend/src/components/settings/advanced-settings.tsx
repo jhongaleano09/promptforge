@@ -7,8 +7,10 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import { Loader2, Save, CheckCircle2, Info } from 'lucide-react'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 export function AdvancedSettings() {
+  const { t } = useLanguage()
   const {
     defaultProvider,
     defaultModel,
@@ -62,29 +64,29 @@ export function AdvancedSettings() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Advanced Settings</CardTitle>
+          <CardTitle>{t("advanced_settings_title")}</CardTitle>
           <CardDescription>
-            Configure LLM provider, models, and generation parameters
+            {t("advanced_settings_description")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Default Provider</label>
+              <label className="text-sm font-medium">{t("advanced_settings_default_provider")}</label>
               <select
                 value={localProvider}
                 onChange={(e) => setLocalProvider(e.target.value)}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 disabled={loading}
               >
-                <option value="openai">OpenAI</option>
-                <option value="anthropic">Anthropic</option>
-                <option value="ollama">Ollama</option>
+                <option value="openai">{t("provider_selector_openai")}</option>
+                <option value="anthropic">{t("provider_selector_anthropic")}</option>
+                <option value="ollama">{t("provider_selector_ollama")}</option>
               </select>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Default Model</label>
+              <label className="text-sm font-medium">{t("advanced_settings_default_model")}</label>
               <select
                 value={localModel}
                 onChange={(e) => setLocalModel(e.target.value)}
@@ -104,14 +106,14 @@ export function AdvancedSettings() {
             <div className="flex items-center gap-2 mb-2">
               <Info className="h-4 w-4 text-muted-foreground" />
               <p className="text-sm text-muted-foreground">
-                These parameters control LLM generation behavior
+                {t("advanced_settings_temperature_help")}
               </p>
             </div>
 
             <div className="space-y-3">
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <label className="text-sm font-medium">Temperature</label>
+                  <label className="text-sm font-medium">{t("advanced_settings_temperature")}</label>
                   <span className="text-sm text-muted-foreground">{temperature.toFixed(2)}</span>
                 </div>
                 <Slider
@@ -123,13 +125,13 @@ export function AdvancedSettings() {
                   disabled={loading}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Higher values make output more random, lower values make it more deterministic
+                  {t("advanced_settings_temperature_help")}
                 </p>
               </div>
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <label className="text-sm font-medium">Max Tokens</label>
+                  <label className="text-sm font-medium">{t("advanced_settings_max_tokens")}</label>
                   <span className="text-sm text-muted-foreground">{maxTokens}</span>
                 </div>
                 <Slider
@@ -141,13 +143,13 @@ export function AdvancedSettings() {
                   disabled={loading}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Maximum number of tokens to generate in the response
+                  {t("advanced_settings_max_tokens_help")}
                 </p>
               </div>
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <label className="text-sm font-medium">Top P</label>
+                  <label className="text-sm font-medium">{t("advanced_settings_top_p")}</label>
                   <span className="text-sm text-muted-foreground">{topP.toFixed(2)}</span>
                 </div>
                 <Slider
@@ -159,7 +161,7 @@ export function AdvancedSettings() {
                   disabled={loading}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Only sample from the top percentage of most likely tokens
+                  {t("advanced_settings_top_p_help")}
                 </p>
               </div>
             </div>
@@ -174,17 +176,17 @@ export function AdvancedSettings() {
               {saving ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {t("advanced_settings_saving")}
                 </>
               ) : lastSaved ? (
                 <>
                   <CheckCircle2 className="mr-2 h-4 w-4 text-green-600" />
-                  Saved
+                  {t("advanced_settings_saved")}
                 </>
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  Save Changes
+                  {t("advanced_settings_save_changes")}
                 </>
               )}
             </Button>
