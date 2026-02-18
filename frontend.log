@@ -22,3 +22,42 @@ Translation missing for key: "loading"
 Translation missing for key: "loading"
  GET / 200 in 32ms (compile: 4ms, render: 28ms)
  GET /settings 200 in 18ms (compile: 3ms, render: 15ms)
+ GET /settings 200 in 17ms (compile: 3ms, render: 13ms)
+ GET /settings 200 in 14ms (compile: 2ms, render: 12ms)
+ GET /settings 200 in 17ms (compile: 2ms, render: 15ms)
+✓ Compiled in 23ms
+✓ Compiled in 31ms
+✓ Compiled in 14ms
+✓ Compiled in 14ms
+✓ Compiled in 15ms
+✓ Compiled in 14ms
+✓ Compiled in 17ms
+✓ Compiled in 16ms
+✓ Compiled in 16ms
+✓ Compiled in 14ms
+✓ Compiled in 14ms
+✓ Compiled in 14ms
+✓ Compiled in 15ms
+✓ Compiled in 17ms
+✓ Compiled in 15ms
+✓ Compiled in 16ms
+✓ Compiled in 16ms
+✓ Compiled in 14ms
+✓ Compiled in 14ms
+✓ Compiled in 14ms
+✓ Compiled in 13ms
+✓ Compiled in 15ms
+✓ Compiled in 20ms
+✓ Compiled in 17ms
+✓ Compiled in 15ms
+✓ Compiled in 13ms
+✓ Compiled in 15ms
+✓ Compiled in 15ms
+✓ Compiled in 78ms
+✓ Compiled in 17ms
+✓ Compiled in 28ms
+✓ Compiled in 14ms
+✓ Compiled in 300ms
+Translation missing for key: "loading"
+Translation missing for key: "loading"
+ GET / 200 in 399ms (compile: 236ms, render: 163ms)

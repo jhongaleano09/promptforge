@@ -6,70 +6,8 @@ You may be able to resolve this warning by setting `model_config['protected_name
 
 You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
   warnings.warn(
-INFO:     Started server process [32183]
+INFO:     Started server process [66640]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     127.0.0.1:45012 - "GET /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50302 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50302 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50304 - "GET /api/prompts/types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50302 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50304 - "GET /api/prompts/types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50302 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50304 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50304 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50304 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50304 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45616 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45616 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45616 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45616 - "GET /api/prompts/types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45624 - "GET /api/prompts/types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45616 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45624 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45616 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45624 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45616 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36204 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36230 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36204 - "GET /api/settings/keys HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36220 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36246 - "GET /api/settings/keys HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36204 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36246 - "GET /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36204 - "GET /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36246 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36246 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36220 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36204 - "GET /api/settings/keys HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36204 - "GET /api/settings/keys HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36246 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36204 - "GET /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36246 - "GET /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36204 - "GET /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:36246 - "GET /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34308 - "GET /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34308 - "GET /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34308 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34308 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "GET /api/settings/keys HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34328 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "GET /api/settings/keys HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "GET /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "GET /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "OPTIONS /api/user/preferences/language HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "PUT /api/user/preferences/language HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "PUT /api/user/preferences/language HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "PUT /api/user/preferences/language HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "OPTIONS /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "PUT /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "PUT /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "PUT /api/user/preferences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37400 - "GET /api/settings/keys HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37416 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34322 - "GET /api/settings/keys HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37400 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:53782 - "GET /health HTTP/1.1" 200 OK
