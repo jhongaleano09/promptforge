@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, LargeBinary, DateTime, Index
+from sqlalchemy import Column, Integer, String, LargeBinary, DateTime, Index, Boolean
 from sqlalchemy.sql import func
 from app.db.database import Base
 
@@ -34,11 +34,15 @@ class UserPreferences(Base):
     """
     User profile and preferences table.
     Single-user application: should only contain ONE row.
-    
+
     Stores:
     - language: UI and agent interaction language ('spanish' or 'english')
     - name: User's name (optional)
     - country: User's country (optional)
+    - default_provider: Default LLM provider ('openai', 'anthropic', 'ollama')
+    - default_model: Default model preference
+    - auto_save_preferences: Automatically save preferences changes
+    - theme: UI theme ('light' or 'dark')
     """
     __tablename__ = "user_preferences"
 
@@ -46,5 +50,9 @@ class UserPreferences(Base):
     language = Column(String, default="spanish", nullable=False)
     name = Column(String, nullable=True)
     country = Column(String, nullable=True)
+    default_provider = Column(String, default="openai", nullable=False)
+    default_model = Column(String, default="gpt-4-turbo", nullable=False)
+    auto_save_preferences = Column(Boolean, default=True, nullable=False)
+    theme = Column(String, default="light", nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())

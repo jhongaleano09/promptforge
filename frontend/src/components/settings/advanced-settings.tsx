@@ -1,0 +1,202 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { usePreferenceStore } from '@/store/preferenceStore'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Slider } from '@/components/ui/slider'
+import { Loader2, Save, CheckCircle2, Info } from 'lucide-react'
+
+export function AdvancedSettings() {
+  const {
+    defaultProvider,
+    defaultModel,
+    loading,
+    error,
+    loadPreferences,
+    updatePreferences
+  } = usePreferenceStore()
+
+  const [localProvider, setLocalProvider] = useState(defaultProvider)
+  const [localModel, setLocalModel] = useState(defaultModel)
+  const [temperature, setTemperature] = useState(0.7)
+  const [maxTokens, setMaxTokens] = useState(2000)
+  const [topP, setTopP] = useState(1.0)
+  const [saving, setSaving] = useState(false)
+  const [lastSaved, setLastSaved] = useState<Date | null>(null)
+
+  useEffect(() => {
+    loadPreferences()
+  }, [loadPreferences])
+
+  useEffect(() => {
+    setLocalProvider(defaultProvider)
+    setLocalModel(defaultModel)
+  }, [defaultProvider, defaultModel])
+
+  const handleSave = async () => {
+    setSaving(true)
+    try {
+      await updatePreferences({
+        default_provider: localProvider,
+        default_model: localModel
+      })
+      setLastSaved(new Date())
+    } catch (err) {
+      console.error('Failed to save advanced settings:', err)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const models: Record<string, string[]> = {
+    openai: ['gpt-4-turbo', 'gpt-4', 'gpt-3.5-turbo'],
+    anthropic: ['claude-3-opus-20240229', 'claude-3-sonnet-20240229', 'claude-3-haiku-20240307'],
+    ollama: ['llama3', 'mistral', 'gemma']
+  }
+
+  const availableModels = models[localProvider] || []
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Advanced Settings</CardTitle>
+          <CardDescription>
+            Configure LLM provider, models, and generation parameters
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Default Provider</label>
+              <select
+                value={localProvider}
+                onChange={(e) => setLocalProvider(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                disabled={loading}
+              >
+                <option value="openai">OpenAI</option>
+                <option value="anthropic">Anthropic</option>
+                <option value="ollama">Ollama</option>
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Default Model</label>
+              <select
+                value={localModel}
+                onChange={(e) => setLocalModel(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                disabled={loading}
+              >
+                {availableModels.map((model) => (
+                  <option key={model} value={model}>
+                    {model}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="space-y-4 pt-4 border-t">
+            <div className="flex items-center gap-2 mb-2">
+              <Info className="h-4 w-4 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">
+                These parameters control LLM generation behavior
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <label className="text-sm font-medium">Temperature</label>
+                  <span className="text-sm text-muted-foreground">{temperature.toFixed(2)}</span>
+                </div>
+                <Slider
+                  value={[temperature]}
+                  onValueChange={([value]) => setTemperature(value)}
+                  min={0}
+                  max={2}
+                  step={0.1}
+                  disabled={loading}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Higher values make output more random, lower values make it more deterministic
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <label className="text-sm font-medium">Max Tokens</label>
+                  <span className="text-sm text-muted-foreground">{maxTokens}</span>
+                </div>
+                <Slider
+                  value={[maxTokens]}
+                  onValueChange={([value]) => setMaxTokens(value)}
+                  min={100}
+                  max={4000}
+                  step={100}
+                  disabled={loading}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Maximum number of tokens to generate in the response
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <label className="text-sm font-medium">Top P</label>
+                  <span className="text-sm text-muted-foreground">{topP.toFixed(2)}</span>
+                </div>
+                <Slider
+                  value={[topP]}
+                  onValueChange={([value]) => setTopP(value)}
+                  min={0}
+                  max={1}
+                  step={0.1}
+                  disabled={loading}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Only sample from the top percentage of most likely tokens
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end pt-4 border-t">
+            <Button
+              onClick={handleSave}
+              disabled={saving || loading}
+              size="sm"
+            >
+              {saving ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : lastSaved ? (
+                <>
+                  <CheckCircle2 className="mr-2 h-4 w-4 text-green-600" />
+                  Saved
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save Changes
+                </>
+              )}
+            </Button>
+          </div>
+
+          {error && (
+            <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-md">
+              <p className="text-sm text-destructive">{error}</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}

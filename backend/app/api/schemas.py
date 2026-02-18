@@ -69,7 +69,11 @@ class UserPreferencesResponse(BaseModel):
     language: str
     name: Optional[str] = None
     country: Optional[str] = None
-    
+    default_provider: str = "openai"
+    default_model: str = "gpt-4-turbo"
+    auto_save_preferences: bool = True
+    theme: str = "light"
+
     model_config = {"protected_namespaces": ()}
 
 class UserPreferencesUpdate(BaseModel):
@@ -77,7 +81,11 @@ class UserPreferencesUpdate(BaseModel):
     language: Optional[str] = None
     name: Optional[str] = None
     country: Optional[str] = None
-    
+    default_provider: Optional[str] = None
+    default_model: Optional[str] = None
+    auto_save_preferences: Optional[bool] = None
+    theme: Optional[str] = None
+
     model_config = {"protected_namespaces": ()}
 
 class LanguagePreferenceResponse(BaseModel):

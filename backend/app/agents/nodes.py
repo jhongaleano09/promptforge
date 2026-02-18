@@ -122,7 +122,7 @@ async def clarify_node(state: PromptState) -> Dict[str, Any]:
                     "has_questions": True,
                     "questions": ["Error: No hay API key activa configurada. Por favor, configure una API key en los ajustes."]
                 },
-                "messages": [AIMessage(content="Error: No hay API key activa configurada para el proveedor seleccionado.")]
+                "clarification_dialogue": [AIMessage(content="Error: No hay API key activa configurada para el proveedor seleccionado.")]
             }
 
         # Call LLM con API key
@@ -139,7 +139,7 @@ async def clarify_node(state: PromptState) -> Dict[str, Any]:
                     "has_questions": True,
                     "questions": [f"Error en la llamada al LLM: {str(e)}"]
                 },
-                "messages": [AIMessage(content=f"Error en el paso de clarificación: {str(e)}")]
+                "clarification_dialogue": [AIMessage(content=f"Error en el paso de clarificación: {str(e)}")]
             }
 
         # Logic: If questions exist, we must ask them.
@@ -152,7 +152,7 @@ async def clarify_node(state: PromptState) -> Dict[str, Any]:
                     "questions": questions,
                     "has_questions": True
                 },
-                "messages": [AIMessage(content=json.dumps(questions))]
+                "clarification_dialogue": [AIMessage(content=json.dumps(questions))]
             }
         else:
             # No questions, we have requirements as a dict
@@ -168,12 +168,12 @@ async def clarify_node(state: PromptState) -> Dict[str, Any]:
         logger.error(f"Traceback: {traceback.format_exc()}")
         # SIEMPRE devolver un dict válido
         return {
-            "requirements": {
-                "has_questions": True,
-                "questions": [f"Error inesperado: {str(e)}"]
-            },
-            "messages": [AIMessage(content=f"Error en el paso de clarificación: {str(e)}")]
-        }
+                "requirements": {
+                    "has_questions": True,
+                    "questions": [f"Error inesperado: {str(e)}"]
+                },
+                "clarification_dialogue": [AIMessage(content=f"Error en el paso de clarificación: {str(e)}")]
+            }
 
 async def generate_node(state: PromptState) -> Dict[str, Any]:
     """

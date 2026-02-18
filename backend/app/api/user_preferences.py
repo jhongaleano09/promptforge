@@ -26,17 +26,21 @@ router = APIRouter(prefix="/user", tags=["user"])
 async def get_user_preferences(db: Session = Depends(get_db)):
     """
     Get all user preferences.
-    
+
     Returns:
-        UserPreferencesResponse with language, name, and country
+        UserPreferencesResponse with all user preferences
     """
     try:
         prefs = user_preferences_service.get_or_create_preferences(db)
-        
+
         return UserPreferencesResponse(
             language=prefs.language,
             name=prefs.name,
-            country=prefs.country
+            country=prefs.country,
+            default_provider=prefs.default_provider,
+            default_model=prefs.default_model,
+            auto_save_preferences=prefs.auto_save_preferences,
+            theme=prefs.theme
         )
     except Exception as e:
         logger.error(f"Error getting user preferences: {e}")
@@ -50,17 +54,17 @@ async def update_user_preferences(
 ):
     """
     Update user preferences.
-    
+
     Only provided fields will be updated.
-    
+
     Args:
         preferences: UserPreferencesUpdate object with optional fields
-        
+
     Returns:
         Updated UserPreferencesResponse
-        
+
     Raises:
-        HTTPException 400: If language is invalid
+        HTTPException 400: If language or provider/theme is invalid
     """
     try:
         # Update preferences (only provided fields)
@@ -68,16 +72,24 @@ async def update_user_preferences(
             db,
             language=preferences.language,
             name=preferences.name,
-            country=preferences.country
+            country=preferences.country,
+            default_provider=preferences.default_provider,
+            default_model=preferences.default_model,
+            auto_save_preferences=preferences.auto_save_preferences,
+            theme=preferences.theme
         )
-        
+
         return UserPreferencesResponse(
             language=prefs.language,
             name=prefs.name,
-            country=prefs.country
+            country=prefs.country,
+            default_provider=prefs.default_provider,
+            default_model=prefs.default_model,
+            auto_save_preferences=prefs.auto_save_preferences,
+            theme=prefs.theme
         )
     except ValueError as e:
-        # Invalid language
+        # Invalid language or provider or theme
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Error updating user preferences: {e}")
