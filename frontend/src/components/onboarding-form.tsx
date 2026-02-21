@@ -181,6 +181,8 @@ export function OnboardingForm() {
             <option value="openai">{t("onboarding_provider_openai")}</option>
             <option value="anthropic">{t("onboarding_provider_anthropic")}</option>
             <option value="ollama">{t("onboarding_provider_ollama")}</option>
+            <option value="openrouter">OpenRouter</option>
+            <option value="zai">Z.AI</option>
           </select>
         </div>
 

@@ -46,7 +46,7 @@ export function PreferencesForm() {
       await updatePreferences({
         name: localName || null,
         country: localCountry || null,
-        auto_save_preferences: autoSaveEnabled
+        autoSave: autoSaveEnabled
       })
       setLastSaved(new Date())
     } catch (err) {
@@ -59,7 +59,7 @@ export function PreferencesForm() {
   const handleAutoSaveChange = (enabled: boolean) => {
     setAutoSaveEnabled(enabled)
     if (enabled) {
-      updatePreferences({ auto_save_preferences: true })
+      updatePreferences({ autoSave: true })
       setLastSaved(new Date())
     }
   }

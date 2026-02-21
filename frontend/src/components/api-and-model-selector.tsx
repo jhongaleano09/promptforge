@@ -101,7 +101,7 @@ export function ApiAndModelSelector({ className }: ApiAndModelSelectorProps) {
         >
           {providers.map((p) => (
             <option key={p} value={p}>
-              {p === 'openai' ? 'OpenAI' : p === 'anthropic' ? 'Anthropic' : p === 'ollama' ? 'Ollama' : p}
+              {p === 'openai' ? 'OpenAI' : p === 'anthropic' ? 'Anthropic' : p === 'ollama' ? 'Ollama' : p === 'openrouter' ? 'OpenRouter' : p === 'zai' ? 'Z.AI' : p}
             </option>
           ))}
         </select>

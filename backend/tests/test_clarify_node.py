@@ -25,6 +25,7 @@ from langchain_core.messages import AIMessage
 def mock_state():
     """Create a mock PromptState for testing."""
     return {
+        "user_input": "Crea un logo para mi startup",
         "original_prompt": "Crea un logo para mi startup",
         "workflow_type": "clarification",
         "requirements": {},
@@ -41,18 +42,17 @@ def mock_state():
 @pytest.fixture
 def mock_llm_response():
     """Mock LLM response with clarification questions."""
-    mock_response = MagicMock()
-    mock_response.content = json.dumps({
+    return {
         "questions": [
             "¿Cuál es el nombre de tu startup?",
             "¿A qué sector pertenece tu negocio?",
             "¿Tienes preferencia de colores?"
         ]
-    })
-    return mock_response
+    }
 
 
-def test_clarify_node_writes_to_correct_field(mock_state, mock_llm_response):
+@pytest.mark.asyncio
+async def test_clarify_node_writes_to_correct_field(mock_state, mock_llm_response):
     """
     CRITICAL TEST: Verify that clarify_node writes to 'clarification_dialogue' field.
     
@@ -67,13 +67,17 @@ def test_clarify_node_writes_to_correct_field(mock_state, mock_llm_response):
     """
     
     # Mock the LLM call
-    with patch('app.agents.nodes.get_llm') as mock_get_llm:
-        mock_llm = AsyncMock()
-        mock_llm.ainvoke.return_value = mock_llm_response
-        mock_get_llm.return_value = mock_llm
+    with patch('app.agents.nodes.llm_call') as mock_llm_call:
+        mock_llm_call.return_value = mock_llm_response
         
-        # Execute clarify_node
-        result = clarify_node(mock_state)
+        # We also need to mock config_service because clarify_node gets the active API key
+        with patch('app.core.config_service.get_config_service') as mock_get_config:
+            mock_config = AsyncMock()
+            mock_config.get_active_api_key.return_value = {"api_key": "test_key", "model_preference": "test-model"}
+            mock_get_config.return_value = mock_config
+
+            # Execute clarify_node
+            result = await clarify_node(mock_state)
         
         # CRITICAL ASSERTION: Must write to 'clarification_dialogue', NOT 'messages'
         assert "clarification_dialogue" in result, \
@@ -100,12 +104,17 @@ def test_clarify_node_writes_to_correct_field(mock_state, mock_llm_response):
             "AIMessage content should not be empty"
         
         # Verify we can parse the JSON
-        questions_data = json.loads(content)
+        if isinstance(content, str):
+            questions_data = json.loads(content)
+        else:
+            questions_data = content
+            
         assert isinstance(questions_data, (list, dict)), \
             "Message content should be valid JSON"
 
 
-def test_clarify_node_error_handling_writes_to_correct_field(mock_state):
+@pytest.mark.asyncio
+async def test_clarify_node_error_handling_writes_to_correct_field(mock_state):
     """
     Test that error handling also writes to 'clarification_dialogue'.
     
@@ -114,13 +123,16 @@ def test_clarify_node_error_handling_writes_to_correct_field(mock_state):
     """
     
     # Mock LLM to raise an exception
-    with patch('app.agents.nodes.get_llm') as mock_get_llm:
-        mock_llm = AsyncMock()
-        mock_llm.ainvoke.side_effect = Exception("API key invalid")
-        mock_get_llm.return_value = mock_llm
+    with patch('app.agents.nodes.llm_call') as mock_llm_call:
+        mock_llm_call.side_effect = Exception("API key invalid")
         
-        # Execute clarify_node (should handle error gracefully)
-        result = clarify_node(mock_state)
+        with patch('app.core.config_service.get_config_service') as mock_get_config:
+            mock_config = AsyncMock()
+            mock_config.get_active_api_key.return_value = {"api_key": "test_key", "model_preference": "test-model"}
+            mock_get_config.return_value = mock_config
+
+            # Execute clarify_node (should handle error gracefully)
+            result = await clarify_node(mock_state)
         
         # Even in error state, should write to correct field
         assert "clarification_dialogue" in result, \
@@ -134,11 +146,13 @@ def test_clarify_node_error_handling_writes_to_correct_field(mock_state):
         assert isinstance(error_message, AIMessage), \
             "Error should be wrapped in AIMessage"
         
-        assert "Error" in error_message.content or "error" in error_message.content.lower(), \
+        error_content = str(error_message.content)
+        assert "Error" in error_content or "error" in error_content.lower(), \
             "Error message should indicate an error occurred"
 
 
-def test_clarify_node_requirements_structure(mock_state, mock_llm_response):
+@pytest.mark.asyncio
+async def test_clarify_node_requirements_structure(mock_state, mock_llm_response):
     """
     Test that clarify_node also correctly populates the requirements field.
     
@@ -147,12 +161,15 @@ def test_clarify_node_requirements_structure(mock_state, mock_llm_response):
     - questions: list of question strings
     """
     
-    with patch('app.agents.nodes.get_llm') as mock_get_llm:
-        mock_llm = AsyncMock()
-        mock_llm.ainvoke.return_value = mock_llm_response
-        mock_get_llm.return_value = mock_llm
+    with patch('app.agents.nodes.llm_call') as mock_llm_call:
+        mock_llm_call.return_value = mock_llm_response
         
-        result = clarify_node(mock_state)
+        with patch('app.core.config_service.get_config_service') as mock_get_config:
+            mock_config = AsyncMock()
+            mock_config.get_active_api_key.return_value = {"api_key": "test_key", "model_preference": "test-model"}
+            mock_get_config.return_value = mock_config
+
+            result = await clarify_node(mock_state)
         
         # Verify requirements structure
         assert "requirements" in result, \
@@ -172,7 +189,8 @@ def test_clarify_node_requirements_structure(mock_state, mock_llm_response):
             "questions list should not be empty"
 
 
-def test_clarify_node_integration_with_format_response(mock_state, mock_llm_response):
+@pytest.mark.asyncio
+async def test_clarify_node_integration_with_format_response(mock_state, mock_llm_response):
     """
     Integration test: Verify that the output of clarify_node can be correctly
     read by format_response.
@@ -181,13 +199,16 @@ def test_clarify_node_integration_with_format_response(mock_state, mock_llm_resp
     and format_response reads from it.
     """
     
-    with patch('app.agents.nodes.get_llm') as mock_get_llm:
-        mock_llm = AsyncMock()
-        mock_llm.ainvoke.return_value = mock_llm_response
-        mock_get_llm.return_value = mock_llm
+    with patch('app.agents.nodes.llm_call') as mock_llm_call:
+        mock_llm_call.return_value = mock_llm_response
         
-        # Execute clarify_node
-        clarify_result = clarify_node(mock_state)
+        with patch('app.core.config_service.get_config_service') as mock_get_config:
+            mock_config = AsyncMock()
+            mock_config.get_active_api_key.return_value = {"api_key": "test_key", "model_preference": "test-model"}
+            mock_get_config.return_value = mock_config
+
+            # Execute clarify_node
+            clarify_result = await clarify_node(mock_state)
         
         # Simulate state update (LangGraph would do this automatically)
         updated_state = {**mock_state, **clarify_result}

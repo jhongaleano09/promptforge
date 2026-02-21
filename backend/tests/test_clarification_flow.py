@@ -21,6 +21,7 @@ from app.agents.state import PromptState
 from langchain_core.messages import HumanMessage, AIMessage
 
 
+@pytest.mark.skip(reason="Requires a live backend server running at localhost:8001")
 @pytest.mark.asyncio
 async def test_full_clarification_flow():
     """

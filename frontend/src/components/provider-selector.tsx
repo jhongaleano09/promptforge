@@ -70,7 +70,7 @@ export function ProviderSelector({ className }: ProviderSelectorProps) {
       >
         {providers.map((p) => (
           <option key={p} value={p}>
-            {p === 'openai' ? t("provider_selector_openai") : p === 'anthropic' ? t("provider_selector_anthropic") : t("provider_selector_ollama")}
+            {p === 'openai' ? t("provider_selector_openai") : p === 'anthropic' ? t("provider_selector_anthropic") : p === 'openrouter' ? 'OpenRouter' : p === 'zai' ? 'Z.AI' : t("provider_selector_ollama")}
           </option>
         ))}
       </select>

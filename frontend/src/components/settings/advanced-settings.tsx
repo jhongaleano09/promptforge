@@ -41,8 +41,8 @@ export function AdvancedSettings() {
     setSaving(true)
     try {
       await updatePreferences({
-        default_provider: localProvider,
-        default_model: localModel
+        defaultProvider: localProvider,
+        defaultModel: localModel
       })
       setLastSaved(new Date())
     } catch (err) {
@@ -55,7 +55,9 @@ export function AdvancedSettings() {
   const models: Record<string, string[]> = {
     openai: ['gpt-4-turbo', 'gpt-4', 'gpt-3.5-turbo'],
     anthropic: ['claude-3-opus-20240229', 'claude-3-sonnet-20240229', 'claude-3-haiku-20240307'],
-    ollama: ['llama3', 'mistral', 'gemma']
+    ollama: ['llama3', 'mistral', 'gemma'],
+    openrouter: ['google/gemini-2.5-pro', 'anthropic/claude-3.5-sonnet', 'openai/gpt-4o'],
+    zai: ['llama3', 'mistral', 'gpt-4o']
   }
 
   const availableModels = models[localProvider] || []
@@ -82,6 +84,8 @@ export function AdvancedSettings() {
                 <option value="openai">{t("provider_selector_openai")}</option>
                 <option value="anthropic">{t("provider_selector_anthropic")}</option>
                 <option value="ollama">{t("provider_selector_ollama")}</option>
+                <option value="openrouter">{t("provider_selector_openrouter") || "OpenRouter"}</option>
+                <option value="zai">{t("provider_selector_zai") || "Z.AI"}</option>
               </select>
             </div>
 

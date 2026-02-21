@@ -21,7 +21,7 @@ export default function Home() {
   const [apiKeyConfigured, setApiKeyConfigured] = useState(false);
   const [loading, setLoading] = useState(true);
   const [validationError, setValidationError] = useState<string | null>(null);
-  const [promptType, setPromptType] = useState<string>('basic');
+  const [promptType, setPromptType] = useState<any>('basic');
   const { theme, setTheme } = useTheme();
 
   // Handle mounting for theme to avoid hydration mismatch

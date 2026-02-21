@@ -108,7 +108,7 @@ async def validate_test_key(request_obj: Request, validation_request: Validation
         )
     
     # Validar que el proveedor sea soportado
-    SUPPORTED_PROVIDERS = ["openai", "anthropic", "ollama"]
+    SUPPORTED_PROVIDERS = ["openai", "anthropic", "ollama", "openrouter", "zai"]
     provider_lower = validation_request.provider.lower()
     
     if provider_lower not in SUPPORTED_PROVIDERS:
@@ -130,7 +130,9 @@ async def validate_test_key(request_obj: Request, validation_request: Validation
     test_models = {
         "openai": "gpt-3.5-turbo",
         "anthropic": "claude-3-haiku-20240307",
-        "ollama": "llama3"
+        "ollama": "llama3",
+        "openrouter": "google/gemma-7b-it:free",
+        "zai": "glm-5"
     }
     test_model = test_models.get(provider_lower, "gpt-3.5-turbo")
     
@@ -205,7 +207,7 @@ async def save_settings(settings_in: SettingsCreate, db: Session = Depends(get_d
     """
     try:
         # Validate provider
-        valid_providers = ["openai", "anthropic", "ollama"]
+        valid_providers = ["openai", "anthropic", "ollama", "openrouter", "zai"]
         if settings_in.provider not in valid_providers:
             raise HTTPException(status_code=400, detail=f"Invalid provider: {settings_in.provider}")
 
@@ -311,19 +313,79 @@ async def get_settings(db: Session = Depends(get_db)):
     }
 
 @router.get("/models")
-async def list_models(provider: str):
+async def list_models(provider: str, db: Session = Depends(get_db)):
     """
     Returns a list of available models for the given provider.
-    This is a simplified list for prototype.
+    Consults the provider API dynamically when possible.
     """
-    if provider == "openai":
-        return ["gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"]
-    elif provider == "anthropic":
-        return ["claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240307"]
-    elif provider == "ollama":
-        return ["llama3", "mistral", "gemma"]
-    else:
-        return ["default-model"]
+    # Fetch active API key for this provider to make the API call
+    from app.core.config_service import get_config_service
+    import httpx
+
+    config_service = await get_config_service()
+    key_info = await config_service.get_active_api_key(provider)
+    
+    api_key = key_info["api_key"] if key_info else None
+    
+    # Static fallbacks
+    static_models = {
+        "openai": ["gpt-4o", "gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"],
+        "anthropic": ["claude-3-5-sonnet-20240620", "claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240307"],
+        "ollama": ["llama3", "mistral", "gemma"],
+        "openrouter": ["google/gemma-7b-it:free", "meta-llama/llama-3-8b-instruct:free", "anthropic/claude-3-haiku"],
+        "zai": ["glm-5", "glm-4.6v", "glm-image"]
+    }
+    
+    if not api_key:
+        return static_models.get(provider, ["default-model"])
+        
+    try:
+        if provider == "openai":
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(
+                    "https://api.openai.com/v1/models",
+                    headers={"Authorization": f"Bearer {api_key}"}
+                )
+                if response.status_code == 200:
+                    data = response.json()
+                    # Filter for chat/text models only
+                    models = [m["id"] for m in data.get("data", []) if "gpt" in m["id"] or "o1" in m["id"]]
+                    return sorted(models, reverse=True) if models else static_models["openai"]
+                    
+        elif provider == "openrouter":
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get("https://openrouter.ai/api/v1/models")
+                if response.status_code == 200:
+                    data = response.json()
+                    models = [m["id"] for m in data.get("data", [])]
+                    return models if models else static_models["openrouter"]
+                    
+        elif provider == "zai":
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                # Z.AI might use a compatible models endpoint or we can just return static for now
+                response = await client.get(
+                    "https://api.z.ai/api/paas/v4/models",
+                    headers={"Authorization": f"Bearer {api_key}"}
+                )
+                if response.status_code == 200:
+                    data = response.json()
+                    models = [m["id"] for m in data.get("data", [])]
+                    return models if models else static_models["zai"]
+                    
+        elif provider == "ollama":
+            async with httpx.AsyncClient(timeout=5.0) as client:
+                # Assuming standard local Ollama URL
+                response = await client.get("http://localhost:11434/api/tags")
+                if response.status_code == 200:
+                    data = response.json()
+                    models = [m["name"] for m in data.get("models", [])]
+                    return models if models else static_models["ollama"]
+                    
+    except Exception as e:
+        logger.warning(f"Failed to fetch dynamic models for {provider}: {e}")
+        
+    # Return static if dynamic fails or for anthropic
+    return static_models.get(provider, ["default-model"])
 
 # --- API Keys Management Endpoints (NEW) ---
 
@@ -365,7 +427,7 @@ async def create_api_key(key_data: ApiKeyCreate, db: Session = Depends(get_db)):
     """
     try:
         # Validate provider
-        valid_providers = ["openai", "anthropic", "ollama"]
+        valid_providers = ["openai", "anthropic", "ollama", "openrouter", "zai"]
         if key_data.provider not in valid_providers:
             raise HTTPException(
                 status_code=400,
@@ -379,11 +441,18 @@ async def create_api_key(key_data: ApiKeyCreate, db: Session = Depends(get_db)):
         # Validate with the provider service
         try:
             test_model = get_test_model(key_data.provider, key_data.model_preference)
+            base_url = None
+            if key_data.provider == "openrouter":
+                base_url = "https://openrouter.ai/api/v1"
+            elif key_data.provider == "zai":
+                base_url = "https://api.z.ai/api/paas/v4"
+                
             completion(
                 model=test_model,
                 messages=[{"role": "user", "content": "Hello"}],
                 api_key=key_data.api_key,
-                max_tokens=5
+                max_tokens=5,
+                base_url=base_url
             )
             logger.info(f"API key validated successfully for provider: {key_data.provider}")
         except AuthenticationError:
@@ -578,14 +647,16 @@ def get_test_model(provider: str, model_preference: str = None) -> str:
     test_models = {
         "openai": "gpt-3.5-turbo",
         "anthropic": "claude-3-haiku-20240307",
-        "ollama": "llama3"
+        "ollama": "llama3",
+        "openrouter": "google/gemma-7b-it:free",
+        "zai": "glm-5"
     }
 
     # If user specified a model preference and it's valid for the provider, use it
     if model_preference:
         valid_models = {
             "openai": ["gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"],
-            "anthropic": ["claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240307"],
+            "anthropic": ["claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240307", "claude-3-5-sonnet-20240620"],
             "ollama": ["llama3", "mistral", "gemma"]
         }
         if provider in valid_models and model_preference in valid_models[provider]:
@@ -672,8 +743,13 @@ async def execute_prompt_variant(
     model_config = {
         "model": model_preference or "gpt-3.5-turbo",
         "api_key": api_key,
-        "base_url": None # Add base_url logic if supporting other providers
+        "base_url": None
     }
+    
+    if active_key and active_key.provider == "openrouter":
+        model_config["base_url"] = "https://openrouter.ai/api/v1"
+    elif active_key and active_key.provider == "zai":
+        model_config["base_url"] = "https://api.z.ai/api/paas/v4"
 
     try:
         result = await run_prompt_variant(

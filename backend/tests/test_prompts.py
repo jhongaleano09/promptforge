@@ -36,13 +36,13 @@ def test_generator_prompt_rendering():
     prompt = PromptService.get_generation_prompt(
         clarified_requirements=requirements,
         prompt_type="creative",
-        target_language="French"
+        target_language="French",
+        persona_name="Test Persona",
+        persona_description="Test Persona Description"
     )
     assert requirements in prompt
-    assert 'Prompt Type: "creative"' in prompt
-    assert 'Target Language: "French"' in prompt
-    assert "Variant A (The Direct/Concise)" in prompt
-    assert "Variant B (Chain-of-Thought)" in prompt
+    assert 'Test Persona' in prompt
+    assert 'Test Persona Description' in prompt
 
 def test_evaluator_prompt_rendering():
     """Test the evaluator prompt structure and language injection."""
@@ -60,19 +60,17 @@ def test_evaluator_prompt_rendering():
 
 def test_refiner_prompt_rendering():
     """Test the refiner prompt inputs."""
-    original = "Prompt v1"
+    seed = "Prompt v1"
     feedback = "Too long"
-    suggestions = "Shorten it"
+    context = "Make it short"
     prompt = PromptService.get_refinement_prompt(
-        original_prompt=original,
-        evaluator_feedback=feedback,
-        suggestions=suggestions,
-        target_language="Spanish"
+        seed_prompt=seed,
+        user_feedback=feedback,
+        original_context=context
     )
-    assert original in prompt
+    assert seed in prompt
     assert feedback in prompt
-    assert suggestions in prompt
-    assert 'Target Language: "Spanish"' in prompt
+    assert context in prompt
 
 def test_prompt_json_structure_validity():
     """

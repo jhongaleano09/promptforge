@@ -118,8 +118,8 @@ export function ApiKeysManager() {
   const validateApiKeyFormat = (key: string) => {
     if (!key || key.length < 10) return false
 
-    if (provider === "openai") {
-      return key.startsWith("sk-")
+    if (provider === "openai" || provider === "openrouter" || provider === "zai") {
+      return key.startsWith("sk-") || provider === "zai" || provider === "openrouter"
     } else if (provider === "anthropic") {
       return key.startsWith("sk-ant-")
     } else if (provider === "ollama") {
@@ -284,6 +284,10 @@ export function ApiKeysManager() {
         return "bg-blue-100 text-blue-800 border-blue-300"
       case "anthropic":
         return "bg-purple-100 text-purple-800 border-purple-300"
+      case "openrouter":
+        return "bg-indigo-100 text-indigo-800 border-indigo-300"
+      case "zai":
+        return "bg-cyan-100 text-cyan-800 border-cyan-300"
       case "ollama":
         return "bg-green-100 text-green-800 border-green-300"
       default:
@@ -427,6 +431,8 @@ export function ApiKeysManager() {
                   <option value="openai">{t("api_keys_modal_provider_openai")}</option>
                   <option value="anthropic">{t("api_keys_modal_provider_anthropic")}</option>
                   <option value="ollama">{t("api_keys_modal_provider_ollama")}</option>
+                  <option value="openrouter">OpenRouter</option>
+                  <option value="zai">Z.AI</option>
                 </select>
               </div>
 

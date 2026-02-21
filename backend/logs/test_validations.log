@@ -54,3 +54,54 @@
 2026-02-17 18:05:16,573 - WARNING - API key inválida | IP: unknown | User-Agent: testclient | Provider: openai | Status: authentication_error | Error: Invalid key
 2026-02-17 18:05:16,575 - INFO - Validación exitosa | IP: unknown | User-Agent: custom-test-agent | Provider: openai | Model: gpt-3.5-turbo | Status: success
 2026-02-17 18:05:16,576 - WARNING - Intento de acceso a endpoint de test con modo deshabilitado | IP: unknown
+2026-02-21 16:01:45,843 - WARNING - Intento de acceso a endpoint de test con modo deshabilitado | IP: unknown
+2026-02-21 16:01:45,845 - ERROR - Proveedor no soportado | IP: unknown | Provider: invalid-provider
+2026-02-21 16:01:45,847 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:01:45,849 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: anthropic | Model: claude-3-haiku-20240307 | Status: success
+2026-02-21 16:01:45,851 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: ollama | Model: llama3 | Status: success
+2026-02-21 16:01:45,853 - WARNING - API key inválida | IP: unknown | User-Agent: testclient | Provider: openai | Status: authentication_error | Error: Invalid API key
+2026-02-21 16:01:45,855 - WARNING - Rate limit excedido | IP: unknown | User-Agent: testclient | Provider: openai | Status: rate_limit_error | Error: Rate limit exceeded
+2026-02-21 16:01:45,929 - ERROR - Error de validación | IP: unknown | User-Agent: testclient | Provider: openai | Status: error | Error: Unexpected error
+2026-02-21 16:01:45,931 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: OpenAI | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:01:45,933 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: OPENAI | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:01:45,934 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:01:45,935 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: oPeNaI | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:01:45,942 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:01:45,944 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:01:45,947 - WARNING - API key inválida | IP: unknown | User-Agent: testclient | Provider: openai | Status: authentication_error | Error: Invalid key
+2026-02-21 16:01:45,948 - INFO - Validación exitosa | IP: unknown | User-Agent: custom-test-agent | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:01:45,950 - WARNING - Intento de acceso a endpoint de test con modo deshabilitado | IP: unknown
+2026-02-21 16:08:59,116 - WARNING - Intento de acceso a endpoint de test con modo deshabilitado | IP: unknown
+2026-02-21 16:08:59,119 - ERROR - Proveedor no soportado | IP: unknown | Provider: invalid-provider
+2026-02-21 16:08:59,121 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:08:59,122 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: anthropic | Model: claude-3-haiku-20240307 | Status: success
+2026-02-21 16:08:59,124 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: ollama | Model: llama3 | Status: success
+2026-02-21 16:08:59,127 - WARNING - API key inválida | IP: unknown | User-Agent: testclient | Provider: openai | Status: authentication_error | Error: Invalid API key
+2026-02-21 16:08:59,129 - WARNING - Rate limit excedido | IP: unknown | User-Agent: testclient | Provider: openai | Status: rate_limit_error | Error: Rate limit exceeded
+2026-02-21 16:08:59,204 - ERROR - Error de validación | IP: unknown | User-Agent: testclient | Provider: openai | Status: error | Error: Unexpected error
+2026-02-21 16:08:59,207 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: OpenAI | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:08:59,209 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: OPENAI | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:08:59,210 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:08:59,211 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: oPeNaI | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:08:59,219 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:08:59,222 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:08:59,224 - WARNING - API key inválida | IP: unknown | User-Agent: testclient | Provider: openai | Status: authentication_error | Error: Invalid key
+2026-02-21 16:08:59,226 - INFO - Validación exitosa | IP: unknown | User-Agent: custom-test-agent | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:08:59,227 - WARNING - Intento de acceso a endpoint de test con modo deshabilitado | IP: unknown
+2026-02-21 16:09:09,197 - WARNING - Intento de acceso a endpoint de test con modo deshabilitado | IP: unknown
+2026-02-21 16:09:09,199 - ERROR - Proveedor no soportado | IP: unknown | Provider: invalid-provider
+2026-02-21 16:09:09,202 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:09:09,204 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: anthropic | Model: claude-3-haiku-20240307 | Status: success
+2026-02-21 16:09:09,206 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: ollama | Model: llama3 | Status: success
+2026-02-21 16:09:09,209 - WARNING - API key inválida | IP: unknown | User-Agent: testclient | Provider: openai | Status: authentication_error | Error: Invalid API key
+2026-02-21 16:09:09,211 - WARNING - Rate limit excedido | IP: unknown | User-Agent: testclient | Provider: openai | Status: rate_limit_error | Error: Rate limit exceeded
+2026-02-21 16:09:09,213 - ERROR - Error de validación | IP: unknown | User-Agent: testclient | Provider: openai | Status: error | Error: Unexpected error
+2026-02-21 16:09:09,215 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: OpenAI | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:09:09,216 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: OPENAI | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:09:09,217 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:09:09,217 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: oPeNaI | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:09:09,225 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:09:09,228 - INFO - Validación exitosa | IP: unknown | User-Agent: testclient | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:09:09,230 - WARNING - API key inválida | IP: unknown | User-Agent: testclient | Provider: openai | Status: authentication_error | Error: Invalid key
+2026-02-21 16:09:09,232 - INFO - Validación exitosa | IP: unknown | User-Agent: custom-test-agent | Provider: openai | Model: gpt-3.5-turbo | Status: success
+2026-02-21 16:09:09,234 - WARNING - Intento de acceso a endpoint de test con modo deshabilitado | IP: unknown

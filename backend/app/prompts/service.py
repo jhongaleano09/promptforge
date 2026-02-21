@@ -21,7 +21,9 @@ class PromptService:
     def get_generation_prompt(
         clarified_requirements: str,
         prompt_type: str = "normal",
-        target_language: str = "Spanish"
+        target_language: str = "Spanish",
+        persona_name: str = "Assistant",
+        persona_description: str = "A helpful AI"
     ) -> str:
         """
         Renders the system prompt for the Generator Agent.
@@ -29,7 +31,9 @@ class PromptService:
         return GENERATOR_TEMPLATE.format(
             clarified_requirements=clarified_requirements,
             prompt_type=prompt_type,
-            target_language=target_language
+            target_language=target_language,
+            persona_name=persona_name,
+            persona_description=persona_description
         )
 
     @staticmethod
@@ -49,17 +53,15 @@ class PromptService:
 
     @staticmethod
     def get_refinement_prompt(
-        original_prompt: str,
-        evaluator_feedback: str,
-        suggestions: str,
-        target_language: str = "Spanish"
+        seed_prompt: str,
+        user_feedback: str,
+        original_context: str
     ) -> str:
         """
         Renders the system prompt for the Refiner Agent.
         """
         return REFINER_TEMPLATE.format(
-            original_prompt=original_prompt,
-            evaluator_feedback=evaluator_feedback,
-            suggestions=suggestions,
-            target_language=target_language
+            seed_prompt=seed_prompt,
+            user_feedback=user_feedback,
+            original_context=original_context
         )
