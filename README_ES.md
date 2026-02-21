@@ -30,9 +30,9 @@ graph TD
     Agents --> LLM[Interfaz LLM (LiteLLM)]
 ```
 
-## ⚡ Inicio Rápido (Docker)
+## ⚡ Inicio Rápido (Docker, local-first)
 
-La forma más fácil de ejecutar PromptForge es usando Docker.
+La forma más fácil de ejecutar PromptForge localmente es usando Docker.
 
 1.  **Clonar el repositorio:**
     ```bash
@@ -40,21 +40,28 @@ La forma más fácil de ejecutar PromptForge es usando Docker.
     cd promptforge
     ```
 
-2.  **Configurar Entorno:**
-    Copia la configuración de ejemplo:
+    Si hace falta, haz ejecutable el script (Linux/macOS):
     ```bash
-    cp .env.example .env
-    ```
-    *Opcional:* Edita `.env` para ajustar puertos o pre-cargar claves API.
-
-3.  **Ejecutar con Docker Compose:**
-    ```bash
-    docker-compose up -d --build
+    chmod +x run-local.sh
     ```
 
-4.  **Acceder a la Aplicación:**
+2.  **Iniciar la app (un comando):**
+    ```bash
+    ./run-local.sh
+    ```
+    Esto crea un `.env` desde `.env.example` si hace falta y levanta los contenedores.
+
+    Windows (PowerShell):
+    ```powershell
+    .\run-local.ps1
+    ```
+
+3.  **Acceder a la aplicación:**
     *   **Frontend:** [http://localhost:3000](http://localhost:3000)
     *   **Backend Docs:** [http://localhost:8000/docs](http://localhost:8000/docs)
+
+4.  **Agregar tu API key en la UI:**
+    Ve a Settings → Providers y agrega tu clave localmente. Nada sale de tu máquina.
 
 ## 🛠️ Configuración de Desarrollo
 
@@ -76,14 +83,14 @@ npm install
 npm run dev
 ```
 
-## 🔐 Configuración
+## 🔐 Configuración (local)
 
 | Variable | Descripción | Predeterminado |
 | :--- | :--- | :--- |
-| `BACKEND_PORT` | Puerto para la API Python | `8000` |
-| `FRONTEND_PORT` | Puerto para la UI Web | `3000` |
-| `ENCRYPTION_KEY` | Clave para encriptar credenciales | (Generada por backend si está vacía) |
-| `DATABASE_URL` | Cadena de conexión SQLAlchemy | `sqlite:///./data/database.sqlite` |
+| `API_PORT` | Puerto para la API Python | `8000` |
+| `APP_PORT` | Puerto para la UI Web | `3000` |
+| `PROMPTFORGE_SECRET_KEY` | Clave para encriptar credenciales | (Auto-generada si está vacía) |
+| `DATABASE_URL` | Cadena de conexión SQLAlchemy | `sqlite+aiosqlite:///data/database.sqlite` |
 
 ## 📄 Licencia
 

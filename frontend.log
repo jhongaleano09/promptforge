@@ -21,3 +21,9 @@ Translation missing for key: "loading"
  GET /settings 200 in 102ms (compile: 76ms, render: 26ms)
 ✓ Compiled in 446ms
  GET /settings 200 in 16ms (compile: 2ms, render: 14ms)
+Translation missing for key: "loading"
+ GET / 200 in 37ms (compile: 3ms, render: 34ms)
+ GET /configuracion 404 in 677ms (compile: 623ms, render: 55ms)
+Translation missing for key: "loading"
+ GET / 200 in 31ms (compile: 4ms, render: 27ms)
+ GET /settings 200 in 14ms (compile: 3ms, render: 11ms)
