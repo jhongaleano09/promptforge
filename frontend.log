@@ -2,6 +2,7 @@
 > frontend@0.1.0 dev
 > next dev
 
+⚠ Port 3000 is in use by an unknown process, using available port 3001 instead.
 ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /home/jhongaleano/projects/promptforge/package-lock.json as the root directory.
  To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
@@ -10,45 +11,138 @@
    * /home/jhongaleano/projects/promptforge/frontend/package-lock.json
 
 ▲ Next.js 16.1.6 (Turbopack)
-- Local:         http://localhost:3000
-- Network:       http://192.168.1.14:3000
+- Local:         http://localhost:3001
+- Network:       http://192.168.1.14:3001
 - Environments: .env.local
 
 ✓ Starting...
-✓ Ready in 1221ms
-Translation missing for key: "loading"
- GET / 200 in 975ms (compile: 668ms, render: 307ms)
- GET /settings 200 in 102ms (compile: 76ms, render: 26ms)
-✓ Compiled in 446ms
- GET /settings 200 in 16ms (compile: 2ms, render: 14ms)
-Translation missing for key: "loading"
- GET / 200 in 37ms (compile: 3ms, render: 34ms)
- GET /configuracion 404 in 677ms (compile: 623ms, render: 55ms)
-Translation missing for key: "loading"
- GET / 200 in 31ms (compile: 4ms, render: 27ms)
- GET /settings 200 in 14ms (compile: 3ms, render: 11ms)
-✓ Compiled in 110ms
-✓ Compiled in 21ms
-✓ Compiled in 40ms
-✓ Compiled in 16ms
-✓ Compiled in 16ms
-✓ Compiled in 22ms
-✓ Compiled in 14ms
-✓ Compiled in 35ms
-✓ Compiled in 133ms
-✓ Compiled in 14ms
-✓ Compiled in 15ms
-✓ Compiled in 246ms
-✓ Compiled in 15ms
-Translation missing for key: "settings"
-Translation missing for key: "settings_page_providers"
-Translation missing for key: "settings_page_general"
-Translation missing for key: "settings_page_advanced"
-Translation missing for key: "api_keys_title"
-Translation missing for key: "api_keys_description"
-Translation missing for key: "api_keys_add_new"
-Translation missing for key: "api_keys_no_keys"
-Translation missing for key: "api_keys_add_first"
- GET /settings 200 in 56ms (compile: 3ms, render: 53ms)
-Translation missing for key: "loading"
- GET / 200 in 303ms (compile: 59ms, render: 244ms)
+✓ Ready in 626ms
+
+thread 'tokio-runtime-worker' (528337) panicked at /build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17:
+Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 297511))
+
+Caused by:
+    0: Looking up data for TaskId 297511 from database failed
+    1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+    2: ArrayLengthMismatch { required: 91, found: 1190 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+-----
+[1m[31mFATAL[39m[0m: An unexpected Turbopack error occurred. A panic log has been written to /tmp/next-panic-4daddf2174d56ed283312c8a39d2a831.log.
+
+To help make Turbopack better, report this error by ]8;;https://github.com/vercel/next.js/discussions/new?category=turbopack-error-report&title=Turbopack%20Error%3A%20Failed%20to%20restore%20task%20data%20%28corrupted%20database%20or%20bug%29%3A%20Meta%20for%20get_written_endpoint_with_issues_operation%20%28TaskId%20297511%29%29&body=Turbopack%20version%3A%20%600c06f068%60%0ANext.js%20version%3A%20%600.0.0%60%0A%0AError%20message%3A%0A%60%60%60%0AFailed%20to%20restore%20task%20data%20%28corrupted%20database%20or%20bug%29%3A%20Meta%20for%20get_written_endpoint_with_issues_operation%20%28TaskId%20297511%29%29%0A%0ADebug%20info%3A%0A-%20Failed%20to%20restore%20task%20data%20%28corrupted%20database%20or%20bug%29%3A%20Meta%20for%20get_written_endpoint_with_issues_operation%20%28TaskId%20297511%29%29%0A%20%20%0A%20%20Caused%20by%3A%0A%20%20%20%20%20%200%3A%20Looking%20up%20data%20for%20TaskId%20297511%20from%20databa GET /settings 404 in 14ms (compile: 4ms, render: 9ms)
+serialize%20AMQF%20from%2000000656.meta%20for%2000000652.sst%0A%20%20%20%20%20%202%3A%20ArrayLengthMismatch%20%7B%20required%3A%2091%2C%20found%3A%201190%20%7D%0A%60%60%60&labels=Turbopack,Turbopack%20Panic%20Backtrace\clicking here.]8;;\
+-----
+
+
+thread 'tokio-runtime-worker' (528338) panicked at /build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17:
+Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))
+
+Caused by:
+    0: Looking up data for TaskId 311319 from database failed
+    1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+    2: ArrayLengthMismatch { required: 91, found: 1190 }
+
+thread '<unnamed>' (528304) panicked at /build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17:
+Failed to restore task data (corrupted database or bug): Meta for get_source_map_rope_operation (TaskId 311320))
+
+Caused by:
+    0: Looking up data for TaskId 311320 from database failed
+    1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+    2: ArrayLengthMismatch { required: 91, found: 1190 }
+⨯ Error [TurbopackInternalError]: Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))
+
+Debug info:
+- Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))
+  
+  Caused by:
+      0: Looking up data for TaskId 311319 from database failed
+      1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+      2: ArrayLengthMismatch { required: 91, found: 1190 }
+    at <unknown> (TurbopackInternalError: Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))) {
+  location: '/build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17'
+}
+
+thread 'tokio-runtime-worker' (528337) panicked at /build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17:
+Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))
+
+Caused by:
+    0: Looking up data for TaskId 311319 from database failed
+    1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+    2: ArrayLengthMismatch { required: 91, found: 1190 }
+
+thread '<unnamed>' (528304) panicked at /build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17:
+Failed to restore task data (corrupted database or bug): Meta for get_source_map_rope_operation (TaskId 311321))
+
+Caused by:
+    0: Looking up data for TaskId 311321 from database failed
+    1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+    2: ArrayLengthMismatch { required: 91, found: 1190 }
+Error [TurbopackInternalError]: Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 297511))
+
+Debug info:
+- Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 297511))
+  
+  Caused by:
+      0: Looking up data for TaskId 297511 from database failed
+      1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+      2: ArrayLengthMismatch { required: 91, found: 1190 }
+    at <unknown> (TurbopackInternalError: Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 297511))) {
+  location: '/build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17'
+}
+
+thread 'tokio-runtime-worker' (528337) panicked at /build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17:
+Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))
+
+Caused by:
+    0: Looking up data for TaskId 311319 from database failed
+    1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+    2: ArrayLengthMismatch { required: 91, found: 1190 }
+
+thread '<unnamed>' (528304) panicked at /build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17:
+Failed to restore task data (corrupted database or bug): Meta for get_source_map_rope_operation (TaskId 311320))
+
+Caused by:
+    0: Looking up data for TaskId 311320 from database failed
+    1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+    2: ArrayLengthMismatch { required: 91, found: 1190 }
+⨯ Error [TurbopackInternalError]: Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))
+
+Debug info:
+- Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))
+  
+  Caused by:
+      0: Looking up data for TaskId 311319 from database failed
+      1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+      2: ArrayLengthMismatch { required: 91, found: 1190 }
+    at <unknown> (TurbopackInternalError: Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))) {
+  location: '/build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17'
+}
+
+thread 'tokio-runtime-worker' (528338) panicked at /build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17:
+Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))
+
+Caused by:
+    0: Looking up data for TaskId 311319 from database failed
+    1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+    2: ArrayLengthMismatch { required: 91, found: 1190 }
+
+thread '<unnamed>' (528304) panicked at /build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17:
+Failed to restore task data (corrupted database or bug): Meta for get_source_map_rope_operation (TaskId 311320))
+
+Caused by:
+    0: Looking up data for TaskId 311320 from database failed
+    1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+    2: ArrayLengthMismatch { required: 91, found: 1190 }
+Error [TurbopackInternalError]: Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))
+
+Debug info:
+- Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))
+  
+  Caused by:
+      0: Looking up data for TaskId 311319 from database failed
+      1: Failed to deserialize AMQF from 00000656.meta for 00000652.sst
+      2: ArrayLengthMismatch { required: 91, found: 1190 }
+    at <unknown> (TurbopackInternalError: Failed to restore task data (corrupted database or bug): Meta for get_written_endpoint_with_issues_operation (TaskId 311319))) {
+  location: '/build/turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:156:17'
+}

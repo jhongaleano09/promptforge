@@ -1036,14 +1036,6 @@ def get_templates(language: str = "spanish") -> dict:
             "additional_improve": ES_ADDITIONAL_IMPROVE_TEMPLATE,
             "additional_generator": ES_ADDITIONAL_GENERATOR_TEMPLATE
         }
-    else:  # spanish (default)
-        return {
-            "clarifier": ES_CLARIFIER_TEMPLATE,
-            "generator": ES_GENERATOR_TEMPLATE,
-            "evaluator": ES_EVALUATOR_TEMPLATE,
-            "judge": ES_JUDGE_TEMPLATE,
-            "refiner": ES_REFINER_TEMPLATE
-        }
 
 
 def is_valid_language(language: str) -> bool:
