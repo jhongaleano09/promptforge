@@ -1,6 +1,6 @@
 INFO:     Will watch for changes in these directories: ['/home/jhongaleano/projects/promptforge/backend']
-INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [528064] using StatReload
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [657561] using StatReload
 /home/jhongaleano/.local/lib/python3.12/site-packages/pydantic/_internal/_fields.py:151: UserWarning: Field "model_max_budget" has conflict with protected namespace "model_".
 
 You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
@@ -9,12 +9,229 @@ You may be able to resolve this warning by setting `model_config['protected_name
 
 You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
   warnings.warn(
-INFO:     Started server process [528100]
+INFO:     Started server process [657577]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     127.0.0.1:57602 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57602 - "OPTIONS /api/workflow/stream/start HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57602 - "POST /api/workflow/stream/start HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55906 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55908 - "GET /api/user/preferences/language HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55908 - "GET /api/prompts/types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55908 - "GET /api/prompts/types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55906 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55906 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+Error getting active API key: 
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
+    h.verify(data[-32:])
+cryptography.exceptions.InvalidSignature: Signature did not match digest.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/config_service.py", line 51, in get_active_api_key
+    api_key_decrypted = security_service.decrypt_key(api_key_encrypted)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/security.py", line 51, in decrypt_key
+    return self.fernet.decrypt(encrypted_key).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 89, in decrypt
+    return self._decrypt_data(data, timestamp, time_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 148, in _decrypt_data
+    self._verify_signature(data)
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 132, in _verify_signature
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+INFO:     127.0.0.1:55914 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+Error getting active API key: 
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
+    h.verify(data[-32:])
+cryptography.exceptions.InvalidSignature: Signature did not match digest.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/config_service.py", line 51, in get_active_api_key
+    api_key_decrypted = security_service.decrypt_key(api_key_encrypted)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/security.py", line 51, in decrypt_key
+    return self.fernet.decrypt(encrypted_key).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 89, in decrypt
+    return self._decrypt_data(data, timestamp, time_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 148, in _decrypt_data
+    self._verify_signature(data)
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 132, in _verify_signature
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+INFO:     127.0.0.1:55914 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55908 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+Error getting active API key: 
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
+    h.verify(data[-32:])
+cryptography.exceptions.InvalidSignature: Signature did not match digest.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/config_service.py", line 51, in get_active_api_key
+    api_key_decrypted = security_service.decrypt_key(api_key_encrypted)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/security.py", line 51, in decrypt_key
+    return self.fernet.decrypt(encrypted_key).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 89, in decrypt
+    return self._decrypt_data(data, timestamp, time_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 148, in _decrypt_data
+    self._verify_signature(data)
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 132, in _verify_signature
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+INFO:     127.0.0.1:55906 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+Error getting active API key: 
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
+    h.verify(data[-32:])
+cryptography.exceptions.InvalidSignature: Signature did not match digest.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/config_service.py", line 51, in get_active_api_key
+    api_key_decrypted = security_service.decrypt_key(api_key_encrypted)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/security.py", line 51, in decrypt_key
+    return self.fernet.decrypt(encrypted_key).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 89, in decrypt
+    return self._decrypt_data(data, timestamp, time_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 148, in _decrypt_data
+    self._verify_signature(data)
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 132, in _verify_signature
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+INFO:     127.0.0.1:55908 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+Error getting active API key: 
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
+    h.verify(data[-32:])
+cryptography.exceptions.InvalidSignature: Signature did not match digest.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/config_service.py", line 51, in get_active_api_key
+    api_key_decrypted = security_service.decrypt_key(api_key_encrypted)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/security.py", line 51, in decrypt_key
+    return self.fernet.decrypt(encrypted_key).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 89, in decrypt
+    return self._decrypt_data(data, timestamp, time_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 148, in _decrypt_data
+    self._verify_signature(data)
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 132, in _verify_signature
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+INFO:     127.0.0.1:53010 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+Error getting active API key: 
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
+    h.verify(data[-32:])
+cryptography.exceptions.InvalidSignature: Signature did not match digest.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/config_service.py", line 51, in get_active_api_key
+    api_key_decrypted = security_service.decrypt_key(api_key_encrypted)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/security.py", line 51, in decrypt_key
+    return self.fernet.decrypt(encrypted_key).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 89, in decrypt
+    return self._decrypt_data(data, timestamp, time_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 148, in _decrypt_data
+    self._verify_signature(data)
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 132, in _verify_signature
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+INFO:     127.0.0.1:53038 - "GET /api/settings/keys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53022 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53010 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53022 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53038 - "GET /api/settings/keys HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53038 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53038 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53022 - "GET /api/prompts/types HTTP/1.1" 200 OK
+Error getting active API key: 
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
+    h.verify(data[-32:])
+cryptography.exceptions.InvalidSignature: Signature did not match digest.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/config_service.py", line 51, in get_active_api_key
+    api_key_decrypted = security_service.decrypt_key(api_key_encrypted)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/security.py", line 51, in decrypt_key
+    return self.fernet.decrypt(encrypted_key).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 89, in decrypt
+    return self._decrypt_data(data, timestamp, time_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 148, in _decrypt_data
+    self._verify_signature(data)
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 132, in _verify_signature
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+INFO:     127.0.0.1:53010 - "GET /api/prompts/types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53022 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53010 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53038 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+Error getting active API key: 
+Traceback: Traceback (most recent call last):
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
+    h.verify(data[-32:])
+cryptography.exceptions.InvalidSignature: Signature did not match digest.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/config_service.py", line 51, in get_active_api_key
+    api_key_decrypted = security_service.decrypt_key(api_key_encrypted)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/projects/promptforge/backend/app/core/security.py", line 51, in decrypt_key
+    return self.fernet.decrypt(encrypted_key).decode()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 89, in decrypt
+    return self._decrypt_data(data, timestamp, time_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 148, in _decrypt_data
+    self._verify_signature(data)
+  File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 132, in _verify_signature
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+INFO:     127.0.0.1:53022 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46392 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46392 - "OPTIONS /api/workflow/stream/start HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46392 - "POST /api/workflow/stream/start HTTP/1.1" 200 OK
 Error getting active API key: 
 Traceback: Traceback (most recent call last):
   File "/home/jhongaleano/.local/lib/python3.12/site-packages/cryptography/fernet.py", line 130, in _verify_signature
@@ -40,14 +257,3 @@ Traceback (most recent call last):
 cryptography.fernet.InvalidToken
 
 No active API key found in clarify_node
-INFO:     127.0.0.1:52476 - "GET /api/prompts/types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52482 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52480 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52476 - "GET /api/prompts/types HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52482 - "GET /api/models?provider=openai HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52480 - "GET /api/settings/validate-active HTTP/1.1" 200 OK
-WARNING:  StatReload detected changes in 'app/api/endpoints.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [528100]
