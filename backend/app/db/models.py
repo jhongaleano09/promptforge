@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, LargeBinary, DateTime, Index, Boolean
+from sqlalchemy import Column, Integer, String, LargeBinary, DateTime, Index, Boolean, Text
 from sqlalchemy.sql import func
 from app.db.database import Base
 
@@ -56,3 +56,37 @@ class UserPreferences(Base):
     theme = Column(String, default="light", nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
+
+class PromptTemplate(Base):
+    """
+    Prompt templates library table.
+    Stores pre-built templates for different prompt types.
+
+    Stores:
+    - type: Template type ('system', 'image', 'additional')
+    - name: Template name
+    - description: Template description
+    - template_content: Template content with placeholders
+    - category: Template category (e.g., 'customer-service', 'creative-writing')
+    - tags: JSON array of tags
+    - is_public: Whether template is public (vs private)
+    - usage_count: Times template has been used
+    """
+    __tablename__ = "prompt_templates"
+
+    id = Column(Integer, primary_key=True, index=True)
+    type = Column(String(50), nullable=False, index=True)
+    name = Column(String(100), nullable=False)
+    description = Column(Text, nullable=True)
+    template_content = Column(Text, nullable=False)
+    category = Column(String(50), nullable=True)
+    tags = Column(String, nullable=True)
+    is_public = Column(Boolean, default=True, nullable=False)
+    usage_count = Column(Integer, default=0, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
+    __table_args__ = (
+        Index('idx_type_category', 'type', 'category'),
+    )

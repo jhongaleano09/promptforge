@@ -36,7 +36,7 @@ PROMPT_TYPE_CONFIGS: Dict[str, Dict[str, Any]] = {
         "description": "System prompt to configure model behavior and role",
         "requires_test_input": True,  # Requires user input for testing
         "workflow_graph": "system_prompt_workflow",
-        "enabled": False,  # Phase 8.6 will enable this
+        "enabled": True,  # ✅ Enabled in Sprint 4
         "icon": "⚙️",
         "color": "purple",
         "category": "configuration",
@@ -48,7 +48,7 @@ PROMPT_TYPE_CONFIGS: Dict[str, Dict[str, Any]] = {
         "description": "Specialized prompt for image generation (DALL-E, Midjourney, Stable Diffusion)",
         "requires_test_input": False,
         "workflow_graph": "image_prompt_workflow",
-        "enabled": False,  # Phase 8.7 will enable this
+        "enabled": True,  # ✅ Enabled in Sprint 4
         "icon": "🖼️",
         "color": "green",
         "category": "creative",
@@ -60,7 +60,7 @@ PROMPT_TYPE_CONFIGS: Dict[str, Dict[str, Any]] = {
         "description": "Complementary prompt for specific tasks with variable placeholders",
         "requires_test_input": False,
         "workflow_graph": "additional_prompt_workflow",
-        "enabled": False,  # Phase 8.8 will enable this
+        "enabled": True,  # ✅ Enabled in Sprint 4
         "icon": "➕",
         "color": "orange",
         "category": "extension",

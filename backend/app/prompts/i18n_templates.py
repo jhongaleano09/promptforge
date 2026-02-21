@@ -172,6 +172,325 @@ Salida estrictamente en formato JSON válido:
 """
 
 # ==============================================================================
+# SYSTEM PROMPT TEMPLATES (ES)
+# ==============================================================================
+
+ES_SYSTEM_CLARIFIER_TEMPLATE = """
+Eres un Arquitecto de System Prompts experto. Tu objetivo es comprender los requisitos para crear un prompt de sistema perfecto para un chatbot o asistente.
+
+Entrada: "{user_input}"
+
+Tus tareas:
+1.  **Analizar** la solicitud en cuanto a propósito del bot, comportamiento deseado y casos de uso.
+2.  **Identificar Información Faltante**: ¿Qué detalles clave son necesarios? (ej: rol del bot, tono, límites, manejo de errores, formato de respuestas).
+3.  **Formular Preguntas**: Crea 3-5 preguntas estratégicas para obtener esta información. **Estas preguntas deben estar en {interaction_language}.**
+
+Salida estrictamente en formato JSON válido:
+{{
+    "ambiguities": ["Lista de puntos ambiguos..."],
+    "questions": ["Pregunta 1 ({interaction_language})?", "Pregunta 2 ({interaction_language})?", ...]
+}}
+"""
+
+ES_SYSTEM_PERSONALITY_TEMPLATE = """
+Eres un Especialista en Personalidad de Chatbots. Tu tarea es definir la personalidad y tono del bot basándote en los requisitos.
+
+Requisitos del Bot:
+"{bot_requirements}"
+
+Tono Objetivo: "{target_tone}"
+
+Tarea:
+Genera una definición de personalidad detallada incluyendo:
+1. Voice y tone (ej: amigable, profesional, técnico, casual)
+2. Personality traits (ej: empático, directo, detallista)
+3. Communication style (ej: conversacional, formal, conciso)
+4. Ejemplos de respuestas
+
+Salida estrictamente en formato JSON válido:
+{{
+    "voice": "...",
+    "tone": "...",
+    "personality_traits": ["...", "...", "..."],
+    "communication_style": "...",
+    "response_examples": ["ejemplo 1", "ejemplo 2"]
+}}
+"""
+
+ES_SYSTEM_BOUNDARIES_TEMPLATE = """
+Eres un Especialista en Seguridad y Límites de IA. Tu tarea es establecer límites claros de comportamiento y restricciones para un chatbot.
+
+Requisitos del Bot:
+"{bot_requirements}"
+
+Personalidad Definida:
+"{personality_definition}"
+
+Tarea:
+Genera un conjunto de reglas y límites incluyendo:
+1. Behaviors permitidos (qué puede hacer el bot)
+2. Behaviors prohibidos (qué NO puede hacer el bot)
+3. Límites de información (qué no debe compartir)
+4. Manejo de casos edge (cómo responder a solicitudes inapropiadas)
+5. Formato de respuestas
+
+Salida estrictamente en formato JSON válido:
+{{
+    "allowed_behaviors": ["...", "..."],
+    "prohibited_behaviors": ["...", "..."],
+    "information_limits": ["...", "..."],
+    "edge_case_handling": "...",
+    "response_format_guidelines": "..."
+}}
+"""
+
+ES_SYSTEM_GENERATOR_TEMPLATE = """
+Eres un Maestro de System Prompts. Tu tarea es consolidar toda la información y crear un system prompt final y profesional.
+
+Rol del Bot: "{bot_role}"
+Personalidad: "{personality}"
+Límites: "{boundaries}"
+Requisitos Adicionales: "{additional_requirements}"
+
+Idioma del System Prompt: "{target_language}"
+
+Tarea:
+Genera un system prompt completo que incluya:
+1. Definición clara del rol y propósito
+2. Directrices de personalidad y tono
+3. Límites y restricciones explícitas
+4. Formato de respuestas esperado
+5. Manejo de casos especiales
+6. Ejemplos de buenas respuestas (few-shot si aplica)
+
+El system prompt debe ser claro, conciso y directo. Evita ambigüedades.
+
+Salida estrictamente en formato JSON válido:
+{{
+    "content": "...(El system prompt completo)..."
+}}
+"""
+
+# ==============================================================================
+# IMAGE PROMPT TEMPLATES (ES)
+# ==============================================================================
+
+ES_IMAGE_CLARIFIER_TEMPLATE = """
+Eres un Arquitecto de Image Prompts experto. Tu objetivo es comprender los requisitos visuales para crear el prompt de imagen perfecto.
+
+Entrada: "{user_input}"
+
+Tus tareas:
+1.  **Analizar** la solicitud en cuanto a intención visual (qué imagen se quiere crear).
+2.  **Identificar Detalles Faltantes**: ¿Qué detalles visuales clave faltan? (ej: estilo artístico, iluminación, composición, colores, detalles específicos, resolución).
+3.  **Formular Preguntas**: Crea 3-5 preguntas estratégicas para obtener esta información. **Estas preguntas deben estar en {interaction_language}.**
+
+Salida estrictamente en formato JSON válido:
+{{
+    "ambiguities": ["Lista de puntos ambiguos..."],
+    "questions": ["Pregunta 1 ({interaction_language})?", "Pregunta 2 ({interaction_language})?", ...]
+}}
+"""
+
+ES_IMAGE_PLATFORM_TEMPLATE = """
+Eres un Experto en Generación de Imágenes. Tu tarea es optimizar un prompt de imagen para una plataforma específica.
+
+Prompt Base: "{base_prompt}"
+Plataforma Objetivo: "{platform}" (DALL-E, Midjourney, Stable Diffusion)
+
+Tarea:
+Optimiza el prompt para la plataforma específica considerando:
+1. {platform} - keywords que funcionan mejor (ej: "photorealistic", "4K", "cinematic")
+2. Formato y sintaxis preferida por la plataforma
+3. Parámetros técnicos recomendados (aspect ratio, calidad)
+4. Estilo y detalles visuales específicos
+
+Salida estrictamente en formato JSON válido:
+{{
+    "optimized_prompt": "...",
+    "platform_specific_keywords": ["...", "..."],
+    "technical_parameters": {{ "aspect_ratio": "...", "quality": "..." }},
+    "style_recommendations": ["...", "..."]
+}}
+"""
+
+ES_IMAGE_NEGATIVE_TEMPLATE = """
+Eres un Experto en Negative Prompts para Generación de Imágenes. Tu tarea es identificar elementos indeseados y generar un negative prompt efectivo.
+
+Prompt de Imagen: "{image_prompt}"
+
+Tarea:
+Analiza el prompt e identifica elementos que podrían causar resultados indeseados. Genera un negative prompt que:
+1. Excluya quality issues (blurry, low resolution, distorted)
+2. Excluya elementos no deseados basados en el prompt
+3. Use keywords efectivas para la plataforma seleccionada
+4. Sea específico pero flexible
+
+Salida estrictamente en formato JSON válido:
+{{
+    "negative_prompt": "...",
+    "excluded_elements": ["...", "..."],
+    "quality_keywords": ["...", "..."],
+    "explanation": "Explicación de por qué se excluyeron estos elementos"
+}}
+"""
+
+ES_IMAGE_GENERATOR_TEMPLATE = """
+Eres un Maestro de Image Prompts. Tu tarea es consolidar todos los componentes en un prompt de imagen optimizado y completo.
+
+Prompt Base: "{base_prompt}"
+Optimización: "{optimization}"
+Negative Prompt: "{negative_prompt}"
+Detalles Adicionales: "{additional_details}"
+
+Plataforma: "{platform}"
+Idioma del Prompt: "{target_language}"
+
+Tarea:
+Genera un prompt de imagen completo que:
+1. Combine el prompt base con las optimizaciones
+2. Use estructura efectiva para la plataforma: [sujeto] [estilo] [iluminación] [composición] [detalles]
+3. Sea descriptivo pero conciso
+4. Incluya keywords relevantes de arte y fotografía
+5. Use formato que la plataforma entienda mejor
+
+Salida estrictamente en formato JSON válido:
+{{
+    "content": "...(El prompt de imagen completo)..."
+}}
+"""
+
+# ==============================================================================
+# ADDITIONAL PROMPT TEMPLATES (ES)
+# ==============================================================================
+
+ES_ADDITIONAL_ANALYZE_TEMPLATE = """
+Eres un Analista de Prompts experto. Tu tarea es analizar un prompt existente para identificar fortalezas y debilidades.
+
+Prompt Original:
+"{original_prompt}"
+
+Tarea:
+Analiza el prompt y evalúa:
+1. Claridad y especificidad
+2. Completitud de instrucciones
+3. Estructura y organización
+4. Posibles malinterpretaciones
+5. Faltantes (qué información o restricciones podrían mejorar)
+
+Salida estrictamente en formato JSON válido:
+{{
+    "strengths": ["...", "..."],
+    "weaknesses": ["...", "..."],
+    "clarity_score": 8.5,
+    "completeness_score": 7.0,
+    "potential_issues": ["...", "..."],
+    "suggested_improvements": ["...", "..."]
+}}
+"""
+
+ES_ADDITIONAL_WEAKNESS_TEMPLATE = """
+Eres un Auditor de Prompts experto. Tu tarea es identificar áreas de mejora específicas en un prompt existente.
+
+Prompt Original:
+"{original_prompt}"
+
+Análisis Previo:
+"{analysis}"
+
+Tarea:
+Categoriza y detalla las debilidades del prompt:
+1. Ambigüedades específicas (qué podría malinterpretarse)
+2. Instrucciones faltantes (qué hace falta)
+3. Problemas de estructura (organización, formato)
+4. Issues de tono o consistencia
+5. Oportunidades de optimización (tokens, claridad)
+
+Salida estrictamente en formato JSON válido:
+{{
+    "ambiguities": [
+        {{"text": "...", "explanation": "..."}},
+        {{"text": "...", "explanation": "..."}}
+    ],
+    "missing_instructions": ["...", "..."],
+    "structure_issues": ["...", "..."],
+    "tone_issues": ["...", "..."],
+    "optimization_opportunities": ["...", "..."]
+}}
+"""
+
+ES_ADDITIONAL_IMPROVE_TEMPLATE = """
+Eres un Consultor de Prompts experto. Tu tarea es generar sugerencias específicas y accionables para mejorar un prompt existente.
+
+Prompt Original:
+"{original_prompt}"
+
+Debilidades Identificadas:
+"{weaknesses}"
+
+Propósito del Prompt: "{prompt_purpose}"
+Idioma: "{target_language}"
+
+Tarea:
+Genera sugerencias concretas que:
+1. Aborden cada debilidad identificada
+2. Sean específicas y accionables
+3. Mejoren la calidad general del prompt
+4. Mantengan la intención original
+
+Salida estrictamente en formato JSON válido:
+{{
+    "suggestions": [
+        {{
+            "category": "Claridad",
+            "original": "...",
+            "improved": "...",
+            "explanation": "..."
+        }},
+        {{
+            "category": "Estructura",
+            "original": "...",
+            "improved": "...",
+            "explanation": "..."
+        }}
+    ]
+}}
+"""
+
+ES_ADDITIONAL_GENERATOR_TEMPLATE = """
+Eres un Mejorador de Prompts experto. Tu tarea es aplicar mejoras a un prompt existente y generar una versión refinada.
+
+Prompt Original:
+"{original_prompt}"
+
+Mejoras Sugeridas:
+"{suggestions}"
+
+Contexto del Usuario:
+"{user_context}"
+
+Idioma Objetivo: "{target_language}"
+
+Tarea:
+Genera una versión mejorada del prompt que:
+1. Mantenga la intención y propósito original
+2. Aplique las mejoras sugeridas
+3. Sea más claro y específico
+4. Tenga mejor estructura y organización
+5. Reduzca ambigüedades y malinterpretaciones
+6. Mejore la calidad general
+
+El prompt refinado debe ser una mejora clara sobre el original.
+
+Salida estrictamente en formato JSON válido:
+{{
+    "content": "...(El prompt mejorado completo)...",
+    "improvements_applied": ["...", "..."],
+    "before_after_summary": "Resumen breve de los cambios principales"
+}}
+"""
+
+# ==============================================================================
 # ENGLISH TEMPLATES (EN)
 # ==============================================================================
 
@@ -328,19 +647,338 @@ Output strictly in valid JSON format:
 """
 
 # ==============================================================================
+# SYSTEM PROMPT TEMPLATES (EN)
+# ==============================================================================
+
+EN_SYSTEM_CLARIFIER_TEMPLATE = """
+You are an expert System Prompt Architect. Your goal is to understand the requirements to create a perfect system prompt for a chatbot or assistant.
+
+Input: "{user_input}"
+
+Your tasks:
+1.  **Analyze** the request regarding bot purpose, desired behavior, and use cases.
+2.  **Identify Missing Information**: What key details are necessary? (e.g., bot role, tone, boundaries, error handling, response format).
+3.  **Formulate Questions**: Create 3-5 strategic questions to gather this information. **These questions must be in {interaction_language}.**
+
+Output strictly in valid JSON format:
+{{
+    "ambiguities": ["List of ambiguous points..."],
+    "questions": ["Question 1 ({interaction_language})?", "Question 2 ({interaction_language})?", ...]
+}}
+"""
+
+EN_SYSTEM_PERSONALITY_TEMPLATE = """
+You are a Chatbot Personality Specialist. Your task is to define the personality and tone of the bot based on requirements.
+
+Bot Requirements:
+"{bot_requirements}"
+
+Target Tone: "{target_tone}"
+
+Task:
+Generate a detailed personality definition including:
+1. Voice and tone (e.g., friendly, professional, technical, casual)
+2. Personality traits (e.g., empathetic, direct, detailed)
+3. Communication style (e.g., conversational, formal, concise)
+4. Response examples
+
+Output strictly in valid JSON format:
+{{
+    "voice": "...",
+    "tone": "...",
+    "personality_traits": ["...", "...", "..."],
+    "communication_style": "...",
+    "response_examples": ["example 1", "example 2"]
+}}
+"""
+
+EN_SYSTEM_BOUNDARIES_TEMPLATE = """
+You are an AI Safety and Boundaries Specialist. Your task is to establish clear behavior rules and constraints for a chatbot.
+
+Bot Requirements:
+"{bot_requirements}"
+
+Defined Personality:
+"{personality_definition}"
+
+Task:
+Generate a set of rules and boundaries including:
+1. Allowed behaviors (what the bot can do)
+2. Prohibited behaviors (what the bot CANNOT do)
+3. Information limits (what the bot must not share)
+4. Edge case handling (how to respond to inappropriate requests)
+5. Response format guidelines
+
+Output strictly in valid JSON format:
+{{
+    "allowed_behaviors": ["...", "..."],
+    "prohibited_behaviors": ["...", "..."],
+    "information_limits": ["...", "..."],
+    "edge_case_handling": "...",
+    "response_format_guidelines": "..."
+}}
+"""
+
+EN_SYSTEM_GENERATOR_TEMPLATE = """
+You are a Master of System Prompts. Your task is to consolidate all information and create a final, professional system prompt.
+
+Bot Role: "{bot_role}"
+Personality: "{personality}"
+Boundaries: "{boundaries}"
+Additional Requirements: "{additional_requirements}"
+
+System Prompt Language: "{target_language}"
+
+Task:
+Generate a complete system prompt that includes:
+1. Clear definition of role and purpose
+2. Personality and tone guidelines
+3. Explicit boundaries and constraints
+4. Expected response format
+5. Special case handling
+6. Examples of good responses (few-shot if applicable)
+
+The system prompt should be clear, concise, and direct. Avoid ambiguities.
+
+Output strictly in valid JSON format:
+{{
+    "content": "...(The complete system prompt)..."
+}}
+"""
+
+# ==============================================================================
+# IMAGE PROMPT TEMPLATES (EN)
+# ==============================================================================
+
+EN_IMAGE_CLARIFIER_TEMPLATE = """
+You are an expert Image Prompt Architect. Your goal is to understand the visual requirements to create the perfect image prompt.
+
+Input: "{user_input}"
+
+Your tasks:
+1.  **Analyze** the request regarding visual intent (what image should be created).
+2.  **Identify Missing Details**: What key visual details are missing? (e.g., artistic style, lighting, composition, colors, specific details, resolution).
+3.  **Formulate Questions**: Create 3-5 strategic questions to gather this information. **These questions must be in {interaction_language}.**
+
+Output strictly in valid JSON format:
+{{
+    "ambiguities": ["List of ambiguous points..."],
+    "questions": ["Question 1 ({interaction_language})?", "Question 2 ({interaction_language})?", ...]
+}}
+"""
+
+EN_IMAGE_PLATFORM_TEMPLATE = """
+You are an Image Generation Expert. Your task is to optimize an image prompt for a specific platform.
+
+Base Prompt: "{base_prompt}"
+Target Platform: "{platform}" (DALL-E, Midjourney, Stable Diffusion)
+
+Task:
+Optimize the prompt for the specific platform considering:
+1. {platform} - keywords that work best (e.g., "photorealistic", "4K", "cinematic")
+2. Preferred format and syntax for the platform
+3. Recommended technical parameters (aspect ratio, quality)
+4. Style and specific visual details
+
+Output strictly in valid JSON format:
+{{
+    "optimized_prompt": "...",
+    "platform_specific_keywords": ["...", "..."],
+    "technical_parameters": {{ "aspect_ratio": "...", "quality": "..." }},
+    "style_recommendations": ["...", "..."]
+}}
+"""
+
+EN_IMAGE_NEGATIVE_TEMPLATE = """
+You are an expert in Negative Prompts for Image Generation. Your task is to identify unwanted elements and generate an effective negative prompt.
+
+Image Prompt: "{image_prompt}"
+
+Task:
+Analyze the prompt and identify elements that might cause unwanted results. Generate a negative prompt that:
+1. Excludes quality issues (blurry, low resolution, distorted)
+2. Excludes unwanted elements based on the prompt
+3. Uses effective keywords for the selected platform
+4. Is specific but flexible
+
+Output strictly in valid JSON format:
+{{
+    "negative_prompt": "...",
+    "excluded_elements": ["...", "..."],
+    "quality_keywords": ["...", "..."],
+    "explanation": "Explanation of why these elements are excluded"
+}}
+"""
+
+EN_IMAGE_GENERATOR_TEMPLATE = """
+You are a Master of Image Prompts. Your task is to consolidate all components into an optimized and complete image prompt.
+
+Base Prompt: "{base_prompt}"
+Optimization: "{optimization}"
+Negative Prompt: "{negative_prompt}"
+Additional Details: "{additional_details}"
+
+Platform: "{platform}"
+Prompt Language: "{target_language}"
+
+Task:
+Generate a complete image prompt that:
+1. Combines the base prompt with optimizations
+2. Uses effective structure for the platform: [subject] [style] [lighting] [composition] [details]
+3. Is descriptive but concise
+4. Includes relevant art and photography keywords
+5. Uses format the platform understands best
+
+Output strictly in valid JSON format:
+{{
+    "content": "...(The complete image prompt)..."
+}}
+"""
+
+# ==============================================================================
+# ADDITIONAL PROMPT TEMPLATES (EN)
+# ==============================================================================
+
+EN_ADDITIONAL_ANALYZE_TEMPLATE = """
+You are an expert Prompt Analyst. Your task is to analyze an existing prompt to identify strengths and weaknesses.
+
+Original Prompt:
+"{original_prompt}"
+
+Task:
+Analyze the prompt and evaluate:
+1. Clarity and specificity
+2. Completeness of instructions
+3. Structure and organization
+4. Potential misinterpretations
+5. Missing elements (what information or constraints could improve)
+
+Output strictly in valid JSON format:
+{{
+    "strengths": ["...", "..."],
+    "weaknesses": ["...", "..."],
+    "clarity_score": 8.5,
+    "completeness_score": 7.0,
+    "potential_issues": ["...", "..."],
+    "suggested_improvements": ["...", "..."]
+}}
+"""
+
+EN_ADDITIONAL_WEAKNESS_TEMPLATE = """
+You are an expert Prompt Auditor. Your task is to identify specific improvement areas in an existing prompt.
+
+Original Prompt:
+"{original_prompt}"
+
+Previous Analysis:
+"{analysis}"
+
+Task:
+Categorize and detail the prompt's weaknesses:
+1. Specific ambiguities (what could be misinterpreted)
+2. Missing instructions (what's missing)
+3. Structure problems (organization, format)
+4. Tone or consistency issues
+5. Optimization opportunities (tokens, clarity)
+
+Output strictly in valid JSON format:
+{{
+    "ambiguities": [
+        {{"text": "...", "explanation": "..."}},
+        {{"text": "...", "explanation": "..."}}
+    ],
+    "missing_instructions": ["...", "..."],
+    "structure_issues": ["...", "..."],
+    "tone_issues": ["...", "..."],
+    "optimization_opportunities": ["...", "..."]
+}}
+"""
+
+EN_ADDITIONAL_IMPROVE_TEMPLATE = """
+You are an expert Prompt Consultant. Your task is to generate specific, actionable suggestions to improve an existing prompt.
+
+Original Prompt:
+"{original_prompt}"
+
+Identified Weaknesses:
+"{weaknesses}"
+
+Prompt Purpose: "{prompt_purpose}"
+Language: "{target_language}"
+
+Task:
+Generate concrete suggestions that:
+1. Address each identified weakness
+2. Are specific and actionable
+3. Improve overall prompt quality
+4. Maintain the original intent
+
+Output strictly in valid JSON format:
+{{
+    "suggestions": [
+        {{
+            "category": "Clarity",
+            "original": "...",
+            "improved": "...",
+            "explanation": "..."
+        }},
+        {{
+            "category": "Structure",
+            "original": "...",
+            "improved": "...",
+            "explanation": "..."
+        }}
+    ]
+}}
+"""
+
+EN_ADDITIONAL_GENERATOR_TEMPLATE = """
+You are an expert Prompt Improver. Your task is to apply improvements to an existing prompt and generate a refined version.
+
+Original Prompt:
+"{original_prompt}"
+
+Suggested Improvements:
+"{suggestions}"
+
+User Context:
+"{user_context}"
+
+Target Language: "{target_language}"
+
+Task:
+Generate an improved version of the prompt that:
+1. Maintains the original intent and purpose
+2. Applies the suggested improvements
+3. Is clearer and more specific
+4. Has better structure and organization
+5. Reduces ambiguities and misinterpretations
+6. Improves overall quality
+
+The refined prompt should be a clear improvement over the original.
+
+Output strictly in valid JSON format:
+{{
+    "content": "...(The complete improved prompt)...",
+    "improvements_applied": ["...", "..."],
+    "before_after_summary": "Brief summary of main changes"
+}}
+"""
+
+# ==============================================================================
 # TEMPLATE SELECTOR FUNCTIONS
 # ==============================================================================
 
 def get_templates(language: str = "spanish") -> dict:
     """
-    Returns a dictionary with all templates according to the specified language.
-    
+    Returns a dictionary with all templates according to specified language.
+
     Args:
         language: 'spanish' (default) or 'english'
-    
+
     Returns:
-        Dictionary with keys: 'clarifier', 'generator', 'evaluator', 'judge', 'refiner'
-        
+        Dictionary with keys for all agent templates and specialized prompt types
+
     Example:
         >>> templates = get_templates("spanish")
         >>> clarifier_prompt = templates["clarifier"].format(
@@ -349,14 +987,54 @@ def get_templates(language: str = "spanish") -> dict:
         ... )
     """
     language_lower = language.lower().strip()
-    
+
     if language_lower == "english":
         return {
+            # Basic workflow templates
             "clarifier": EN_CLARIFIER_TEMPLATE,
             "generator": EN_GENERATOR_TEMPLATE,
             "evaluator": EN_EVALUATOR_TEMPLATE,
             "judge": EN_JUDGE_TEMPLATE,
-            "refiner": EN_REFINER_TEMPLATE
+            "refiner": EN_REFINER_TEMPLATE,
+            # System prompt templates
+            "system_clarifier": EN_SYSTEM_CLARIFIER_TEMPLATE,
+            "system_personality": EN_SYSTEM_PERSONALITY_TEMPLATE,
+            "system_boundaries": EN_SYSTEM_BOUNDARIES_TEMPLATE,
+            "system_generator": EN_SYSTEM_GENERATOR_TEMPLATE,
+            # Image prompt templates
+            "image_clarifier": EN_IMAGE_CLARIFIER_TEMPLATE,
+            "image_platform": EN_IMAGE_PLATFORM_TEMPLATE,
+            "image_negative": EN_IMAGE_NEGATIVE_TEMPLATE,
+            "image_generator": EN_IMAGE_GENERATOR_TEMPLATE,
+            # Additional prompt templates
+            "additional_analyze": EN_ADDITIONAL_ANALYZE_TEMPLATE,
+            "additional_weakness": EN_ADDITIONAL_WEAKNESS_TEMPLATE,
+            "additional_improve": EN_ADDITIONAL_IMPROVE_TEMPLATE,
+            "additional_generator": EN_ADDITIONAL_GENERATOR_TEMPLATE
+        }
+    else:  # spanish (default)
+        return {
+            # Basic workflow templates
+            "clarifier": ES_CLARIFIER_TEMPLATE,
+            "generator": ES_GENERATOR_TEMPLATE,
+            "evaluator": ES_EVALUATOR_TEMPLATE,
+            "judge": ES_JUDGE_TEMPLATE,
+            "refiner": ES_REFINER_TEMPLATE,
+            # System prompt templates
+            "system_clarifier": ES_SYSTEM_CLARIFIER_TEMPLATE,
+            "system_personality": ES_SYSTEM_PERSONALITY_TEMPLATE,
+            "system_boundaries": ES_SYSTEM_BOUNDARIES_TEMPLATE,
+            "system_generator": ES_SYSTEM_GENERATOR_TEMPLATE,
+            # Image prompt templates
+            "image_clarifier": ES_IMAGE_CLARIFIER_TEMPLATE,
+            "image_platform": ES_IMAGE_PLATFORM_TEMPLATE,
+            "image_negative": ES_IMAGE_NEGATIVE_TEMPLATE,
+            "image_generator": ES_IMAGE_GENERATOR_TEMPLATE,
+            # Additional prompt templates
+            "additional_analyze": ES_ADDITIONAL_ANALYZE_TEMPLATE,
+            "additional_weakness": ES_ADDITIONAL_WEAKNESS_TEMPLATE,
+            "additional_improve": ES_ADDITIONAL_IMPROVE_TEMPLATE,
+            "additional_generator": ES_ADDITIONAL_GENERATOR_TEMPLATE
         }
     else:  # spanish (default)
         return {

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from litellm import completion, AuthenticationError, RateLimitError
 import litellm
 from app.db.database import get_db
-from app.db.models import Settings, ApiKey
+from app.db.models import Settings, ApiKey, PromptTemplate
 from app.core.security import security_service
 from app.api.schemas import (
     SettingsCreate, ValidationRequest,
@@ -801,3 +801,139 @@ async def get_available_prompt_types():
         "types": types,
         "total": len(types)
     }
+
+
+# ===== Phase 8: Templates CRUD Endpoints =====
+
+@router.get("/prompts/templates")
+async def list_templates(
+    prompt_type: Optional[str] = None,
+    category: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    List all prompt templates with optional filtering.
+    """
+    try:
+        query = db.query(PromptTemplate)
+
+        # Filter by type if provided
+        if prompt_type:
+            query = query.filter(PromptTemplate.type == prompt_type)
+
+        # Filter by category if provided
+        if category:
+            query = query.filter(PromptTemplate.category == category)
+
+        # Only public templates
+        query = query.filter(PromptTemplate.is_public == True)
+
+        templates = query.order_by(PromptTemplate.usage_count.desc()).all()
+
+        return {
+            "templates": [
+                {
+                    "id": t.id,
+                    "type": t.type,
+                    "name": t.name,
+                    "description": t.description,
+                    "category": t.category,
+                    "tags": eval(t.tags) if t.tags else [],
+                    "usage_count": t.usage_count
+                }
+                for t in templates
+            ],
+            "total": len(templates)
+        }
+    except Exception as e:
+        logger.error(f"Error listing templates: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/prompts/templates/{template_id}")
+async def get_template(template_id: int, db: Session = Depends(get_db)):
+    """
+    Get a specific prompt template by ID.
+    """
+    try:
+        template = db.query(PromptTemplate).filter(PromptTemplate.id == template_id).first()
+
+        if not template:
+            raise HTTPException(status_code=404, detail="Template not found")
+
+        return {
+            "id": template.id,
+            "type": template.type,
+            "name": template.name,
+            "description": template.description,
+            "template_content": template.template_content,
+            "category": template.category,
+            "tags": eval(template.tags) if template.tags else [],
+            "usage_count": template.usage_count
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting template: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/prompts/templates/type/{prompt_type}")
+async def get_templates_by_type(prompt_type: str, db: Session = Depends(get_db)):
+    """
+    Get all templates for a specific prompt type (system, image, additional).
+    """
+    try:
+        templates = db.query(PromptTemplate).filter(
+            PromptTemplate.type == prompt_type,
+            PromptTemplate.is_public == True
+        ).order_by(PromptTemplate.usage_count.desc()).all()
+
+        return {
+            "type": prompt_type,
+            "templates": [
+                {
+                    "id": t.id,
+                    "name": t.name,
+                    "description": t.description,
+                    "category": t.category,
+                    "tags": eval(t.tags) if t.tags else [],
+                    "usage_count": t.usage_count
+                }
+                for t in templates
+            ],
+            "total": len(templates)
+        }
+    except Exception as e:
+        logger.error(f"Error getting templates by type: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/prompts/templates/{template_id}/use")
+async def use_template(template_id: int, db: Session = Depends(get_db)):
+    """
+    Increment usage count when a template is used.
+    """
+    try:
+        template = db.query(PromptTemplate).filter(PromptTemplate.id == template_id).first()
+
+        if not template:
+            raise HTTPException(status_code=404, detail="Template not found")
+
+        # Increment usage count
+        template.usage_count += 1
+        template.updated_at = datetime.utcnow()
+        db.commit()
+
+        return {
+            "status": "success",
+            "message": "Template usage recorded",
+            "template_id": template_id,
+            "usage_count": template.usage_count
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Error using template: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

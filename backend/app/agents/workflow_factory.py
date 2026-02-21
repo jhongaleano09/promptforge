@@ -17,10 +17,12 @@ from app.core.prompt_types import (
 )
 from app.agents.graph import get_graph as get_basic_graph
 
-# Future workflow imports (will be uncommented when implemented):
-# from app.agents.system_prompt_graph import get_graph as get_system_prompt_graph
-# from app.agents.image_prompt_graph import get_graph as get_image_prompt_graph
-# from app.agents.additional_prompt_graph import get_graph as get_additional_prompt_graph
+# System prompt workflow (✅ Implemented in Sprint 4)
+from app.agents.system_prompt_graph import get_graph as get_system_prompt_graph
+# Image prompt workflow (✅ Implemented in Sprint 4)
+from app.agents.image_prompt_graph import get_graph as get_image_prompt_graph
+# Additional prompt workflow (✅ Implemented in Sprint 4)
+from app.agents.additional_prompt_graph import get_graph as get_additional_prompt_graph
 
 
 def get_workflow_graph(prompt_type: str, checkpointer=None) -> Any:
@@ -65,40 +67,40 @@ def get_workflow_graph(prompt_type: str, checkpointer=None) -> Any:
     if workflow_name == "basic_workflow":
         return get_basic_graph(checkpointer)
     
-    # Specific workflows (will be implemented in phases 8.6, 8.7, 8.8)
+    # Specific workflows (✅ Implemented in Sprint 4)
     elif workflow_name == "system_prompt_workflow":
-        # Will be implemented in Phase 8.6
+        # ✅ Implemented in Sprint 4
         try:
             from app.agents.system_prompt_graph import get_graph as get_system_prompt_graph
             return get_system_prompt_graph(checkpointer)
         except ImportError:
             print(
-                f"Warning: System prompt workflow is not yet implemented. "
-                "Check Phase 8.6 for implementation details. Falling back to 'basic' workflow."
+                f"Warning: System prompt workflow could not be imported. "
+                "Check Sprint 4 implementation details. Falling back to 'basic' workflow."
             )
             return get_basic_graph(checkpointer)
-    
+
     elif workflow_name == "image_prompt_workflow":
-        # Will be implemented in Phase 8.7
+        # ✅ Implemented in Sprint 4
         try:
             from app.agents.image_prompt_graph import get_graph as get_image_prompt_graph
             return get_image_prompt_graph(checkpointer)
         except ImportError:
             print(
-                f"Warning: Image prompt workflow is not yet implemented. "
-                "Check Phase 8.7 for implementation details. Falling back to 'basic' workflow."
+                f"Warning: Image prompt workflow could not be imported. "
+                "Check Sprint 4 implementation details. Falling back to 'basic' workflow."
             )
             return get_basic_graph(checkpointer)
-    
+
     elif workflow_name == "additional_prompt_workflow":
-        # Will be implemented in Phase 8.8
+        # ✅ Implemented in Sprint 4
         try:
             from app.agents.additional_prompt_graph import get_graph as get_additional_prompt_graph
             return get_additional_prompt_graph(checkpointer)
         except ImportError:
             print(
-                f"Warning: Additional prompt workflow is not yet implemented. "
-                "Check Phase 8.8 for implementation details. Falling back to 'basic' workflow."
+                f"Warning: Additional prompt workflow could not be imported. "
+                "Check Sprint 4 implementation details. Falling back to 'basic' workflow."
             )
             return get_basic_graph(checkpointer)
     
@@ -127,10 +129,15 @@ def get_available_workflows() -> list:
         
         # Check if the workflow is implemented
         implemented = True
-        if workflow_name in ["system_prompt_workflow", "image_prompt_workflow", "additional_prompt_workflow"]:
-            # These workflows will be verified when used
-            # For now, assume they are not implemented
-            implemented = workflow_name == "basic_workflow"
+        if workflow_name == "basic_workflow":
+            # Basic workflow is always implemented
+            implemented = True
+        elif workflow_name in ["system_prompt_workflow", "image_prompt_workflow", "additional_prompt_workflow"]:
+            # These workflows are implemented in Sprint 4
+            implemented = True
+        else:
+            # Unrecognized workflow
+            implemented = False
         
         available.append({
             "prompt_type": ptype,
