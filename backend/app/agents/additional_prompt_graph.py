@@ -80,6 +80,7 @@ async def analyze_original_prompt_node(state: PromptState) -> dict:
         original_prompt = user_input
 
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Get templates
         templates = get_node_templates(state)
@@ -112,7 +113,7 @@ async def analyze_original_prompt_node(state: PromptState) -> dict:
         try:
             result = await llm_call(
                 prompt,
-                model=api_key_info['model_preference'],
+                model=state.get('selected_model') or api_key_info['model_preference'],
                 api_key=api_key_info['api_key']
             )
         except Exception as e:
@@ -160,6 +161,7 @@ async def identify_weaknesses_node(state: PromptState) -> dict:
         analysis = state.get("prompt_analysis", {})
 
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Get templates
         templates = get_node_templates(state)
@@ -193,7 +195,7 @@ async def identify_weaknesses_node(state: PromptState) -> dict:
         # Call LLM
         result = await llm_call(
             prompt,
-            model=api_key_info['model_preference'],
+            model=state.get('selected_model') or api_key_info['model_preference'],
             api_key=api_key_info['api_key']
         )
 
@@ -225,6 +227,7 @@ async def suggest_improvements_node(state: PromptState) -> dict:
         weaknesses = state.get("prompt_weaknesses", {})
 
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Get templates
         templates = get_node_templates(state)
@@ -256,7 +259,7 @@ async def suggest_improvements_node(state: PromptState) -> dict:
         # Call LLM
         result = await llm_call(
             prompt,
-            model=api_key_info['model_preference'],
+            model=state.get('selected_model') or api_key_info['model_preference'],
             api_key=api_key_info['api_key']
         )
 
@@ -284,6 +287,7 @@ async def generate_refined_prompt_node(state: PromptState) -> dict:
         suggestions = state.get("improvement_suggestions", {})
 
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Get templates
         templates = get_node_templates(state)
@@ -316,7 +320,7 @@ async def generate_refined_prompt_node(state: PromptState) -> dict:
         # Call LLM
         result = await llm_call(
             prompt,
-            model=api_key_info['model_preference'],
+            model=state.get('selected_model') or api_key_info['model_preference'],
             api_key=api_key_info['api_key']
         )
 

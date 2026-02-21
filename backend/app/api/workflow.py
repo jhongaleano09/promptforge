@@ -153,6 +153,7 @@ async def start_workflow_stream(request: WorkflowStartRequest):
     initial_state = {
         "user_input": request.user_input,
         "selected_provider": request.provider,
+        "selected_model": request.model,
         "prompt_type": prompt_type,  # Add prompt type to state
         "clarification_dialogue": [],
         "requirements": {},

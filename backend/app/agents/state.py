@@ -32,3 +32,4 @@ class PromptState(TypedDict):
 
     # --- Phase 6.5 Additions ---
     selected_provider: Optional[str]  # Provider seleccionado por el usuario
+    selected_model: Optional[str]     # Modelo dinámico seleccionado por el usuario

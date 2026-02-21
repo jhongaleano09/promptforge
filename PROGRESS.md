@@ -835,3 +835,19 @@ analyze_original_prompt → identify_weaknesses → suggest_improvements → gen
 - CRUD API endpoints
 - Componente UI React con hooks
 - Script de seeding de base de datos
+
+## Sprint Adicional - Refinamiento UX y Control de Modelos
+**Fecha de Inicio:** 21 de Febrero de 2026
+**Estado:** ⏳ EN PROGRESO
+
+### Objetivos del Sprint
+1. **Mejorar Navegación:** Convertir el logo "PromptForge" del Header en un botón de "Home" que reinicie el flujo actual (`useWorkflowStore.reset()`).
+2. **Limpiar Header:** Mover el selector de idioma (`LanguageSwitcher`) a la pestaña de "Preferencias" dentro de la vista de Configuración.
+3. **Control Dinámico de Modelos:** Añadir selectores de [API] y [Modelo] directamente en el input inicial del chat, permitiendo elegir el modelo por cada conversación, y actualizando el backend (`/stream/start`) para soportarlo.
+
+### Tareas
+- [ ] Actualizar `PROGRESS.md`, `ROADMAP` y `VISION_GLOBAL`.
+- [ ] Backend: Modificar `WorkflowStartRequest` para aceptar `model` y usarlo en la generación.
+- [ ] Frontend: Mover `LanguageSwitcher` a `settings/preferences-form.tsx`.
+- [ ] Frontend: Implementar `reset()` en el título del Header en `page.tsx`.
+- [ ] Frontend: Crear/Actualizar selector dual de API y Modelo en `InitialPromptInput`.

@@ -33,6 +33,8 @@ interface WorkflowState {
 
   selectedProvider: string | null;
   setSelectedProvider: (provider: string | null) => void;
+  selectedModel: string | null;
+  setSelectedModel: (model: string | null) => void;
 
   testResults: { [key: string]: string };
   isTesting: boolean;
@@ -58,11 +60,13 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
   error: null,
   activeTab: 'chat',
   selectedProvider: null,
+  selectedModel: null,
   testResults: {},
   isTesting: false,
   isRefining: false,
 
-  setSelectedProvider: (provider) => set({ selectedProvider: provider }),
+  setSelectedProvider: (provider) => set({ selectedProvider: provider, selectedModel: null }),
+  setSelectedModel: (model) => set({ selectedModel: model }),
 
   checkActiveKeys: async () => {
     try {
@@ -102,6 +106,7 @@ export const useWorkflowStore = create<WorkflowState>((set, get) => ({
         body: JSON.stringify({ 
           user_input: input,
           provider: get().selectedProvider,
+          model: get().selectedModel,
           prompt_type: promptType
         }),
         onmessage(ev) {

@@ -99,6 +99,7 @@ async def analyze_system_requirements_node(state: PromptState) -> dict:
 
         # Get selected provider
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Build conversation context
         conversation_text = f"User Initial Input: {user_input}\n\nHistory:\n"
@@ -142,7 +143,7 @@ async def analyze_system_requirements_node(state: PromptState) -> dict:
         try:
             result = await llm_call(
                 prompt,
-                model=api_key_info['model_preference'],
+                model=state.get('selected_model') or api_key_info['model_preference'],
                 api_key=api_key_info['api_key']
             )
         except Exception as e:
@@ -202,6 +203,7 @@ async def define_bot_personality_node(state: PromptState) -> dict:
 
         requirements = state["requirements"]
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Build requirements text
         reqs_text = f"Original Request: {state['user_input']}\n"
@@ -240,7 +242,7 @@ async def define_bot_personality_node(state: PromptState) -> dict:
         # Call LLM
         result = await llm_call(
             prompt,
-            model=api_key_info['model_preference'],
+            model=state.get('selected_model') or api_key_info['model_preference'],
             api_key=api_key_info['api_key']
         )
 
@@ -270,6 +272,7 @@ async def set_behavior_boundaries_node(state: PromptState) -> dict:
         requirements = state["requirements"]
         personality = state.get("bot_personality", {})
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Get templates
         templates = get_node_templates(state)
@@ -299,7 +302,7 @@ async def set_behavior_boundaries_node(state: PromptState) -> dict:
         # Call LLM
         result = await llm_call(
             prompt,
-            model=api_key_info['model_preference'],
+            model=state.get('selected_model') or api_key_info['model_preference'],
             api_key=api_key_info['api_key']
         )
 
@@ -330,6 +333,7 @@ async def generate_system_prompt_node(state: PromptState) -> dict:
         personality = state.get("bot_personality", {})
         boundaries = state.get("bot_boundaries", {})
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Get templates
         templates = get_node_templates(state)
@@ -366,7 +370,7 @@ async def generate_system_prompt_node(state: PromptState) -> dict:
         # Call LLM
         result = await llm_call(
             prompt,
-            model=api_key_info['model_preference'],
+            model=state.get('selected_model') or api_key_info['model_preference'],
             api_key=api_key_info['api_key']
         )
 

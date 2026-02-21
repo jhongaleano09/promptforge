@@ -25,12 +25,12 @@ No generar un solo prompt, sino explorar el espacio de soluciones con 3 variante
 ### 2. **Ciclo de Feedback Humano**
 El usuario no es un espectador pasivo; es el juez final en la "Arena" y el director en la fase de refinamiento. La IA propone, el humano decide.
 
-### 3. **Agnosticismo de Modelo**
-Diseñado para funcionar con cualquier proveedor de LLM:
+### 3. **Agnosticismo y Control Dinámico de Modelo**
+Diseñado para funcionar con cualquier proveedor de LLM y permitir el control fino sobre el modelo a utilizar:
 - **OpenAI** (GPT-4, GPT-3.5-turbo)
 - **Anthropic** (Claude 3)
 - **Ollama** (Modelos locales)
-- Extensible a nuevos proveedores
+- **Selección Dinámica:** Permite elegir el modelo exacto por cada sesión individual desde la pantalla de inicio del chat.
 
 ### 4. **Seguridad y Privacidad**
 - Gestión local de credenciales

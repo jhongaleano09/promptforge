@@ -49,6 +49,7 @@ class ValidationActiveResponse(BaseModel):
 class WorkflowStartRequest(BaseModel):
     user_input: str
     provider: Optional[str] = None  # Proveedor seleccionado por el usuario
+    model: Optional[str] = None     # Modelo seleccionado dinámicamente por el usuario
     prompt_type: str = "basic"  # Tipo de prompt ('basic', 'system', 'image', 'additional')
 
 class WorkflowAnswerRequest(BaseModel):

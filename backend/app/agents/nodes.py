@@ -92,6 +92,7 @@ async def clarify_node(state: PromptState) -> Dict[str, Any]:
         # Si no hay respuestas, generar preguntas de clarificación (comportamiento original)
         # Obtener provider del estado (si fue especificado)
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Construct conversation history string for the prompt context
         conversation_text = f"User Initial Input: {user_input}\n\nHistory:\n"
@@ -129,7 +130,7 @@ async def clarify_node(state: PromptState) -> Dict[str, Any]:
         try:
             result = await llm_call(
                 prompt,
-                model=api_key_info['model_preference'],
+                model=state.get('selected_model') or api_key_info['model_preference'],
                 api_key=api_key_info['api_key']
             )
         except Exception as e:
@@ -191,6 +192,7 @@ async def generate_node(state: PromptState) -> Dict[str, Any]:
 
         # Obtener provider seleccionado
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         clarified_reqs_str = f"Original Request: {state['user_input']}\n"
         for msg in state.get("clarification_dialogue", []):
@@ -248,7 +250,7 @@ async def generate_node(state: PromptState) -> Dict[str, Any]:
             # Usar API key y modelo del provider
             tasks.append(llm_call(
                 prompt,
-                model=api_key_info['model_preference'],
+                model=state.get('selected_model') or api_key_info['model_preference'],
                 api_key=api_key_info['api_key']
             ))
 
@@ -331,6 +333,7 @@ async def evaluate_node(state: PromptState) -> Dict[str, Any]:
 
         # Obtener provider seleccionado
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Obtener API key activa
         config_service = await get_config_service()
@@ -378,7 +381,7 @@ async def evaluate_node(state: PromptState) -> Dict[str, Any]:
                 )
                 tasks.append(llm_call(
                     prompt,
-                    model=api_key_info['model_preference'],
+                    model=state.get('selected_model') or api_key_info['model_preference'],
                     api_key=api_key_info['api_key']
                 ))
                 variant_ids.append(variant.get("id", ""))
@@ -431,6 +434,7 @@ async def judge_node(state: PromptState) -> Dict[str, Any]:
 
         # Obtener provider seleccionado
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Obtener API key activa
         config_service = await get_config_service()
@@ -468,7 +472,7 @@ async def judge_node(state: PromptState) -> Dict[str, Any]:
         try:
             result = await llm_call(
                 prompt,
-                model=api_key_info['model_preference'],
+                model=state.get('selected_model') or api_key_info['model_preference'],
                 api_key=api_key_info['api_key']
             )
         except Exception as e:
@@ -508,6 +512,7 @@ async def refiner_node(state: PromptState) -> Dict[str, Any]:
 
         # Obtener provider seleccionado
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Obtener API key activa
         config_service = await get_config_service()
@@ -546,7 +551,7 @@ async def refiner_node(state: PromptState) -> Dict[str, Any]:
         try:
             result = await llm_call(
                 prompt,
-                model=api_key_info['model_preference'],
+                model=state.get('selected_model') or api_key_info['model_preference'],
                 api_key=api_key_info['api_key']
             )
             new_variants = result.get("variations", [])

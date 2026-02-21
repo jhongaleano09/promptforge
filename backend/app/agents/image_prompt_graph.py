@@ -99,6 +99,7 @@ async def analyze_visual_requirements_node(state: PromptState) -> dict:
 
         # Get selected provider
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Build conversation context
         conversation_text = f"User Initial Input: {user_input}\n\nHistory:\n"
@@ -142,7 +143,7 @@ async def analyze_visual_requirements_node(state: PromptState) -> dict:
         try:
             result = await llm_call(
                 prompt,
-                model=api_key_info['model_preference'],
+                model=state.get('selected_model') or api_key_info['model_preference'],
                 api_key=api_key_info['api_key']
             )
         except Exception as e:
@@ -202,6 +203,7 @@ async def optimize_for_platform_node(state: PromptState) -> dict:
 
         requirements = state["requirements"]
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Determine target platform (default to DALL-E if not specified)
         target_platform = requirements.get("target_platform", "DALL-E")
@@ -240,7 +242,7 @@ async def optimize_for_platform_node(state: PromptState) -> dict:
         # Call LLM
         result = await llm_call(
             prompt,
-            model=api_key_info['model_preference'],
+            model=state.get('selected_model') or api_key_info['model_preference'],
             api_key=api_key_info['api_key']
         )
 
@@ -269,6 +271,7 @@ async def include_negative_prompts_node(state: PromptState) -> dict:
 
         base_prompt = state.get("platform_optimization", {}).get("optimized_prompt", "")
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Get templates
         templates = get_node_templates(state)
@@ -297,7 +300,7 @@ async def include_negative_prompts_node(state: PromptState) -> dict:
         # Call LLM
         result = await llm_call(
             prompt,
-            model=api_key_info['model_preference'],
+            model=state.get('selected_model') or api_key_info['model_preference'],
             api_key=api_key_info['api_key']
         )
 
@@ -328,6 +331,7 @@ async def generate_image_prompt_node(state: PromptState) -> dict:
         optimization = state.get("platform_optimization", {})
         negative = state.get("negative_prompt", {})
         selected_provider = state.get("selected_provider", None)
+        selected_model = state.get("selected_model", None)
 
         # Determine platform
         platform = requirements.get("target_platform", "DALL-E")
@@ -365,7 +369,7 @@ async def generate_image_prompt_node(state: PromptState) -> dict:
         # Call LLM
         result = await llm_call(
             prompt,
-            model=api_key_info['model_preference'],
+            model=state.get('selected_model') or api_key_info['model_preference'],
             api_key=api_key_info['api_key']
         )
 

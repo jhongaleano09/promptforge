@@ -6,19 +6,18 @@ import { OnboardingForm } from '@/components/onboarding-form';
 import { ChatInterface } from '@/components/arena/ChatInterface';
 import { ArenaView } from '@/components/arena/ArenaView';
 import { useWorkflowStore } from '@/store/workflowStore';
-import { ProviderSelector } from '@/components/provider-selector';
+import { ApiAndModelSelector } from '@/components/api-and-model-selector';
 import { PromptTypeSelector } from '@/components/prompt-type-selector';
 import { cn } from '@/lib/utils';
 import { LayoutDashboard, MessageSquare, Sparkles, Sun, Moon, Settings as SettingsIcon } from 'lucide-react';
 import { useTheme } from "next-themes";
 import { API_BASE } from "@/config/api";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { LanguageSwitcher } from "@/components/language-switcher";
 
 export default function Home() {
   const { t } = useLanguage();
   const router = useRouter();
-  const { status, activeTab, setActiveTab, startWorkflow, error } = useWorkflowStore();
+  const { status, activeTab, setActiveTab, startWorkflow, error, reset } = useWorkflowStore();
   const [apiKeyConfigured, setApiKeyConfigured] = useState(false);
   const [loading, setLoading] = useState(true);
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -79,15 +78,16 @@ export default function Home() {
 
       {/* Header */}
       <header className="w-full max-w-7xl mb-8 flex justify-between items-center border-b pb-4">
-         <div className="flex items-center gap-2">
+         <button 
+            onClick={() => reset()} 
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity text-left"
+         >
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-primary-foreground" />
               </div>
                <h1 className="text-xl font-bold tracking-tight">{t("app_title")}</h1>
-         </div>
+         </button>
           <div className="flex items-center gap-2">
-             <LanguageSwitcher />
-             <ProviderSelector className="mr-2" />
              <button
                  onClick={() => router.push('/settings')}
                  className="p-2 rounded-lg hover:bg-muted transition-colors"
@@ -201,9 +201,8 @@ function InitialPromptInput({ onSubmit }: { onSubmit: (text: string) => void }) 
             
             <div className="flex flex-col gap-4 p-1 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent rounded-2xl">
                 <div className="bg-card rounded-xl p-2 shadow-sm border">
-                    <div className="px-4 py-2 border-b flex justify-between items-center bg-muted/20 rounded-t-lg mb-2">
+                    <div className="px-4 py-2 border-b flex justify-start items-center bg-muted/20 rounded-t-lg mb-2">
                         <span className="text-xs font-medium text-muted-foreground">{t("home_system_context")}</span>
-                        <ProviderSelector />
                     </div>
                     <textarea 
                         className="w-full p-4 rounded-lg bg-transparent border-none outline-none resize-none text-lg min-h-[150px] placeholder:text-muted-foreground/50"
@@ -212,7 +211,8 @@ function InitialPromptInput({ onSubmit }: { onSubmit: (text: string) => void }) 
                         onChange={e => setText(e.target.value)}
                         autoFocus
                     />
-                    <div className="flex justify-end pt-2 border-t mt-2">
+                    <div className="flex justify-between items-center pt-3 pb-1 px-2 border-t mt-2">
+                        <ApiAndModelSelector />
                         <button 
                             onClick={() => onSubmit(text)}
                             disabled={!text.trim()}

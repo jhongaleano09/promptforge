@@ -408,3 +408,29 @@ Al completar los 5 Sprints, PromptForge estará en estado **production-ready** c
 
 **Última Actualización:** 17 de Febrero de 2026  
 **Próxima Revisión:** Al completar cada Sprint
+
+---
+
+## 🎯 Sprint Adicional: Refinamiento UX y Control de Modelos (21-Feb-2026)
+
+**Duración:** 1-2 días  
+**Prioridad:** 🟠 ALTA  
+**Objetivo:** Mejorar la experiencia de navegación, limpiar el Header principal y permitir el control dinámico del modelo de IA utilizado directamente desde la pantalla de inicio del chat.
+
+### **Tareas:**
+
+1. **SA.1 - Botón Home y Limpieza de Header** (1 hora)
+   - Convertir el título "PromptForge" en el Header en un botón funcional que reinicie el estado global (`useWorkflowStore.reset()`) y navegue a la pantalla principal.
+   - Mover el componente `<LanguageSwitcher />` desde el Header principal a la pestaña "Preferencias" dentro de `/settings`.
+   - **Entregable:** Header simplificado y botón "Home" funcional.
+
+2. **SA.2 - Backend: Soporte Dinámico de Modelos** (1.5 horas)
+   - Actualizar el esquema `WorkflowStartRequest` en `schemas.py` para aceptar un campo `model` opcional.
+   - Modificar el endpoint `/stream/start` para propagar el `model` solicitado al flujo de trabajo (LangGraph), de modo que reemplace la preferencia global `model_preference` de la API key solo para esa ejecución.
+   - **Entregable:** Backend soporta selección de modelo por sesión de chat.
+
+3. **SA.3 - Frontend: Selectores de API y Modelo** (2 horas)
+   - Actualizar el estado global en `useWorkflowStore` para incluir `selectedModel`.
+   - Crear o modificar un componente selector dual en el `InitialPromptInput` que se sitúe junto al botón de "Comenzar a forjar".
+   - Almacenar el modelo seleccionado y enviarlo al backend al iniciar el workflow.
+   - **Entregable:** Interfaz dual [API] -> [Modelo] funcional en el input principal.

@@ -27,3 +27,28 @@ Translation missing for key: "loading"
 Translation missing for key: "loading"
  GET / 200 in 31ms (compile: 4ms, render: 27ms)
  GET /settings 200 in 14ms (compile: 3ms, render: 11ms)
+✓ Compiled in 110ms
+✓ Compiled in 21ms
+✓ Compiled in 40ms
+✓ Compiled in 16ms
+✓ Compiled in 16ms
+✓ Compiled in 22ms
+✓ Compiled in 14ms
+✓ Compiled in 35ms
+✓ Compiled in 133ms
+✓ Compiled in 14ms
+✓ Compiled in 15ms
+✓ Compiled in 246ms
+✓ Compiled in 15ms
+Translation missing for key: "settings"
+Translation missing for key: "settings_page_providers"
+Translation missing for key: "settings_page_general"
+Translation missing for key: "settings_page_advanced"
+Translation missing for key: "api_keys_title"
+Translation missing for key: "api_keys_description"
+Translation missing for key: "api_keys_add_new"
+Translation missing for key: "api_keys_no_keys"
+Translation missing for key: "api_keys_add_first"
+ GET /settings 200 in 56ms (compile: 3ms, render: 53ms)
+Translation missing for key: "loading"
+ GET / 200 in 303ms (compile: 59ms, render: 244ms)
